@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCFPlugin · Digital Twin Framework</title>
+<script src="https://cdn.tailwindcss.com">
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg-deep: #f4f6fb;
+    --bg-card: #ffffff;
+    --bg-elevated: #edf0f7;
+    --bg-hover: rgba(99,102,241,0.06);
+    --border: #e2e6ef;
+    --border-accent: #c7d2fe;
+    --text-main: #0b0f1a;
+    --text-dim: #3f4659;
+    --text-muted: #8b92a8;
+    --accent: #4f46e5;
+    --accent-glow: rgba(79,70,229,0.1);
+    --accent-sub: #06b6d4;
+    --green: #059669;
+    --green-bg: rgba(5,150,105,0.08);
+    --amber: #d97706;
+    --amber-bg: rgba(217,119,6,0.08);
+    --purple: #7c3aed;
+    --purple-bg: rgba(124,58,237,0.08);
+    --cyan: #0891b2;
+    --cyan-bg: rgba(8,145,178,0.08);
+    --pink: #db2777;
+    --pink-bg: rgba(219,39,119,0.08);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+    --topbar-bg: rgba(244,246,251,0.88);
+    color-scheme: light;
+  }
+  :root.dark {
+    --bg-deep: #080b16;
+    --bg-card: #0f1428;
+    --bg-elevated: #151b32;
+    --bg-hover: rgba(99,102,241,0.08);
+    --border: #1e2440;
+    --border-accent: #2d3560;
+    --text-main: #e8edf5;
+    --text-dim: #9ca3bf;
+    --text-muted: #5c6490;
+    --accent: #818cf8;
+    --accent-glow: rgba(129,140,248,0.12);
+    --accent-sub: #22d3ee;
+    --green: #34d399;
+    --green-bg: rgba(52,211,153,0.1);
+    --amber: #fbbf24;
+    --amber-bg: rgba(251,191,36,0.1);
+    --purple: #a78bfa;
+    --purple-bg: rgba(167,139,250,0.1);
+    --cyan: #22d3ee;
+    --cyan-bg: rgba(34,211,238,0.1);
+    --pink: #f472b6;
+    --pink-bg: rgba(244,114,182,0.1);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+    --topbar-bg: rgba(8,11,22,0.9);
+    color-scheme: dark;
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-main);
+    transition: background .3s, color .3s;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  :root.dark body::before {
+    background-image:
+      linear-gradient(rgba(129,140,248,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(129,140,248,0.04) 1px, transparent 1px);
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--topbar-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px; height: 56px;
+    display: flex; align-items: center; gap: 12px;
+    transition: background .3s;
+  }
+  .topbar .logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--text-main);
+    flex-shrink: 0;
+  }
+  .topbar .logo-icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-sub));
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #fff;
+  }
+  .topbar .logo-text {
+    font-size: 16px; font-weight: 800; letter-spacing: -.02em;
+  }
+  .topbar .nav-links {
+    display: flex; align-items: center; gap: 4px;
+    margin-left: 24px;
+  }
+  .topbar .nav-links a {
+    padding: 6px 14px; border-radius: 6px;
+    font-size: 13px; font-weight: 500; color: var(--text-dim);
+    text-decoration: none; transition: all .15s;
+  }
+  .topbar .nav-links a:hover {
+    color: var(--text-main); background: var(--accent-glow);
+  }
+  .topbar .nav-links a.active {
+    color: var(--accent); background: var(--accent-glow);
+  }
+  .topbar .spacer { flex: 1; }
+  .theme-toggle {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all .2s;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  .content {
+    max-width: 960px; padding: 0 36px 80px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  .hero {
+    padding: 52px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-sub), transparent);
+    opacity: .5;
+  }
+  .hero .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    background: var(--accent-glow);
+    color: var(--accent);
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .02em;
+  }
+  .hero h1 {
+    font-size: 36px; font-weight: 800;
+    letter-spacing: -.03em; line-height: 1.15;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent), var(--accent-sub));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 15px; color: var(--text-dim);
+    line-height: 1.75; max-width: 640px; margin-top: 12px;
+  }
+  .hero .cta-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 24px;
+  }
+  .hero .cta-row a {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 22px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; text-decoration: none;
+    transition: all .2s;
+  }
+  .hero .cta-row .btn-primary {
+    background: var(--accent); color: #fff;
+    box-shadow: 0 2px 12px var(--accent-glow);
+  }
+  .hero .cta-row .btn-primary:hover {
+    box-shadow: 0 4px 20px var(--accent-glow);
+    transform: translateY(-1px);
+  }
+  .hero .cta-row .btn-secondary {
+    border: 1px solid var(--border);
+    color: var(--text-dim); background: var(--bg-card);
+  }
+  .hero .cta-row .btn-secondary:hover {
+    border-color: var(--border-accent);
+    color: var(--text-main);
+  }
+
+  .section { margin-bottom: 44px; }
+  .section-title {
+    font-size: 18px; font-weight: 700;
+    margin-bottom: 16px; letter-spacing: -.01em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .st-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .section-title .st-count {
+    font-size: 11px; color: var(--text-muted);
+    background: var(--bg-elevated); padding: 1px 9px;
+    border-radius: 6px; font-family: 'JetBrains Mono', monospace;
+    font-weight: 400; margin-left: auto;
+  }
+
+  .feature-grid {
+    display: grid; grid-template-columns: repeat(2,1fr);
+    gap: 12px;
+  }
+  .feature-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px;
+    transition: border-color .2s, box-shadow .2s, background .3s;
+  }
+  .feature-card:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-sm);
+  }
+  .feature-card .fc-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .feature-card h3 {
+    font-size: 14px; font-weight: 700; margin-bottom: 4px;
+  }
+  .feature-card p {
+    font-size: 12px; color: var(--text-dim); line-height: 1.6;
+  }
+  .feature-card .fc-tags {
+    display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px;
+  }
+  .feature-card .fc-tags span {
+    font-size: 10px; padding: 2px 7px; border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg-elevated); color: var(--text-muted);
+  }
+
+  .module-list { display: flex; flex-direction: column; gap: 10px; }
+  .module-item {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px;
+    transition: border-color .2s, background .3s;
+  }
+  .module-item:hover { border-color: var(--border-accent); }
+  .module-item .mi-top {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .module-item .mi-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .module-item .mi-name {
+    font-size: 14px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .module-item .mi-desc {
+    font-size: 12px; color: var(--text-dim);
+    margin-top: 4px; line-height: 1.6;
+    padding-left: 18px;
+  }
+  .module-item .mi-subs {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    margin-top: 8px; padding-left: 18px;
+  }
+  .module-item .mi-subs span {
+    font-size: 10px; padding: 2px 7px; border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--accent-glow); color: var(--accent);
+  }
+
+  .t-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-card);
+  }
+  .t-wrap table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; min-width: 560px;
+  }
+  .t-wrap th {
+    text-align: left; padding: 9px 14px;
+    font-weight: 600; color: var(--text-muted);
+    font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .t-wrap td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim); vertical-align: top;
+    font-size: 12px; line-height: 1.6;
+  }
+  .t-wrap tr:last-child td { border-bottom: none; }
+  .t-wrap td:first-child {
+    font-weight: 600; color: var(--text-main);
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .t-wrap td:last-child code {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: var(--accent-glow); color: var(--accent);
+    padding: 1px 5px; border-radius: 3px;
+  }
+
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step-card {
+    display: flex; gap: 16px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+    transition: border-color .2s, background .3s;
+  }
+  .step-card:hover { border-color: var(--border-accent); }
+  .step-card .step-num {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: var(--accent-glow); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .step-card .step-body { flex: 1; min-width: 0; }
+  .step-card .step-body h3 {
+    font-size: 14px; font-weight: 700; margin-bottom: 4px;
+  }
+  .step-card .step-body p {
+    font-size: 12px; color: var(--text-dim); line-height: 1.6;
+  }
+  .step-card .step-body .step-detail {
+    margin-top: 8px; padding: 10px 12px;
+    background: var(--bg-elevated); border-radius: 6px;
+    font-size: 12px; line-height: 1.7; color: var(--text-dim);
+  }
+  .step-card .step-body .step-detail code {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: var(--accent-glow); color: var(--accent);
+    padding: 1px 4px; border-radius: 3px;
+  }
+  .step-card .step-body .step-detail .sd-label {
+    font-weight: 600; color: var(--text-muted);
+    font-size: 10px; text-transform: uppercase; letter-spacing: .05em;
+    margin-bottom: 4px;
+  }
+
+  .mode-hint {
+    margin-top: 8px; padding: 8px 14px;
+    border-radius: 6px; font-size: 12px; line-height: 1.6;
+    background: var(--amber-bg);
+    border: 1px solid rgba(217,119,6,0.15);
+    color: var(--text-dim);
+  }
+  .mode-hint code {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: var(--accent-glow); color: var(--accent);
+    padding: 1px 4px; border-radius: 3px;
+  }
+
+  @media (max-width: 768px) {
+    .topbar { padding: 0 14px; }
+    .topbar .nav-links { margin-left: 8px; }
+    .topbar .nav-links a { padding: 5px 10px; font-size: 12px; }
+    .content { padding: 0 14px 60px; }
+    .hero { padding: 36px 0 28px; }
+    .hero h1 { font-size: 26px; }
+    .hero .cta-row { flex-direction: column; align-items: stretch; }
+    .hero .cta-row a { justify-content: center; }
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="index.html">
+    <div class="logo-icon">U</div>
+    <span class="logo-text">UCFPlugin</span>
+  </a>
+  <nav class="nav-links">
+    <a href="#start" class="active">快速开始</a>
+    <a href="#pawn">Pawn控制</a>
+    <a href="#vehicle">车行模式</a>
+    <a href="#walk">人行模式</a>
+    <a href="#features">核心特性</a>
+    <a href="#modules">内置模块</a>
+    <a href="ucfview.html" style="color:var(--accent);background:var(--accent-glow)">API 文档 →</a>
+  </nav>
+  <div class="spacer"></div>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+</header>
+
+<div class="content">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+      UE5 Digital Twin Framework
+    </div>
+    <h1><span class="gradient">UCFPlugin</span> 数字孪生城市敏捷开发</h1>
+    <p>Universal CIM Framework — 基于 Unreal Engine 的数字孪生城市敏捷开发插件。支持轻量级蓝图项目、前后端协同的像素流项目，提供视口控制、漫游管理、输入配置等完备接口。</p>
+    <div class="cta-row">
+      <a class="btn-primary" href="#start">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg>
+        快速开始
+      </a>
+      <a class="btn-secondary" href="ucfview.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        查看 API 文档
+      </a>
+    </div>
+  </div>
+
+  <!-- Quick Start -->
+  <div class="section" id="start">
+    <div class="section-title">
+      <span class="st-dot"></span>
+      快速开始
+    </div>
+
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>安装插件</h3>
+          <p>将 <code>UCFPlugin</code> 文件夹放到项目的 <code>Plugins</code> 目录下，并为项目重新编译生成 C++ 工程</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>插件设置</h3>
+          <p>在编辑器中打开 <code>Project Settings &gt; Plugins &gt; UCFPlugin</code> 配置以下选项：</p>
+          <div class="step-detail">
+            <div class="sd-label">配置项</div>
+            <div><strong>BP Interface Path</strong>：添加蓝图接口所在的目录路径</div>
+            <div><strong>Double Tap Time Interval</strong>：输入双击间隔时间（默认 0.23 秒）</div>
+            <div><strong>Default Input Component Class</strong>：选择 <code>UCFInputComponent</code></div>
+          </div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>配置 GamePlay</h3>
+          <p>选定主关卡，转到 World Settings 窗口，<code>GameMode Override</code> 设置为 <code>UCFGameMode</code>。Pawn 与 PlayerController 会自动匹配为对应的 Class。</p>
+          <div class="step-detail">
+            此时可直接运行项目。若需自定义 Pawn 操作配置，可在场景中默认视点处拖入 <code>UCFDefaultPawn</code> 的实例，在 Details 中自定义配置。
+          </div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>接口扩展</h3>
+          <p>在 AI Code IDE 中配置 skills 后，支持 AI 辅助 C++ 接口的扩展、更新、重构，并快速创建对应接口文档。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pawn Control -->
+  <div class="section" id="pawn">
+    <div class="section-title">
+      <span class="st-dot" style="background:var(--green)"></span>
+      Pawn 控制方式
+      <span class="st-count">6 种操作</span>
+    </div>
+    <p style="font-size:13px;color:var(--text-dim);line-height:1.7;margin-bottom:12px">
+      DefaultPawn 的基本控制以<b>锚点</b>为参考。鼠标按住时场景中出现绿色锚点标识，所有移动和旋转均基于该锚点计算。
+    </p>
+    <div class="t-wrap">
+      <table>
+        <thead><tr><th>行为</th><th>描述</th><th>默认控制方式</th></tr></thead>
+        <tbody>
+          <tr><td>定点移动</td><td>水平拖动控制 Pawn 左右移动到锚点位置；上下拖动控制 Pawn 前后移动到锚点位置</td><td>按住 <code>鼠标左键</code> 拖动</td></tr>
+          <tr><td>定点旋转</td><td>水平拖动以锚点为中心左右旋转；上下拖动以锚点为中心上下旋转</td><td>按住 <code>鼠标右键</code> 拖动</td></tr>
+          <tr><td>定点缩放</td><td>向前滚动逼近锚点；向后滚动远离锚点</td><td><code>鼠标中键</code> 滚动</td></tr>
+          <tr><td>快速聚焦</td><td>快速聚焦到锚点位置</td><td><code>鼠标右键</code> 双击</td></tr>
+          <tr><td>竖向移动</td><td>竖直向上 / 向下移动</td><td>按住 <code>Q</code> / <code>E</code> 键</td></tr>
+          <tr><td>居中旋转</td><td>以自身为中心左右 / 上下旋转</td><td>按住 <code>鼠标中键</code> 拖动</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Vehicle Mode -->
+  <div class="section" id="vehicle">
+    <div class="section-title">
+      <span class="st-dot" style="background:var(--amber)"></span>
+      车行模式
+      <span class="st-count">8 种操作</span>
+    </div>
+    <div class="t-wrap">
+      <table>
+        <thead><tr><th>行为</th><th>控制方式</th><th>描述</th></tr></thead>
+        <tbody>
+          <tr><td>前进</td><td>按住 <code>W</code> 键</td><td>车辆前进</td></tr>
+          <tr><td>后退</td><td>按住 <code>S</code> 键</td><td>车辆后退</td></tr>
+          <tr><td>左转</td><td>按住 <code>A</code> 键</td><td>车辆左转向，需同时前进/后退才移动</td></tr>
+          <tr><td>右转</td><td>按住 <code>D</code> 键</td><td>车辆右转向，需同时前进/后退才移动</td></tr>
+          <tr><td>制动</td><td>单击 <code>空格</code> 键</td><td>车辆制动（默认缓冲时间 1.5s），同时按 W/S 时制动失效</td></tr>
+          <tr><td>恢复</td><td>单击 <code>空格</code> 键</td><td>车辆侧翻时恢复正常姿态</td></tr>
+          <tr><td>切换视角模式</td><td>单击 <code>F</code> 键</td><td>跟随视角 vs 自由视角，默认为跟随视角</td></tr>
+          <tr><td>切换人称</td><td>单击 <code>V</code> 键</td><td>第一人称（车内沉浸）vs 第三人称（车外俯视），默认第三人称</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mode-hint">
+      若仅需要车行效果，请使用 <code>/WebCore/GamePlay/Vehicle/BP_FakeVehicle.BP_FakeVehicle_C</code>，调用 <code>Turn</code> 接口控制车行效果开关。
+    </div>
+  </div>
+
+  <!-- Walk Mode -->
+  <div class="section" id="walk">
+    <div class="section-title">
+      <span class="st-dot" style="background:var(--cyan)"></span>
+      人行模式
+      <span class="st-count">5 种操作</span>
+    </div>
+    <div class="t-wrap">
+      <table>
+        <thead><tr><th>行为</th><th>控制方式</th><th>描述</th></tr></thead>
+        <tbody>
+          <tr><td>前进</td><td>按住 <code>W</code> 键</td><td>人物前进</td></tr>
+          <tr><td>后退</td><td>按住 <code>S</code> 键</td><td>人物后退</td></tr>
+          <tr><td>左转</td><td>按住 <code>A</code> 键</td><td>人物左转后前进</td></tr>
+          <tr><td>右转</td><td>按住 <code>D</code> 键</td><td>人物右转后前进</td></tr>
+          <tr><td>跳跃</td><td>单击 <code>空格</code> 键</td><td>人物跳跃障碍物</td></tr>
+          <tr><td>切换人称</td><td>单击 <code>V</code> 键</td><td>第一人称（沉浸）vs 第三人称（俯视），默认第三人称</td></tr>
+          <tr><td>转动视角</td><td><code>鼠标</code> 移动</td><td>自由环顾四周</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mode-hint">
+      若仅需要人行效果，请调用 <code>Turn</code> 接口控制人行效果开关。
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="section" id="features">
+    <div class="section-title">
+      <span class="st-dot" style="background:var(--purple)"></span>
+      核心特性
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="fc-icon" style="background:var(--accent-glow);color:var(--accent)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3>接口自动注册</h3>
+        <p>支持同步接口、异步接口和触发接口三种类型，接口自动注册至统一管理系统</p>
+        <div class="fc-tags"><span>sync</span><span>async</span><span>trigger</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon" style="background:var(--green-bg);color:var(--green)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg>
+        </div>
+        <h3>统一接口调用</h3>
+        <p>统一的接口调用入口，支持像素流方式与蓝图方式接口通信</p>
+        <div class="fc-tags"><span>Pixel Streaming</span><span>Blueprint</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon" style="background:var(--amber-bg);color:var(--amber)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>视口与漫游控制</h3>
+        <p>完备的 DefaultPawn 位置控制、视角操作、漫游管理、输入配置接口</p>
+        <div class="fc-tags"><span>UCFView</span><span>Viewport</span></div>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon" style="background:var(--cyan-bg);color:var(--cyan)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/><line x1="22" y1="8.5" x2="12" y2="15.5"/><line x1="2" y1="8.5" x2="12" y2="15.5"/></svg>
+        </div>
+        <h3>接口重置</h3>
+        <p>支持运行时接口状态重置，清除 UCFView 接口类的所有状态和缓存</p>
+        <div class="fc-tags"><span>Reset</span><span>Cache</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modules -->
+  <div class="section" id="modules">
+    <div class="section-title">
+      <span class="st-dot" style="background:var(--pink)"></span>
+      内置模块
+    </div>
+    <div class="module-list">
+      <div class="module-item">
+        <div class="mi-top">
+          <div class="mi-dot" style="background:var(--accent)"></div>
+          <span class="mi-name">UCFCore</span>
+        </div>
+        <div class="mi-desc">核心模块 — 接口管理系统、接口基类、GamePlay 框架</div>
+        <div class="mi-subs"><span>UCFIManagement</span><span>UCFIBase</span><span>GamePlay</span></div>
+      </div>
+      <div class="module-item">
+        <div class="mi-top">
+          <div class="mi-dot" style="background:var(--green)"></div>
+          <span class="mi-name">UCFLibrary</span>
+        </div>
+        <div class="mi-desc">工具库模块 — JSON 处理、数学工具、反射工具、资源管理工具</div>
+        <div class="mi-subs"><span>JSON</span><span>Math</span><span>Reflection</span><span>Resource</span></div>
+      </div>
+      <div class="module-item">
+        <div class="mi-top">
+          <div class="mi-dot" style="background:var(--amber)"></div>
+          <span class="mi-name">UCFPlugin</span>
+        </div>
+        <div class="mi-desc">功能插件模块 — 外轮廓高亮、视点管理</div>
+        <div class="mi-subs"><span>UCFOutline</span><span>UCFView</span></div>
+      </div>
+      <div class="module-item">
+        <div class="mi-top">
+          <div class="mi-dot" style="background:var(--cyan)"></div>
+          <span class="mi-name">UCFEnhanceEditor</span>
+        </div>
+        <div class="mi-desc">编辑器增强模块</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function initTheme() {
+  const saved = localStorage.getItem('ucf-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+
+function toggleTheme() {
+  const root = document.documentElement;
+  const isDark = root.classList.toggle('dark');
+  localStorage.setItem('ucf-theme', isDark ? 'dark' : 'light');
+}
+
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-80px 0px -60% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

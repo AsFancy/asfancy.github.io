@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCFView · API Reference</title>
+<script src="https://cdn.tailwindcss.com">
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+</script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    /* ---- Light ---- */
+    --bg-deep: #f4f6fb;
+    --bg-side: #ffffff;
+    --bg-card: #ffffff;
+    --bg-elevated: #edf0f7;
+    --bg-hover: rgba(99,102,241,0.06);
+    --border: #e2e6ef;
+    --border-accent: #c7d2fe;
+    --text-main: #0b0f1a;
+    --text-dim: #3f4659;
+    --text-muted: #8b92a8;
+    --accent: #4f46e5;
+    --accent-glow: rgba(79,70,229,0.1);
+    --accent-sub: #06b6d4;
+    --accent-sub-glow: rgba(6,182,212,0.1);
+    --green: #059669;
+    --green-bg: rgba(5,150,105,0.08);
+    --amber: #d97706;
+    --amber-bg: rgba(217,119,6,0.08);
+    --purple: #7c3aed;
+    --purple-bg: rgba(124,58,237,0.08);
+    --pink: #db2777;
+    --pink-bg: rgba(219,39,119,0.08);
+    --cyan: #0891b2;
+    --cyan-bg: rgba(8,145,178,0.08);
+    --rose: #e11d48;
+    --rose-bg: rgba(225,29,72,0.08);
+    --callout-warn-bg: #fffbeb;
+    --callout-warn-border: #fde68a;
+    --callout-info-bg: #eef2ff;
+    --callout-info-border: #c7d2fe;
+    --table-hdr: #edf0f7;
+    --code-bg: #f8f9fb;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+    --sidebar-bg: rgba(255,255,255,0.92);
+    --topbar-bg: rgba(244,246,251,0.88);
+    --hljs-color: #1e293b;
+    color-scheme: light;
+  }
+  :root.dark {
+    --bg-deep: #080b16;
+    --bg-side: #0c1021;
+    --bg-card: #0f1428;
+    --bg-elevated: #151b32;
+    --bg-hover: rgba(99,102,241,0.08);
+    --border: #1e2440;
+    --border-accent: #2d3560;
+    --text-main: #e8edf5;
+    --text-dim: #9ca3bf;
+    --text-muted: #5c6490;
+    --accent: #818cf8;
+    --accent-glow: rgba(129,140,248,0.12);
+    --accent-sub: #22d3ee;
+    --accent-sub-glow: rgba(34,211,238,0.1);
+    --green: #34d399;
+    --green-bg: rgba(52,211,153,0.1);
+    --amber: #fbbf24;
+    --amber-bg: rgba(251,191,36,0.1);
+    --purple: #a78bfa;
+    --purple-bg: rgba(167,139,250,0.1);
+    --pink: #f472b6;
+    --pink-bg: rgba(244,114,182,0.1);
+    --cyan: #22d3ee;
+    --cyan-bg: rgba(34,211,238,0.1);
+    --rose: #fb7185;
+    --rose-bg: rgba(251,113,133,0.1);
+    --callout-warn-bg: rgba(217,119,6,0.1);
+    --callout-warn-border: rgba(217,119,6,0.25);
+    --callout-info-bg: rgba(99,102,241,0.1);
+    --callout-info-border: rgba(99,102,241,0.2);
+    --table-hdr: #151b32;
+    --code-bg: #0d1124;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+    --sidebar-bg: rgba(12,16,33,0.94);
+    --topbar-bg: rgba(8,11,22,0.9);
+    --hljs-color: #e2e8f0;
+    color-scheme: dark;
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-main);
+    display: flex;
+    min-height: 100vh;
+    transition: background .3s, color .3s;
+  }
+
+  /* Grid overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  :root.dark body::before {
+    background-image:
+      linear-gradient(rgba(129,140,248,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(129,140,248,0.04) 1px, transparent 1px);
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 260px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; z-index: 50;
+    transition: transform .35s cubic-bezier(.4,0,.2,1), background .3s;
+  }
+  .sidebar-brand {
+    padding: 22px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .sidebar-brand .logo-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sidebar-brand .logo-icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-sub));
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #fff;
+  }
+  .sidebar-brand h1 {
+    font-size: 18px; font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -.02em;
+  }
+  .sidebar-brand p {
+    font-size: 11px; color: var(--text-muted);
+    margin-top: 2px; letter-spacing: .04em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .sidebar-search {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .sidebar-search input {
+    width: 100%; padding: 9px 12px 9px 34px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text-main);
+    font-size: 13px; font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s, background .3s;
+  }
+  .sidebar-search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .sidebar-search input::placeholder { color: var(--text-muted); }
+  .sidebar-search .s-icon {
+    position: absolute; left: 27px; top: 50%;
+    transform: translateY(-50%); color: var(--text-muted);
+    pointer-events: none;
+  }
+  .sidebar-nav {
+    flex: 1; overflow-y: auto; padding: 8px 0 20px;
+  }
+  .sidebar-nav::-webkit-scrollbar { width: 3px; }
+  .nav-group {
+    padding: 16px 16px 4px 20px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .12em; color: var(--text-muted);
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 16px 6px 20px;
+    margin: 0 8px; border-radius: 6px;
+    font-size: 12px; font-weight: 500; color: var(--text-dim);
+    cursor: pointer; transition: all .15s;
+    text-decoration: none; position: relative;
+  }
+  .nav-item:hover { color: var(--text-main); background: var(--accent-glow); }
+  .nav-item.active {
+    color: var(--accent); background: var(--accent-glow);
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 60%; border-radius: 0 2px 2px 0;
+    background: var(--accent);
+  }
+  .nav-item .nname { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ===== MAIN ===== */
+  .main {
+    margin-left: 260px; flex: 1; min-width: 0; position: relative; z-index: 1;
+  }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--topbar-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px; height: 56px;
+    display: flex; align-items: center; gap: 12px;
+    transition: background .3s;
+  }
+  .topbar .mb-toggle {
+    display: none; background: none; border: none;
+    color: var(--text-dim); cursor: pointer; padding: 4px;
+  }
+  .topbar .crumbs {
+    font-size: 12px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 8px;
+    flex: 1;
+  }
+  .topbar .crumbs .sep { opacity: .4; }
+  .topbar .crumbs .cur { color: var(--text-dim); }
+
+  /* Theme toggle */
+  .theme-toggle {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all .2s;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  .theme-toggle svg { transition: transform .4s; }
+  .theme-toggle:hover svg { transform: rotate(15deg); }
+
+  .content {
+    max-width: 960px; padding: 0 36px 80px; margin: 0 auto;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 44px 0 36px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 36px;
+    position: relative;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-sub), transparent);
+    opacity: .5;
+  }
+  .hero .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    background: var(--accent-glow);
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .02em;
+  }
+  .hero h1 {
+    font-size: 34px; font-weight: 800;
+    letter-spacing: -.03em; line-height: 1.15;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent), var(--accent-sub));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 14px; color: var(--text-dim);
+    line-height: 1.7; max-width: 620px; margin-top: 10px;
+  }
+
+  /* ===== STATS ROW ===== */
+  .stats {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 12px; margin-bottom: 36px;
+  }
+  .stat-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 18px;
+    transition: border-color .2s, box-shadow .2s, background .3s;
+    position: relative; overflow: hidden;
+  }
+  .stat-card:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-card .stat-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .stat-card .num {
+    font-size: 24px; font-weight: 700; letter-spacing: -.02em;
+  }
+  .stat-card .lbl {
+    font-size: 11px; color: var(--text-muted); margin-top: 2px;
+    text-transform: uppercase; letter-spacing: .05em; font-weight: 600;
+  }
+
+  /* ===== GROUP SECTION ===== */
+  .group-section { margin-bottom: 36px; }
+  .group-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .group-header .g-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .group-header h2 {
+    font-size: 16px; font-weight: 700; color: var(--text-main);
+    letter-spacing: -.01em;
+  }
+  .group-header .g-count {
+    font-size: 11px; color: var(--text-muted);
+    background: var(--bg-elevated); padding: 1px 9px;
+    border-radius: 6px; font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ===== ENDPOINT CARD ===== */
+  .ep-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color .2s, box-shadow .2s, background .3s;
+  }
+  .ep-card:hover { border-color: var(--border-accent); }
+  .ep-card.open {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow-md);
+  }
+  .ep-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; cursor: pointer;
+    user-select: none; transition: background .15s;
+  }
+  .ep-header:hover { background: var(--bg-hover); }
+  .ep-tag {
+    font-size: 9px; font-weight: 700; padding: 2px 7px;
+    border-radius: 4px; letter-spacing: .04em;
+    flex-shrink: 0; font-family: 'JetBrains Mono', monospace;
+  }
+  .ep-tag.sync { background: var(--green-bg); color: var(--green); }
+  .ep-tag.trigger { background: var(--amber-bg); color: var(--amber); }
+  .ep-tag.system { background: var(--purple-bg); color: var(--purple); }
+  .ep-name {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600;
+    color: var(--text-main); flex: 1;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .ep-arrow {
+    color: var(--text-muted); flex-shrink: 0;
+    transition: transform .3s;
+  }
+  .ep-card.open .ep-arrow { transform: rotate(180deg); }
+
+  .ep-body { display: none; }
+  .ep-card.open .ep-body { display: block; }
+
+  .ep-inner { padding: 0 18px 18px; }
+  .ep-inner > * + * { margin-top: 18px; }
+
+  .ep-desc {
+    font-size: 13px; line-height: 1.7; color: var(--text-dim);
+  }
+
+  /* Callout */
+  .callout {
+    border-radius: 8px; padding: 12px 14px;
+    display: flex; gap: 10px; font-size: 12px; line-height: 1.6;
+  }
+  .callout svg { flex-shrink: 0; margin-top: 2px; }
+  .callout.warn {
+    background: var(--callout-warn-bg);
+    border: 1px solid var(--callout-warn-border);
+  }
+  .callout.warn svg { color: var(--amber); }
+  .callout.warn .c-title { color: var(--amber); font-weight: 600; margin-bottom: 3px; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+  .callout.info {
+    background: var(--callout-info-bg);
+    border: 1px solid var(--callout-info-border);
+  }
+  .callout.info svg { color: var(--accent); }
+  .callout.info .c-title { color: var(--accent); font-weight: 600; margin-bottom: 3px; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+  .callout ul { list-style: none; }
+  .callout ul li {
+    position: relative; padding-left: 14px;
+    color: var(--text-dim);
+  }
+  .callout ul li::before {
+    content: ""; position: absolute; left: 0; top: 7px;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .sect-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+
+  /* Params table */
+  .p-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .p-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 12px; min-width: 480px;
+  }
+  .p-table th {
+    text-align: left; padding: 7px 12px;
+    font-weight: 600; color: var(--text-muted);
+    font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
+    background: var(--table-hdr);
+    border-bottom: 1px solid var(--border);
+  }
+  .p-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim); vertical-align: top;
+  }
+  .p-table tr:last-child td { border-bottom: none; }
+  .p-table .pn {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-main); white-space: nowrap;
+  }
+  .p-table .pn .nested { color: var(--text-muted); }
+  .p-table .pt {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .p-table .pr { font-size: 10px; white-space: nowrap; }
+  .p-table .pr.y { color: var(--green); }
+  .p-table .pr.n { color: var(--text-muted); }
+  .p-table .pd { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+  .p-table .pd code {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    background: var(--accent-glow); color: var(--accent);
+    padding: 1px 5px; border-radius: 3px;
+  }
+
+  /* Code blocks */
+  .cb {
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    transition: border-color .2s;
+  }
+  .cb-h {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 5px 12px; background: var(--table-hdr);
+    border-bottom: 1px solid var(--border);
+    font-size: 10px; color: var(--text-muted);
+  }
+  .cb-h .cbl { display: flex; align-items: center; gap: 5px; }
+  .cb-h .cbl .dot { width: 7px; height: 7px; border-radius: 50%; transition: opacity .2s; }
+  .cb-h .cbl .dot.r { background: #ef4444; }
+  .cb-h .cbl .dot.y { background: #eab308; }
+  .cb-h .cbl .dot.g { background: #22c55e; }
+  .cb-h .cpy {
+    display: flex; align-items: center; gap: 4px;
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 10px; font-family: 'Inter', sans-serif;
+    padding: 2px 7px; border-radius: 4px; transition: all .15s;
+  }
+  .cb-h .cpy:hover { background: var(--bg-hover); color: var(--text-dim); }
+  .cb-h .cpy.done { color: var(--green); }
+  .cb pre {
+    margin: 0; padding: 12px; background: var(--code-bg);
+    overflow-x: auto; font-size: 12px; line-height: 1.6;
+    transition: background .3s;
+  }
+  .cb pre code {
+    font-family: 'JetBrains Mono', monospace; background: none !important; padding: 0 !important;
+  }
+  .hljs { background: transparent !important; }
+  .hljs { color: var(--hljs-color) !important; }
+  :root.dark .hljs { color: #e2e8f0 !important; }
+  :root.dark .hljs-keyword,
+  :root.dark .hljs-selector-tag,
+  :root.dark .hljs-type { color: #a78bfa !important; }
+  :root.dark .hljs-string,
+  :root.dark .hljs-attr { color: #6ee7b7 !important; }
+  :root.dark .hljs-number,
+  :root.dark .hljs-literal { color: #67e8f9 !important; }
+  :root.dark .hljs-comment,
+  :root.dark .hljs-quote { color: #64748b !important; }
+  :root.dark .hljs-built_in,
+  :root.dark .hljs-title { color: #818cf8 !important; }
+  :root.dark .hljs-property { color: #7dd3fc !important; }
+  :root.dark .hljs-attribute { color: #fcd34d !important; }
+  :root.dark .hljs-punctuation { color: #94a3b8 !important; }
+
+  /* Mobile */
+  .sidebar-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.35); z-index: 45;
+    backdrop-filter: blur(4px);
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-overlay.open { display: block; }
+    .main { margin-left: 0; }
+    .topbar { padding: 0 14px; }
+    .topbar .mb-toggle { display: block; }
+    .topbar .crumbs { font-size: 11px; }
+    .content { padding: 0 14px 60px; }
+    .hero { padding: 28px 0 24px; }
+    .hero h1 { font-size: 24px; }
+    .stats { grid-template-columns: repeat(2,1fr); }
+    .ep-header { padding: 10px 12px; }
+    .ep-inner { padding: 0 12px 12px; }
+    .ep-name { font-size: 11px; }
+  }
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: repeat(2,1fr); gap: 8px; }
+    .stat-card { padding: 10px 12px; }
+    .stat-card .num { font-size: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="ov" onclick="toggleSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo-row">
+      <div class="logo-icon">U</div>
+      <h1>UCFView</h1>
+    </div>
+    <p>// API Reference v1.0</p>
+  </div>
+  <div class="sidebar-search">
+    <svg class="s-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="搜索接口..." oninput="doFilter(this.value)">
+  </div>
+  <nav class="sidebar-nav" id="snav"></nav>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <button class="mb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
+    </button>
+    <a href="index.html" style="display:flex;align-items:center;gap:5px;text-decoration:none;color:var(--text-muted);font-size:12px;padding:4px 10px;border-radius:6px;transition:all .15s;margin-right:4px;" onmouseover="this.style.background='var(--accent-glow)';this.style.color='var(--accent)'" onmouseout="this.style.background='transparent';this.style.color='var(--text-muted)'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      主页
+    </a>
+    <div class="crumbs">
+      <span class="cur">UCFView</span>
+      <span class="sep">/</span>
+      <span>API Reference</span>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" aria-label="切换主题">
+      <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </header>
+
+  <div class="content">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg>
+        UCFView API
+      </div>
+      <h1><span class="gradient">Digital Twin</span> 视口控制接口</h1>
+      <p>UCFView 提供 DefaultPawn 的位置控制、视角操作、漫游管理、输入配置和功能开关等完整接口，用于三维数字孪生场景中的视口控制与漫游交互。</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats" id="statsRow"></div>
+
+    <!-- Groups -->
+    <div id="groupsContainer"></div>
+
+  </div>
+</div>
+
+<script>
+// ===================== THEME =====================
+(function initTheme() {
+  const saved = localStorage.getItem('ucf-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+
+function toggleTheme() {
+  const root = document.documentElement;
+  const isDark = root.classList.toggle('dark');
+  localStorage.setItem('ucf-theme', isDark ? 'dark' : 'light');
+}
+
+// ===================== DATA =====================
+const GRP = [
+  { id:"pos", label:"位置与视角", dot:"#34d399",
+    apis:["UCFView/SetDPPosition","UCFView/SetDPLocation","UCFView/SetDPRotation","UCFView/GetDPPosition","UCFView/FocusToActorByTag"] },
+  { id:"roam", label:"漫游控制", dot:"#60a5fa",
+    apis:["UCFView/StartRoamUniformTime","UCFView/StartRoamUniformSpeed","UCFView/StartRoamCustomTime","UCFView/PauseRoam","UCFView/ResumeRoam","UCFView/StopRoam","UCFView/RestartRoam","UCFView/OnRoamFinished"] },
+  { id:"input", label:"输入配置", dot:"#fbbf24",
+    apis:["UCFView/ModifyDPInputConfig","UCFView/ResetDPInputToDefault"] },
+  { id:"feature", label:"功能控制", dot:"#a78bfa",
+    apis:["UCFView/SetDPFeatureSwitch","UCFView/SetDPSpeedParams"] },
+  { id:"sys", label:"系统", dot:"#f472b6",
+    apis:["UCFView/Reset"] }
+];
+
+const API = {
+  "UCFView/SetDPPosition": {
+    t:"sync", desc:"设置 DefaultPawn 的位置和视角，支持相对目标位置的反向偏移和平滑移动效果。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","OffestDistance 为相对目标位置的反向偏移距离，单位为厘米","bIgnoreLag 为 false 时会启用平滑移动效果"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["DesirLocation","Object","必填","目标位置，世界坐标系下的三维坐标"],["DesirLocation.X","Float","必填","X坐标，单位：厘米"],["DesirLocation.Y","Float","必填","Y坐标，单位：厘米"],["DesirLocation.Z","Float","必填","Z坐标，单位：厘米"],["DesirRotation","Object","必填","目标视角，欧拉角表示的旋转值"],["DesirRotation.Pitch","Float","必填","俯仰角，单位：度，取值 [-90,90]"],["DesirRotation.Yaw","Float","必填","偏航角，单位：度，取值 [-180,180]"],["DesirRotation.Roll","Float","必填","翻滚角，单位：度，取值 [-180,180]"],["OffestDistance","Float","选填","相对目标位置的反向偏移距离（厘米），默认 <code>0</code>"],["bIgnoreLag","Boolean","选填","是否忽略平滑移动效果，默认 <code>false</code>"]],
+    req:`{\n  "ExecutionID": "123456789",\n  "Interface": "UCFView/SetDPPosition",\n  "Params": {\n    "DesirLocation": { "X": 1000.0, "Y": 2000.0, "Z": 500.0 },\n    "DesirRotation": { "Pitch": 0.0, "Yaw": 90.0, "Roll": 0.0 },\n    "OffestDistance": 100.0,\n    "bIgnoreLag": false\n  }\n}`,
+    cb:`{\n  "ExecutionID": "123456789",\n  "Interface": "UCFView/SetDPPosition",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/SetDPLocation": {
+    t:"sync", desc:"设置 DefaultPawn 的位置，保持当前视角不变，支持反向偏移和平滑移动。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","该接口仅修改位置，不改变当前视角","OffestDistance 为相对目标位置的反向偏移距离，单位为厘米","bIgnoreLag 为 false 时会启用平滑移动效果"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["DesirLocation","Object","必填","目标位置，世界坐标系下的三维坐标"],["DesirLocation.X","Float","必填","X坐标，单位：厘米"],["DesirLocation.Y","Float","必填","Y坐标，单位：厘米"],["DesirLocation.Z","Float","必填","Z坐标，单位：厘米"],["OffestDistance","Float","选填","相对目标位置的反向偏移距离（厘米），默认 <code>0</code>"],["bIgnoreLag","Boolean","选填","是否忽略平滑移动效果，默认 <code>false</code>"]],
+    req:`{\n  "ExecutionID": "223456789",\n  "Interface": "UCFView/SetDPLocation",\n  "Params": {\n    "DesirLocation": { "X": 1000.0, "Y": 2000.0, "Z": 500.0 },\n    "OffestDistance": 100.0,\n    "bIgnoreLag": false\n  }\n}`,
+    cb:`{\n  "ExecutionID": "223456789",\n  "Interface": "UCFView/SetDPLocation",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/SetDPRotation": {
+    t:"sync", desc:"设置 DefaultPawn 的视角，保持当前位置不变，支持平滑旋转效果。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","该接口仅修改视角，不改变当前位置","bIgnoreLag 为 false 时会启用平滑旋转效果"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["DesirRotation","Object","必填","目标视角，欧拉角表示的旋转值"],["DesirRotation.Pitch","Float","必填","俯仰角，单位：度，取值 [-90,90]"],["DesirRotation.Yaw","Float","必填","偏航角，单位：度，取值 [-180,180]"],["DesirRotation.Roll","Float","必填","翻滚角，单位：度，取值 [-180,180]"],["bIgnoreLag","Boolean","选填","是否忽略平滑移动效果，默认 <code>false</code>"]],
+    req:`{\n  "ExecutionID": "323456789",\n  "Interface": "UCFView/SetDPRotation",\n  "Params": {\n    "DesirRotation": { "Pitch": -30.0, "Yaw": 180.0, "Roll": 0.0 },\n    "bIgnoreLag": false\n  }\n}`,
+    cb:`{\n  "ExecutionID": "323456789",\n  "Interface": "UCFView/SetDPRotation",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/GetDPPosition": {
+    t:"sync", desc:"获取 DefaultPawn 当前的位置和视角信息，返回值保留两位小数。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","返回的位置和旋转值均保留两位小数","位置坐标为世界坐标系下的三维坐标","旋转值为欧拉角表示"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]], pi:[],
+    req:`{\n  "ExecutionID": "423456789",\n  "Interface": "UCFView/GetDPPosition",\n  "Params": {}\n}`,
+    cb:`{\n  "ExecutionID": "423456789",\n  "Interface": "UCFView/GetDPPosition",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "PawnLocation": { "X": 1000.50, "Y": 2000.75, "Z": 500.25 },\n    "PawnRotation": { "Pitch": -30.50, "Yaw": 180.00, "Roll": 0.00 }\n  }\n}`,
+    cbi:[["PawnLocation","Object","必填","当前位置，世界坐标系下的三维坐标，保留两位小数"],["PawnLocation.X","Float","必填","X坐标（厘米）"],["PawnLocation.Y","Float","必填","Y坐标（厘米）"],["PawnLocation.Z","Float","必填","Z坐标（厘米）"],["PawnRotation","Object","必填","当前视角，欧拉角表示的旋转值，保留两位小数"],["PawnRotation.Pitch","Float","必填","俯仰角（度）"],["PawnRotation.Yaw","Float","必填","偏航角（度）"],["PawnRotation.Roll","Float","必填","翻滚角（度）"]]
+  },
+  "UCFView/FocusToActorByTag": {
+    t:"sync", desc:"聚焦到指定 Tag 的对象。通过 Tag 查找对象，计算对象及其所有挂载子对象的包围盒，以包围盒中心为聚焦点设置 Pawn 位置。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","通过 Tag 查找对象，如果找到多个对象则使用第一个","计算包围盒时会包含目标对象及其所有挂载的子对象","若未传入 OffestDistance 或小于 0，则使用包围盒最大边长的 2 倍作为偏移距离","若未传入 DesirRotation，则保持当前视角不变","bIgnoreLag 为 false 时会启用平滑移动效果"],
+    scenario:["快速定位到场景中的特定对象","自动计算合适的观察距离","支持包含多个子对象的复杂对象聚焦"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["TargetTag","String","必填","目标对象的 Tag 标识"],["OffestDistance","Float","选填","相对包围盒中心的反向偏移距离（厘米）。小于 0 则自动计算"],["DesirRotation","Object","选填","目标视角。不传入则保持当前视角"],["DesirRotation.Pitch","Float","必填","俯仰角（度），取值 [-90,90]"],["DesirRotation.Yaw","Float","必填","偏航角（度），取值 [-180,180]"],["DesirRotation.Roll","Float","必填","翻滚角（度），取值 [-180,180]"],["bIgnoreLag","Boolean","选填","是否忽略平滑移动效果，默认 <code>false</code>"]],
+    re:[{lb:"仅指定 Tag（自动计算偏移）",cd:`{\n  "ExecutionID": "1123456789",\n  "Interface": "UCFView/FocusToActorByTag",\n  "Params": { "TargetTag": "Building_01" }\n}`},{lb:"指定 Tag + 偏移距离",cd:`{\n  "ExecutionID": "1123456789",\n  "Interface": "UCFView/FocusToActorByTag",\n  "Params": {\n    "TargetTag": "Building_01",\n    "OffestDistance": 500.0\n  }\n}`},{lb:"完整参数",cd:`{\n  "ExecutionID": "1123456789",\n  "Interface": "UCFView/FocusToActorByTag",\n  "Params": {\n    "TargetTag": "Building_01",\n    "OffestDistance": 500.0,\n    "DesirRotation": { "Pitch": -30.0, "Yaw": 45.0, "Roll": 0.0 },\n    "bIgnoreLag": false\n  }\n}`}],
+    ce:[{lb:"成功",cd:`{\n  "ExecutionID": "1123456789",\n  "Interface": "UCFView/FocusToActorByTag",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`},{lb:"失败（未找到对象）",cd:`{\n  "ExecutionID": "1123456789",\n  "Interface": "UCFView/FocusToActorByTag",\n  "Status": false,\n  "DebugInfo": "未找到Tag为[Building_01]的对象",\n  "Params": {}\n}`}]
+  },
+  "UCFView/StartRoamUniformTime": {
+    t:"sync", desc:"开始 DefaultPawn 的漫游（均匀时间模式）。相邻关键帧耗时相同，速度根据距离自动变化。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","关键帧数组至少包含 2 个关键帧","漫游总时长必须大于 0","相邻关键帧之间耗时相同，距离长则速度快，距离短则速度慢","漫游完成后自动触发 OnRoamFinished"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["Keyframes","Array","必填","关键帧数组，至少包含 2 个元素"],["Keyframes[].Location","Object","必填","关键帧位置（世界坐标）"],["Keyframes[].Location.X","Float","必填","X坐标（厘米）"],["Keyframes[].Location.Y","Float","必填","Y坐标（厘米）"],["Keyframes[].Location.Z","Float","必填","Z坐标（厘米）"],["Keyframes[].Rotation","Object","必填","关键帧视角（欧拉角）"],["Keyframes[].Rotation.Pitch","Float","必填","俯仰角（度）"],["Keyframes[].Rotation.Yaw","Float","必填","偏航角（度）"],["Keyframes[].Rotation.Roll","Float","必填","翻滚角（度）"],["Duration","Float","必填","漫游总时长（秒）"]],
+    req:`{\n  "ExecutionID": "523456789",\n  "Interface": "UCFView/StartRoamUniformTime",\n  "Params": {\n    "Keyframes": [\n      { "Location": {"X":0,"Y":0,"Z":500}, "Rotation": {"Pitch":-30,"Yaw":0,"Roll":0} },\n      { "Location": {"X":1000,"Y":0,"Z":500}, "Rotation": {"Pitch":-30,"Yaw":90,"Roll":0} },\n      { "Location": {"X":1000,"Y":1000,"Z":500}, "Rotation": {"Pitch":-30,"Yaw":180,"Roll":0} }\n    ],\n    "Duration": 15.0\n  }\n}`,
+    cb:`{\n  "ExecutionID": "523456789",\n  "Interface": "UCFView/StartRoamUniformTime",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/StartRoamUniformSpeed": {
+    t:"sync", desc:"开始 DefaultPawn 的漫游（均匀速度模式）。整个过程保持匀速运动，各段耗时根据路径长度自动分配。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","关键帧数组至少包含 2 个关键帧","漫游总时长必须大于 0","整个过程保持匀速，各段耗时根据路径长度自动分配","漫游完成后自动触发 OnRoamFinished"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["Keyframes","Array","必填","关键帧数组，至少包含 2 个元素"],["Keyframes[].Location","Object","必填","关键帧位置（世界坐标）"],["Keyframes[].Location.X","Float","必填","X坐标（厘米）"],["Keyframes[].Location.Y","Float","必填","Y坐标（厘米）"],["Keyframes[].Location.Z","Float","必填","Z坐标（厘米）"],["Keyframes[].Rotation","Object","必填","关键帧视角（欧拉角）"],["Keyframes[].Rotation.Pitch","Float","必填","俯仰角（度）"],["Keyframes[].Rotation.Yaw","Float","必填","偏航角（度）"],["Keyframes[].Rotation.Roll","Float","必填","翻滚角（度）"],["Duration","Float","必填","漫游总时长（秒）"]],
+    req:`{\n  "ExecutionID": "623456789",\n  "Interface": "UCFView/StartRoamUniformSpeed",\n  "Params": {\n    "Keyframes": [\n      { "Location": {"X":1000,"Y":2000,"Z":500}, "Rotation": {"Pitch":-30,"Yaw":0,"Roll":0} },\n      { "Location": {"X":1500,"Y":2500,"Z":600}, "Rotation": {"Pitch":-20,"Yaw":90,"Roll":0} },\n      { "Location": {"X":2000,"Y":3000,"Z":700}, "Rotation": {"Pitch":-10,"Yaw":180,"Roll":0} }\n    ],\n    "Duration": 10.0\n  }\n}`,
+    cb:`{\n  "ExecutionID": "623456789",\n  "Interface": "UCFView/StartRoamUniformSpeed",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/StartRoamCustomTime": {
+    t:"sync", desc:"开始 DefaultPawn 的漫游（自定义时间模式）。每个关键帧可独立设置到达用时，提供最灵活的时间控制。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","关键帧数组至少包含 2 个关键帧","每个 Duration 表示从上一关键帧到达该帧的时间（段时长）","首帧 Duration 可设为 0（作为起点），后续必须大于 0","漫游总时长 = 各段 Duration 累加","漫游完成后自动触发 OnRoamFinished"],
+    scenario:["需要精确控制每段漫游的时长","某些关键点快速通过，某些需要缓慢展示","根据实际需求灵活调整各段速度"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["Keyframes","Array","必填","关键帧数组，每个元素含 Location、Rotation、Duration"]],
+    kpi:[["Location","Object","必填","关键帧位置（世界坐标）"],["Location.X","Float","必填","X坐标（厘米）"],["Location.Y","Float","必填","Y坐标（厘米）"],["Location.Z","Float","必填","Z坐标（厘米）"],["Rotation","Object","必填","关键帧视角（欧拉角）"],["Rotation.Pitch","Float","必填","俯仰角（度）"],["Rotation.Yaw","Float","必填","偏航角（度）"],["Rotation.Roll","Float","必填","翻滚角（度）"],["Duration","Float","必填","到达该帧用时（秒），首帧可设 0"]],
+    req:`{\n  "ExecutionID": "1023456789",\n  "Interface": "UCFView/StartRoamCustomTime",\n  "Params": {\n    "Keyframes": [\n      { "Location": {"X":0,"Y":0,"Z":500}, "Rotation": {"Pitch":-30,"Yaw":0,"Roll":0}, "Duration": 0 },\n      { "Location": {"X":1000,"Y":0,"Z":500}, "Rotation": {"Pitch":-30,"Yaw":90,"Roll":0}, "Duration": 3 },\n      { "Location": {"X":1000,"Y":1000,"Z":600}, "Rotation": {"Pitch":-20,"Yaw":180,"Roll":0}, "Duration": 5 },\n      { "Location": {"X":0,"Y":1000,"Z":700}, "Rotation": {"Pitch":-10,"Yaw":270,"Roll":0}, "Duration": 2 }\n    ]\n  }\n}`,
+    reqNote:"各段时间分配：第 1 段 3s（快速通过）→ 第 2 段 5s（缓慢展示）→ 第 3 段 2s（快速结束），总计 10s",
+    cb:`{\n  "ExecutionID": "1023456789",\n  "Interface": "UCFView/StartRoamCustomTime",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/PauseRoam": {
+    t:"sync", desc:"暂停当前进行的漫游，保持当前位置和视角不变，适用于所有漫游模式。",
+    notes:["必须在漫游进行中才能暂停","暂停后可通过 ResumeRoam 继续漫游","适用于所有三种漫游模式"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],pi:[],
+    req:`{\n  "ExecutionID": "623456789",\n  "Interface": "UCFView/PauseRoam",\n  "Params": {}\n}`,
+    cb:`{\n  "ExecutionID": "623456789",\n  "Interface": "UCFView/PauseRoam",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/ResumeRoam": {
+    t:"sync", desc:"继续已暂停的漫游，从暂停位置继续执行，适用于所有漫游模式。",
+    notes:["必须在漫游已暂停的状态下才能继续","继续后从暂停的时间点恢复","适用于所有三种漫游模式"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],pi:[],
+    req:`{\n  "ExecutionID": "723456789",\n  "Interface": "UCFView/ResumeRoam",\n  "Params": {}\n}`,
+    cb:`{\n  "ExecutionID": "723456789",\n  "Interface": "UCFView/ResumeRoam",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/StopRoam": {
+    t:"sync", desc:"停止当前进行的漫游并清除状态，适用于所有漫游模式。",
+    notes:["停止后漫游状态会被清除","需要重新调用 StartRoamXXX 才能再次漫游","适用于所有三种漫游模式"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],pi:[],
+    req:`{\n  "ExecutionID": "823456789",\n  "Interface": "UCFView/StopRoam",\n  "Params": {}\n}`,
+    cb:`{\n  "ExecutionID": "823456789",\n  "Interface": "UCFView/StopRoam",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/RestartRoam": {
+    t:"sync", desc:"重新开始漫游，从第一个关键帧执行。以上次启动时的模式和参数重新开始。",
+    notes:["必须先调用过 StartRoamXXX 初始化漫游数据","重新开始会将进度重置为 0","如果已暂停，重新开始后自动恢复运行","以上次模式（均匀时间/速度/自定义）重新开始"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],pi:[],
+    req:`{\n  "ExecutionID": "923456789",\n  "Interface": "UCFView/RestartRoam",\n  "Params": {}\n}`,
+    cb:`{\n  "ExecutionID": "923456789",\n  "Interface": "UCFView/RestartRoam",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/ModifyDPInputConfig": {
+    t:"sync", desc:"运行时统一修改 DefaultPawn 的所有输入配置，一次性设置所有控制输入方式。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","所有参数均为必填，需同时配置","所有输入方式必须唯一，不能重复绑定","修改后立即生效","可通过 ResetDPInputToDefault 恢复默认"],
+    scenario:["需要同时修改多个输入方式时","切换不同的操作模式（如左手/右手模式）","自定义完整的输入配置方案"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["HMoveInput","String","必填","水平移动输入"],["VUPInput","String","必填","垂直向上移动输入"],["VDownInput","String","必填","垂直向下移动输入"],["RotateAnchorInput","String","必填","固定锚点旋转输入"],["RotateSelfInput","String","必填","绕自身旋转输入"],["ZoomInput","String","必填","缩放输入"],["FocusInput","String","必填","快速聚焦输入"]],
+    re:[{lb:"标准配置",cd:`{\n  "ExecutionID": "1023456789",\n  "Interface": "UCFView/ModifyDPInputConfig",\n  "Params": {\n    "HMoveInput": "UCFInputTagBase.LeftMouseDown",\n    "VUPInput": "UCFInputTagDefaultPawn.QDown",\n    "VDownInput": "UCFInputTagDefaultPawn.EDown",\n    "RotateAnchorInput": "UCFInputTagBase.RightMouseDown",\n    "RotateSelfInput": "UCFInputTagBase.MiddleMouseDown",\n    "ZoomInput": "UCFInputTagBase.MiddleMouseRoll",\n    "FocusInput": "LeftMouseDoubleTap"\n  }\n}`},{lb:"自定义配置",cd:`{\n  "ExecutionID": "1023456789",\n  "Interface": "UCFView/ModifyDPInputConfig",\n  "Params": {\n    "HMoveInput": "UCFInputTagBase.RightMouseDown",\n    "VUPInput": "UCFInputTagDefaultPawn.EDown",\n    "VDownInput": "UCFInputTagDefaultPawn.QDown",\n    "RotateAnchorInput": "UCFInputTagBase.LeftMouseDown",\n    "RotateSelfInput": "UCFInputTagBase.MiddleMouseDown",\n    "ZoomInput": "UCFInputTagBase.MiddleMouseRoll",\n    "FocusInput": "RightMouseDoubleTap"\n  }\n}`}],
+    ce:[{lb:"成功",cd:`{\n  "ExecutionID": "1023456789",\n  "Interface": "UCFView/ModifyDPInputConfig",\n  "Status": true,\n  "DebugInfo": "修改成功",\n  "Params": {}\n}`},{lb:"失败（输入冲突）",cd:`{\n  "ExecutionID": "1023456789",\n  "Interface": "UCFView/ModifyDPInputConfig",\n  "Status": false,\n  "DebugInfo": "输入动作冲突",\n  "Params": {}\n}`},{lb:"失败（参数无效）",cd:`{\n  "ExecutionID": "1023456789",\n  "Interface": "UCFView/ModifyDPInputConfig",\n  "Status": false,\n  "DebugInfo": "HMoveInput无效或为空",\n  "Params": {}\n}`}]
+  },
+  "UCFView/ResetDPInputToDefault": {
+    t:"sync", desc:"恢复 DefaultPawn 的默认输入方式，将所有控制输入恢复为初始默认值。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","恢复所有输入方式到默认设置","恢复后立即生效"],
+    scenario:["自定义输入后需要恢复默认设置","重置所有输入配置到初始状态"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],pi:[],
+    req:`{\n  "ExecutionID": "1723456789",\n  "Interface": "UCFView/ResetDPInputToDefault",\n  "Params": {}\n}`,
+    cb:`{\n  "ExecutionID": "1723456789",\n  "Interface": "UCFView/ResetDPInputToDefault",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/SetDPFeatureSwitch": {
+    t:"sync", desc:"设置 DefaultPawn 各项功能的启用/禁用状态。所有参数均为选填，不传入则不修改对应功能。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","所有参数均为可选，不传入则保持当前状态不变","修改后立即生效"],
+    scenario:["根据场景需求启用或禁用特定功能","限制用户在特定状态下的操作权限","实现分阶段的功能开放"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["bEnableCollision","Boolean","选填","碰撞开关"],["bEnableHMove","Boolean","选填","固定锚点水平移动"],["bEnableVMove","Boolean","选填","竖直移动"],["bEnableRotateWithAnchor","Boolean","选填","固定锚点旋转"],["bEnableRotateWithSelf","Boolean","选填","绕自身旋转"],["bEnableZoom","Boolean","选填","缩放"],["bEnableFastFocus","Boolean","选填","快速聚焦"]],
+    re:[{lb:"仅禁用碰撞",cd:`{\n  "ExecutionID": "1823456789",\n  "Interface": "UCFView/SetDPFeatureSwitch",\n  "Params": { "bEnableCollision": false }\n}`},{lb:"禁用移动和旋转",cd:`{\n  "ExecutionID": "1823456789",\n  "Interface": "UCFView/SetDPFeatureSwitch",\n  "Params": {\n    "bEnableHMove": false,\n    "bEnableVMove": false,\n    "bEnableRotateWithAnchor": false,\n    "bEnableRotateWithSelf": false\n  }\n}`},{lb:"启用所有功能",cd:`{\n  "ExecutionID": "1823456789",\n  "Interface": "UCFView/SetDPFeatureSwitch",\n  "Params": {\n    "bEnableCollision": true,\n    "bEnableHMove": true,\n    "bEnableVMove": true,\n    "bEnableRotateWithAnchor": true,\n    "bEnableRotateWithSelf": true,\n    "bEnableZoom": true,\n    "bEnableFastFocus": true\n  }\n}`}],
+    cb:`{\n  "ExecutionID": "1823456789",\n  "Interface": "UCFView/SetDPFeatureSwitch",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/SetDPSpeedParams": {
+    t:"sync", desc:"设置 DefaultPawn 各项操作的速度参数。所有参数均为选填，不传入则保持当前值不变。",
+    notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","所有参数均为可选，不传入则保持当前值不变","ZoomPercent 限制在 [0.1, 0.8] 范围内","LagSpeed 限制在 [0.0, 8.0] 范围内，0 表示关闭平滑效果","修改后立即生效"],
+    scenario:["根据场景需求调整操作速度","为不同用户提供个性化操作体验","动态调整平滑效果强度"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
+    pi:[["RotateSpeed","Float","选填","旋转角速度，默认 <code>3.0</code>"],["VerticalMoveSpeed","Float","选填","竖直移动速度（米/秒），默认 <code>3.0</code>"],["ZoomPercent","Float","选填","缩放百分比，取值 [0.1, 0.8]，默认 <code>0.4</code>"],["LagSpeed","Float","选填","滞后平滑速度，取值 [0.0, 8.0]，默认 <code>5.0</code>"]],
+    re:[{lb:"仅修改旋转速度",cd:`{\n  "ExecutionID": "1323456789",\n  "Interface": "UCFView/SetDPSpeedParams",\n  "Params": { "RotateSpeed": 5.0 }\n}`},{lb:"修改多个参数",cd:`{\n  "ExecutionID": "1323456789",\n  "Interface": "UCFView/SetDPSpeedParams",\n  "Params": { "RotateSpeed": 4.0, "VerticalMoveSpeed": 5.0, "ZoomPercent": 0.5, "LagSpeed": 6.0 }\n}`},{lb:"关闭平滑效果",cd:`{\n  "ExecutionID": "1323456789",\n  "Interface": "UCFView/SetDPSpeedParams",\n  "Params": { "LagSpeed": 0.0 }\n}`}],
+    cb:`{\n  "ExecutionID": "1323456789",\n  "Interface": "UCFView/SetDPSpeedParams",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}`
+  },
+  "UCFView/OnRoamFinished": {
+    t:"trigger", desc:"漫游自动结束时触发的回调接口。当漫游正常完成（非手动停止）时由系统自动触发。",
+    notes:["触发接口，由系统自动调用，无需手动调用","仅在漫游自然完成时触发，手动 StopRoam 不会触发","适用于所有三种漫游模式","可用于在漫游结束后执行后续操作"],
+    noReq:true,
+    cf:[["ExecutionID","String","执行ID（系统自动生成）"],["Interface","String","固定为 UCFView/OnRoamFinished"],["Status","Boolean","固定为 true"],["DebugInfo","String","固定为「漫游已完成」"],["Params","Object","参数对象"]],
+    cb:`{\n  "ExecutionID": "auto_generated_id",\n  "Interface": "UCFView/OnRoamFinished",\n  "Status": true,\n  "DebugInfo": "漫游已完成",\n  "Params": {}\n}`
+  },
+  "UCFView/Reset": {
+    t:"system", desc:"重置 UCFView 接口类的所有状态，清除内存占用和缓存数据。",
+    notes:["系统自动生成的接口","清除 UCFView 接口类的所有状态和缓存","操作不可逆，重置后需重新调用相关接口","仅重置 UCFView 接口类，不影响其他接口类"],
+    pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],pi:[],
+    req:`{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/Reset",\n  "Params": {}\n}`,
+    cb:`{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/Reset",\n  "Status": true,\n  "DebugInfo": "success",\n  "Params": {}\n}`
+  }
+};
+
+// ===================== RENDER =====================
+const TL = {sync:"同步接口",trigger:"触发接口",system:"系统接口"};
+const TC = {sync:"sync",trigger:"trigger",system:"system"};
+const TDOT = {sync:"#34d399",trigger:"#fbbf24",system:"#a78bfa"};
+
+function renderAll() {
+  const flat = Object.keys(API);
+
+  // Stats
+  const total = flat.length;
+  const syncN = flat.filter(n=>API[n].t==="sync").length;
+  const trigN = flat.filter(n=>API[n].t==="trigger").length;
+  const sysN = flat.filter(n=>API[n].t==="system").length;
+  document.getElementById("statsRow").innerHTML = `
+    <div class="stat-card">
+      <div class="stat-bar" style="background:linear-gradient(90deg,var(--accent),var(--accent-sub))"></div>
+      <div class="num" style="color:var(--accent)">${total}</div>
+      <div class="lbl">接口总数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-bar" style="background:var(--green)"></div>
+      <div class="num" style="color:var(--green)">${syncN}</div>
+      <div class="lbl">同步接口</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-bar" style="background:var(--amber)"></div>
+      <div class="num" style="color:var(--amber)">${trigN}</div>
+      <div class="lbl">触发接口</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-bar" style="background:var(--purple)"></div>
+      <div class="num" style="color:var(--purple)">${sysN}</div>
+      <div class="lbl">系统接口</div>
+    </div>
+  `;
+
+  // Sidebar nav
+  let sn = "";
+  GRP.forEach(g => {
+    sn += `<div class="nav-group">${g.label}</div>`;
+    g.apis.forEach(n => {
+      const d = API[n];
+      sn += `<a class="nav-item" href="#${n}" onclick="return navClick(this,'${n}')">
+        <span class="nname">${n.replace("UCFView/","")}</span>
+      </a>`;
+    });
+  });
+  document.getElementById("snav").innerHTML = sn;
+
+  // Groups + endpoints
+  let html = "";
+  GRP.forEach(g => {
+    html += `<section class="group-section" id="g-${g.id}">`;
+    html += `<div class="group-header">
+      <div class="g-dot" style="background:${g.dot}"></div>
+      <h2>${g.label}</h2>
+      <span class="g-count">${g.apis.length}</span>
+    </div>`;
+    g.apis.forEach(n => {
+      const d = API[n];
+      html += epCard(n, d);
+    });
+    html += `</section>`;
+  });
+  document.getElementById("groupsContainer").innerHTML = html;
+
+  // Re-highlight
+  document.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
+}
+
+function epCard(name, d) {
+  let h = `<div class="ep-card" data-api="${name}" id="${name}">`;
+  h += `<div class="ep-header" onclick="toggleEP(this)">
+    <span class="ep-tag ${TC[d.t]}">${TL[d.t] === "同步接口" ? "SYNC" : TL[d.t] === "触发接口" ? "EVENT" : "SYS"}</span>
+    <span class="ep-name">${name}</span>
+    <svg class="ep-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+  </div>`;
+  h += `<div class="ep-body"><div class="ep-inner">`;
+
+  // Description
+  h += `<p class="ep-desc">${d.desc}</p>`;
+
+  // Notes
+  if (d.notes) {
+    h += `<div class="callout warn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
+      <div><div class="c-title">注意事项</div><ul>${d.notes.map(n=>`<li>${n}</li>`).join("")}</ul></div>
+    </div>`;
+  }
+
+  // Scenario
+  if (d.scenario) {
+    h += `<div class="callout info">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      <div><div class="c-title">使用场景</div><ul>${d.scenario.map(s=>`<li>${s}</li>`).join("")}</ul></div>
+    </div>`;
+  }
+
+  // Request params
+  if (!d.noReq && d.pf) {
+    h += `<div class="sect-title">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg>
+      请求参数
+    </div>`;
+    if (d.pf.length) {
+      h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>`;
+      d.pf.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pd">${p[2]}</td></tr>`);
+      h += `</tbody></table></div>`;
+    }
+    if (d.pi.length) {
+      h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
+      d.pi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
+      h += `</tbody></table></div>`;
+    }
+    if (d.kpi) {
+      h += `<div style="margin:6px 0 2px;font-size:11px;color:var(--text-muted)">Keyframes 数组元素：</div>`;
+      h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
+      d.kpi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
+      h += `</tbody></table></div>`;
+    }
+  }
+
+  // Request examples
+  if (d.re) {
+    d.re.forEach(ex => {
+      h += `<div class="sect-title" style="margin-top:14px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg> ${ex.lb}</div>`;
+      h += codeBlock(ex.cd);
+    });
+  } else if (!d.noReq && d.req) {
+    h += `<div class="sect-title" style="margin-top:14px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg> 请求示例</div>`;
+    h += codeBlock(d.req);
+    if (d.reqNote) h += `<div style="font-size:12px;color:var(--text-muted);line-height:1.7">${d.reqNote}</div>`;
+  }
+
+  // Callback
+  h += `<div class="sect-title" style="margin-top:18px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 响应参数</div>`;
+  const cbf = d.cf || [["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Status","Boolean","操作是否成功"],["DebugInfo","String","调试信息"],["Params","Object","参数对象"]];
+  h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>`;
+  cbf.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pd">${p[2]}</td></tr>`);
+  h += `</tbody></table></div>`;
+  if (d.cbi) {
+    h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
+    d.cbi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
+    h += `</tbody></table></div>`;
+  }
+  if (d.ce) {
+    d.ce.forEach(ex => {
+      h += `<div class="sect-title" style="margin-top:10px">${ex.lb}</div>`;
+      h += codeBlock(ex.cd);
+    });
+  } else if (d.cb) {
+    h += `<div class="sect-title" style="margin-top:10px">响应示例</div>`;
+    h += codeBlock(d.cb);
+  }
+
+  h += `</div></div></div>`;
+  return h;
+}
+
+function codeBlock(code) {
+  const esc = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return `<div class="cb">
+    <div class="cb-h">
+      <div class="cbl"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <button class="cpy" onclick="cpy(this)" data-cd="${encodeURIComponent(code)}">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        复制
+      </button>
+    </div>
+    <pre><code class="language-json">${esc}</code></pre>
+  </div>`;
+}
+
+// ===================== INTERACTIONS =====================
+function toggleEP(h, fromNav) {
+  const card = h.closest ? h.closest('.ep-card') : h;
+  card.classList.toggle('open');
+  if (!fromNav) syncNav(card.dataset.api);
+}
+
+function navClick(el, name) {
+  const card = document.getElementById(name);
+  if (card) {
+    card.classList.add('open');
+    setTimeout(() => {
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
+  syncNav(name);
+  closeMb();
+  return false;
+}
+
+function syncNav(name) {
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.getAttribute('href') === '#' + name);
+  });
+}
+
+function cpy(btn) {
+  const code = decodeURIComponent(btn.dataset.cd);
+  navigator.clipboard.writeText(code).then(() => {
+    btn.classList.add('done');
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 已复制';
+    setTimeout(() => {
+      btn.classList.remove('done');
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制';
+    }, 2000);
+  });
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('ov').classList.toggle('open');
+}
+
+function closeMb() {
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('ov').classList.remove('open');
+  }
+}
+
+// Search
+function doFilter(q) {
+  const s = q.toLowerCase().trim();
+  document.querySelectorAll('.ep-card').forEach(c => {
+    const m = !s || c.dataset.api.toLowerCase().includes(s) || c.textContent.toLowerCase().includes(s);
+    c.style.display = m ? '' : 'none';
+  });
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.style.display = (!s || n.textContent.toLowerCase().includes(s)) ? '' : 'none';
+  });
+  document.querySelectorAll('.group-section').forEach(gs => {
+    const vis = [...gs.querySelectorAll('.ep-card')].some(e => e.style.display !== 'none');
+    gs.style.display = vis ? '' : 'none';
+  });
+}
+
+// Active nav highlight on scroll (IntersectionObserver)
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      syncNav(entry.target.dataset.api);
+    }
+  });
+}, { rootMargin: '-80px 0px -60% 0px' });
+
+renderAll();
+document.querySelectorAll('.ep-card').forEach(c => obs.observe(c));
+</script>
+</body>
+</html>
