@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配置插件 - UCFPlugin</title>
+<meta name="description" content="UCFPlugin 配置指引：快速开始、UCFDefaultPawn 配置、POIStyle 配置等">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" type="image/svg+xml" href="../res/favicon.svg">
+<style>
+/* ── Doc Layout ── */
+.doc-layout{
+  display:flex;
+  max-width:var(--max-w);
+  margin:0 auto;
+  padding:0 24px 60px;
+  gap:32px;
+  align-items:flex-start;
+}
+
+/* ── Sidebar ── */
+.doc-sidebar{
+  position:sticky;
+  top:calc(var(--nav-h) + 24px);
+  width:220px;
+  flex-shrink:0;
+  border-right:1px solid var(--border-glass);
+  padding-right:24px;
+  padding-top:8px;
+}
+.doc-nav{display:flex;flex-direction:column;gap:4px}
+.doc-nav-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:var(--radius-sm);
+  font-size:14px;
+  font-weight:500;
+  color:var(--text-muted);
+  text-decoration:none;
+  transition:all .2s;
+  line-height:1.3;
+}
+.doc-nav-item svg{
+  width:18px;height:18px;
+  flex-shrink:0;
+  opacity:0.6;
+}
+.doc-nav-item:hover{
+  color:var(--text-main);
+  background:var(--bg-glass);
+}
+.doc-nav-item.active{
+  color:var(--green);
+  background:var(--green-glow);
+}
+.doc-nav-item.active svg{opacity:1;color:var(--green)}
+.doc-nav-item .nav-badge{
+  font-size:10px;
+  padding:1px 6px;
+  border-radius:4px;
+  background:var(--green-glow);
+  color:var(--green);
+  margin-left:auto;
+}
+
+/* ── Content ── */
+.doc-content{
+  flex:1;
+  min-width:0;
+}
+
+.doc-section{
+  scroll-margin-top:calc(var(--nav-h) + 24px);
+  margin-bottom:48px;
+}
+.doc-section:last-child{margin-bottom:0}
+
+.doc-section-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:24px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border-glass);
+}
+.doc-section-header svg{
+  width:24px;height:24px;
+  color:var(--green);
+  flex-shrink:0;
+}
+.doc-section-header h2{
+  font-family:'Orbitron',sans-serif;
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:-0.02em;
+}
+.doc-section-header .section-tag{
+  font-size:11px;
+  padding:2px 10px;
+  border-radius:4px;
+  background:var(--green-glow);
+  color:var(--green);
+  margin-left:auto;
+  white-space:nowrap;
+}
+
+/* ── Step Cards ── */
+.steps{display:flex;flex-direction:column;gap:20px}
+.step-card{
+  display:flex;
+  align-items:flex-start;
+  gap:20px;
+  padding:24px 28px;
+  border-radius:var(--radius-lg);
+  background:var(--bg-card);
+  border:1px solid var(--border-glass);
+  backdrop-filter:blur(12px);
+  transition:all .3s;
+}
+.step-card:hover{
+  border-color:rgba(74,222,128,0.2);
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+}
+.step-card.completed{border-color:rgba(74,222,128,0.15)}
+.step-num{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--green-glow);
+  color:var(--green);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:15px;
+  flex-shrink:0;
+  border:1px solid rgba(74,222,128,0.15);
+}
+.step-card.completed .step-num{
+  background:var(--green);
+  color:#0a0a0f;
+}
+.step-body{flex:1;min-width:0}
+.step-body h3{
+  font-family:'Orbitron',sans-serif;
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.step-body p{
+  font-size:14px;
+  color:var(--text-muted);
+  line-height:1.7;
+}
+.step-body .note{
+  padding:10px 14px;
+  border-radius:var(--radius-sm);
+  background:var(--green-glow);
+  border-left:3px solid var(--green);
+  font-size:13px;
+  color:var(--text-muted);
+  margin-top:10px;
+}
+.step-body code{
+  background:var(--bg-glass);
+  padding:2px 8px;
+  border-radius:4px;
+  font-size:13px;
+  font-family:'Exo 2',monospace;
+  color:var(--green);
+}
+.step-body ul{
+  list-style:none;
+  margin-top:8px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.step-body li{
+  font-size:14px;
+  color:var(--text-muted);
+  padding-left:20px;
+  position:relative;
+  line-height:1.6;
+}
+.step-body li::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:8px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--green);
+}
+
+/* ── Control Cards (GIF-enhanced) ── */
+.control-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.control-card{
+  display:flex;
+  flex-direction:column;
+  border-radius:var(--radius-lg);
+  background:var(--bg-card);
+  border:1px solid var(--border-glass);
+  overflow:hidden;
+  transition:all .3s;
+}
+.control-card:hover{
+  border-color:rgba(74,222,128,0.2);
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.25);
+}
+.control-card .gif-wrap{
+  width:100%;
+  aspect-ratio:16/9;
+  background:var(--bg-secondary);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-bottom:1px solid var(--border-glass);
+}
+.control-card .gif-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.control-card .gif-placeholder{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  color:var(--text-dim);
+  font-size:13px;
+}
+.control-card .gif-placeholder svg{
+  width:32px;height:32px;
+  opacity:0.4;
+}
+.control-card .control-info{
+  padding:16px 20px;
+}
+.control-card .control-info h4{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:4px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.control-card .control-info h4 .dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--green);
+  flex-shrink:0;
+}
+.control-card .control-info p{
+  font-size:13px;
+  color:var(--text-muted);
+  line-height:1.6;
+  margin-bottom:8px;
+}
+.control-card .control-info .key-hint{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 10px;
+  border-radius:4px;
+  background:var(--green-glow);
+  color:var(--green);
+  font-size:12px;
+  font-weight:600;
+}
+.control-card .control-info .key-hint kbd{
+  font-family:'Exo 2',monospace;
+  font-size:11px;
+  font-weight:700;
+  padding:1px 5px;
+  border-radius:3px;
+  background:rgba(74,222,128,0.2);
+}
+
+/* ── Empty Section State ── */
+.placeholder-section{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:60px 32px;
+  border-radius:var(--radius-lg);
+  border:1px dashed var(--border-glass);
+  background:var(--bg-card);
+  text-align:center;
+  gap:12px;
+}
+.placeholder-section svg{
+  width:48px;height:48px;
+  opacity:0.3;
+  color:var(--text-dim);
+}
+.placeholder-section h3{
+  font-family:'Orbitron',sans-serif;
+  font-size:16px;
+  font-weight:600;
+  color:var(--text-muted);
+}
+.placeholder-section p{
+  font-size:14px;
+  color:var(--text-dim);
+  max-width:360px;
+  line-height:1.6;
+}
+
+/* ── Mobile sidebar ── */
+.doc-sidebar-mobile{
+  display:none;
+  padding:0 24px;
+  position:sticky;
+  top:var(--nav-h);
+  z-index:10;
+  background:var(--bg-primary);
+  border-bottom:1px solid var(--border-glass);
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.doc-sidebar-mobile .doc-nav{
+  flex-direction:row;
+  gap:0;
+  padding:8px 0;
+}
+.doc-sidebar-mobile .doc-nav-item{
+  white-space:nowrap;
+  padding:8px 14px;
+  font-size:13px;
+  border-radius:var(--radius-sm);
+}
+
+/* ── Responsive ── */
+@media(max-width:1024px){
+  .doc-sidebar{width:180px;padding-right:16px}
+}
+@media(max-width:768px){
+  .doc-layout{flex-direction:column;padding:0 0 40px;gap:0}
+  .doc-sidebar{display:none}
+  .doc-sidebar-mobile{display:block}
+  .doc-content{padding:0 16px}
+  .control-grid{grid-template-columns:1fr}
+  .step-card{padding:20px;gap:16px}
+  .doc-section-header h2{font-size:18px}
+  .doc-section-header svg{width:20px;height:20px}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="主导航">
+  <div class="nav-inner">
+    <a class="logo" href="../index.html">
+      <span class="logo-icon">
+        <svg width="40" height="40" viewBox="0 0 1024 1024" aria-hidden="true">
+          <path d="M474.282667 96.213333a123.477333 123.477333 0 0 0-116.181334 123.221334l-0.042666 22.826666H243.797333A104.832 104.832 0 0 0 139.093333 347.477333l-0.213333 138.922667a32 32 0 0 0 32 32.042667h54.698667c36.821333 0 66.730667 29.909333 66.730666 66.730666 0 36.821333-29.909333 66.773333-66.730666 66.773334H170.837333a32 32 0 0 0-32 31.957333l-0.170666 138.965333a105.130667 105.130667 0 0 0 105.130666 105.173334h138.965334a32 32 0 0 0 32-32v-54.869334a66.816 66.816 0 0 1 133.504 0V896c0 17.664 14.336 32 32 32h138.965333l6.912-0.213333a105.130667 105.130667 0 0 0 98.218667-104.96v-114.261334h22.869333a123.477333 123.477333 0 0 0 123.434667-123.434666l-0.213334-7.253334a123.477333 123.477333 0 0 0-123.221333-116.181333h-22.869333V347.434667l-0.213334-6.912a105.130667 105.130667 0 0 0-104.917333-98.218667l-114.304-0.042667v-22.826666a123.477333 123.477333 0 0 0-123.392-123.434667z"
+            fill="none" stroke="#4ade80" stroke-width="50" stroke-linejoin="round"/>
+          <text x="570" y="650" text-anchor="middle" font-size="220" font-weight="800"
+            fill="#4ade80" font-family="Orbitron,'Segoe UI Black','Arial Black',sans-serif">UCF</text>
+        </svg>
+      </span>
+      <span class="logo-text">UCFPlugin</span>
+    </a>
+    <ul class="nav-links" style="margin-left:auto;display:flex;gap:6px;list-style:none">
+      <li><a class="nav-item active" href="../pages/配置插件.html">配置插件</a></li>
+      <li class="nav-dropdown"><a class="nav-item" href="../pages/接口文档.html">接口文档 <span class="dropdown-arrow">▾</span></a>
+        <div class="nav-dropdown-menu" role="menu" aria-label="接口文档">
+          <a href="../pages/apipages/UCFView.html" role="menuitem">
+            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+            <span class="menu-label">UCFView</span><span class="menu-desc">视点管理</span>
+          </a>
+          <a href="../pages/接口文档.html#UCFVisibility" role="menuitem">
+            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <span class="menu-label">UCFVisibility</span><span class="menu-desc">可视性</span>
+          </a>
+          <a href="../pages/接口文档.html#UCFOutlineActor" role="menuitem">
+            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+            <span class="menu-label">UCFOutlineActor</span><span class="menu-desc">对象高亮</span>
+          </a>
+          <a href="../pages/接口文档.html#UCFOutlineArea" role="menuitem">
+            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
+            <span class="menu-label">UCFOutlineArea</span><span class="menu-desc">区域高亮</span>
+          </a>
+        </div>
+      </li>
+      <li><a class="nav-item" href="../pages/智能体.html">智能体</a></li>
+      <li><a class="nav-item" href="../pages/插件扩展.html">插件扩展</a></li>
+      <li><a class="nav-item" href="../pages/素材库.html">素材库</a></li>
+      <li><a class="nav-item" href="../pages/博客分享.html">博客分享</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-loaded">
+
+<div class="page-header">
+  <div class="page-header-bg">
+    <div class="gradient g-left"></div>
+    <div class="gradient g-right"></div>
+  </div>
+  <div class="header-grid"></div>
+  <div class="section-label" style="justify-content:center;position:relative;z-index:1">配置插件</div>
+  <h1>安装与配置</h1>
+  <p>在 UnrealEngine 5.1 项目中完成 UCFPlugin 的安装、基础配置与进阶调优。</p>
+</div>
+
+<!-- Mobile sidebar -->
+<div class="doc-sidebar-mobile" id="docSidebarMobile">
+  <nav class="doc-nav">
+    <a href="#quickstart" class="doc-nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/></svg>
+      快速开始
+    </a>
+    <a href="#ucfdefaultpawn" class="doc-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      配置 UCFDefaultPawn
+    </a>
+    <a href="#poistyle" class="doc-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      配置 POIStyle
+    </a>
+  </nav>
+</div>
+
+<div class="doc-layout">
+
+  <!-- Sidebar -->
+  <aside class="doc-sidebar" id="docSidebar">
+    <nav class="doc-nav">
+      <a href="#quickstart" class="doc-nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/></svg>
+        快速开始
+        <span class="nav-badge">4 步</span>
+      </a>
+      <a href="#ucfdefaultpawn" class="doc-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        配置 UCFDefaultPawn
+      </a>
+      <a href="#poistyle" class="doc-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        配置 POIStyle
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <div class="doc-content">
+
+    <!-- ─── 快速开始 ─── -->
+    <section id="quickstart" class="doc-section">
+      <div class="doc-section-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/></svg>
+        <h2>快速开始</h2>
+        <span class="section-tag">4 步完成</span>
+      </div>
+
+      <div class="steps">
+
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>安装插件</h3>
+            <p>将 <code>UCFPlugin</code> 文件夹放到项目的 <code>Plugins</code> 目录下，并为项目重新编译生成 C++ 工程。</p>
+            <div class="note">确保项目已配置为 C++ 项目。如果是蓝图项目，请先通过"添加 C++ 类"将其转换为 C++ 项目。</div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>插件设置</h3>
+            <p>在编辑器中打开 <code>Project Settings &gt; Plugins &gt; UCFPlugin</code>，配置以下选项：</p>
+            <ul>
+              <li><strong>BP Interface Path</strong>：添加蓝图接口所在的目录路径</li>
+              <li><strong>Double Tap Time Interval</strong>：输入双击间隔时间（默认 0.23 秒）</li>
+              <li><strong>Default Input Component Class</strong>：选择 <code>UCFInputComponent</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>配置 GamePlay</h3>
+            <p>选定主关卡，然后转到 World Settings 窗口，GameMode Override 设置为 <code>UCFGameMode</code>，Pawn 与 PlayerController 会默认匹配为对应的 Class。</p>
+            <p>此时可以直接运行项目，项目默认视点为启动时编辑器视点的位置或者 <code>PlayerStart</code> 实例的位置。</p>
+            <p>若需要自定义 Pawn 操作配置，可以在场景中自定义位置放置 UCFDefaultPawn 的实例，然后在 Details 中自定义配置。</p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>控制 Pawn</h3>
+            <p>UCFDefaultPawn 的基本控制都是以锚点为参考的，请始终注意鼠标按住时在场景中出现的绿色锚点，默认的控制方式如下：</p>
+
+            <div class="control-grid">
+              <!-- 定点移动 -->
+              <div class="control-card">
+                <div class="gif-wrap">
+                  <img src="../res/UCFDefaultPawn/定点移动.gif" alt="定点移动演示" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="gif-placeholder" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <span>定点移动</span>
+                  </div>
+                </div>
+                <div class="control-info">
+                  <h4><span class="dot"></span>定点移动</h4>
+                  <p>按住鼠标左键水平拖动，控制 Pawn 左右移动到锚点位置；按住鼠标左键上下拖动，控制 Pawn 前后移动到锚点位置</p>
+                  <span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span>
+                </div>
+              </div>
+
+              <!-- 定点旋转 -->
+              <div class="control-card">
+                <div class="gif-wrap">
+                  <img src="../res/UCFDefaultPawn/定点旋转.gif" alt="定点旋转演示" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="gif-placeholder" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    <span>定点旋转</span>
+                  </div>
+                </div>
+                <div class="control-info">
+                  <h4><span class="dot"></span>定点旋转</h4>
+                  <p>按住鼠标右键水平拖动，控制 Pawn 以锚点为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以锚点为中心上下旋转</p>
+                  <span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span>
+                </div>
+              </div>
+
+              <!-- 定点缩放 -->
+              <div class="control-card">
+                <div class="gif-wrap">
+                  <img src="../res/UCFDefaultPawn/定点缩放.gif" alt="定点缩放演示" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="gif-placeholder" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                    <span>定点缩放</span>
+                  </div>
+                </div>
+                <div class="control-info">
+                  <h4><span class="dot"></span>定点缩放</h4>
+                  <p>向前滚动鼠标中键，控制 Pawn 逼近锚点；向后滚动鼠标中键，控制 Pawn 远离锚点</p>
+                  <span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span>
+                </div>
+              </div>
+
+              <!-- 快速聚焦 -->
+              <div class="control-card">
+                <div class="gif-wrap">
+                  <img src="../res/UCFDefaultPawn/快速聚焦.gif" alt="快速聚焦演示" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="gif-placeholder" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    <span>快速聚焦</span>
+                  </div>
+                </div>
+                <div class="control-info">
+                  <h4><span class="dot"></span>快速聚焦</h4>
+                  <p>双击鼠标右键快速聚焦到锚点位置</p>
+                  <span class="key-hint"><kbd>双击鼠标右键</kbd></span>
+                </div>
+              </div>
+
+              <!-- 竖向移动 -->
+              <div class="control-card">
+                <div class="gif-wrap">
+                  <img src="../res/UCFDefaultPawn/竖向移动.gif" alt="竖向移动演示" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="gif-placeholder" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                    <span>竖向移动</span>
+                  </div>
+                </div>
+                <div class="control-info">
+                  <h4><span class="dot"></span>竖向移动</h4>
+                  <p>按住 Q 键竖直向上移动；按住 E 键竖直向下移动</p>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap">
+                    <span class="key-hint"><kbd>Q</kbd> 上升</span>
+                    <span class="key-hint"><kbd>E</kbd> 下降</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 居中旋转 -->
+              <div class="control-card">
+                <div class="gif-wrap">
+                  <img src="../res/UCFDefaultPawn/居中旋转.gif" alt="居中旋转演示" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                  <div class="gif-placeholder" style="display:none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    <span>居中旋转</span>
+                  </div>
+                </div>
+                <div class="control-info">
+                  <h4><span class="dot"></span>居中旋转</h4>
+                  <p>按住鼠标右键水平拖动，控制 Pawn 以自身为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以自身为中心上下旋转</p>
+                  <span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── 配置 UCFDefaultPawn ─── -->
+    <section id="ucfdefaultpawn" class="doc-section">
+      <div class="doc-section-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <h2>配置 UCFDefaultPawn</h2>
+        <span class="section-tag">即将推出</span>
+      </div>
+      <div class="placeholder-section">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <h3>内容准备中</h3>
+        <p>UCFDefaultPawn 的详细配置说明、属性参考和最佳实践将在后续版本中更新。</p>
+      </div>
+    </section>
+
+    <!-- ─── 配置 POIStyle ─── -->
+    <section id="poistyle" class="doc-section">
+      <div class="doc-section-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <h2>配置 POIStyle</h2>
+        <span class="section-tag">即将推出</span>
+      </div>
+      <div class="placeholder-section">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <h3>内容准备中</h3>
+        <p>POI 样式的配置说明、样式参考和自定义技巧将在后续版本中更新。</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> UCFPlugin. All rights reserved. 数字孪生 · UnrealEngine 插件</p>
+</footer>
+
+</div>
+
+<script>
+// Footer year
+document.getElementById('year').textContent=new Date().getFullYear();
+
+// ── Sidebar active state on scroll ──
+const sections=document.querySelectorAll('.doc-section');
+const navItems=document.querySelectorAll('.doc-nav-item');
+
+function updateActiveNav(){
+  let current='';
+  const scrollPos=window.scrollY + 120;
+
+  sections.forEach(section=>{
+    if(section.offsetTop <= scrollPos){
+      current=section.getAttribute('id');
+    }
+  });
+
+  navItems.forEach(item=>{
+    item.classList.toggle('active',item.getAttribute('href')==='#'+current);
+  });
+}
+
+window.addEventListener('scroll',updateActiveNav,{passive:true});
+window.addEventListener('load',updateActiveNav);
+
+// ── Smooth scroll for sidebar links ──
+navItems.forEach(item=>{
+  item.addEventListener('click',function(e){
+    e.preventDefault();
+    const target=document.querySelector(this.getAttribute('href'));
+    if(target){
+      target.scrollIntoView({behavior:'smooth'});
+    }
+  });
+});
+</script>
+</body>
+</html>

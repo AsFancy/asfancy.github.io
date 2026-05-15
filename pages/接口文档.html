@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>接口文档 - UCFPlugin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" type="image/svg+xml" href="../res/favicon.svg">
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="主导航">
+  <div class="nav-inner">
+    <a class="logo" href="../index.html">
+      <span class="logo-icon">
+        <svg width="40" height="40" viewBox="0 0 1024 1024" aria-hidden="true">
+          <path d="M474.282667 96.213333a123.477333 123.477333 0 0 0-116.181334 123.221334l-0.042666 22.826666H243.797333A104.832 104.832 0 0 0 139.093333 347.477333l-0.213333 138.922667a32 32 0 0 0 32 32.042667h54.698667c36.821333 0 66.730667 29.909333 66.730666 66.730666 0 36.821333-29.909333 66.773333-66.730666 66.773334H170.837333a32 32 0 0 0-32 31.957333l-0.170666 138.965333a105.130667 105.130667 0 0 0 105.130666 105.173334h138.965334a32 32 0 0 0 32-32v-54.869334a66.816 66.816 0 0 1 133.504 0V896c0 17.664 14.336 32 32 32h138.965333l6.912-0.213333a105.130667 105.130667 0 0 0 98.218667-104.96v-114.261334h22.869333a123.477333 123.477333 0 0 0 123.434667-123.434666l-0.213334-7.253334a123.477333 123.477333 0 0 0-123.221333-116.181333h-22.869333V347.434667l-0.213334-6.912a105.130667 105.130667 0 0 0-104.917333-98.218667l-114.304-0.042667v-22.826666a123.477333 123.477333 0 0 0-123.392-123.434667z"
+            fill="none" stroke="#4ade80" stroke-width="50" stroke-linejoin="round"/>
+          <text x="570" y="650" text-anchor="middle" font-size="220" font-weight="800"
+            fill="#4ade80" font-family="Orbitron,'Segoe UI Black','Arial Black',sans-serif">UCF</text>
+        </svg>
+      </span>
+      <span class="logo-text">UCFPlugin</span>
+    </a>
+    <ul class="nav-links" style="margin-left:auto;display:flex;gap:6px;list-style:none">
+      <li><a class="nav-item" href="../pages/配置插件.html">配置插件</a></li>
+      <li class="nav-dropdown"><a class="nav-item active" href="../pages/接口文档.html">接口文档 <span class="dropdown-arrow">▾</span></a>
+        <div class="nav-dropdown-menu" role="menu" aria-label="接口文档">
+          <a href="../pages/apipages/UCFView.html" role="menuitem">
+            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+            <span class="menu-label">UCFView</span><span class="menu-desc">视点管理</span>
+          </a>
+          <a href="../pages/接口文档.html#UCFVisibility" role="menuitem">
+            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <span class="menu-label">UCFVisibility</span><span class="menu-desc">可视性</span>
+          </a>
+          <a href="../pages/接口文档.html#UCFOutlineActor" role="menuitem">
+            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+            <span class="menu-label">UCFOutlineActor</span><span class="menu-desc">对象高亮</span>
+          </a>
+          <a href="../pages/接口文档.html#UCFOutlineArea" role="menuitem">
+            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
+            <span class="menu-label">UCFOutlineArea</span><span class="menu-desc">区域高亮</span>
+          </a>
+        </div>
+      </li>
+      <li><a class="nav-item" href="../pages/智能体.html">智能体</a></li>
+      <li><a class="nav-item" href="../pages/插件扩展.html">插件扩展</a></li>
+      <li><a class="nav-item" href="../pages/素材库.html">素材库</a></li>
+      <li><a class="nav-item" href="../pages/博客分享.html">博客分享</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-loaded">
+
+<div class="page-header">
+  <div class="page-header-bg">
+    <div class="gradient g-left"></div>
+    <div class="gradient g-right"></div>
+  </div>
+  <div class="header-grid"></div>
+  <div class="section-label" style="justify-content:center;position:relative;z-index:1">接口文档</div>
+  <h1>UCF 接口体系</h1>
+  <p>UCFPlugin 提供四大核心接口类，覆盖视点管理、可视性控制、对象与区域高亮等数字孪生常见需求。</p>
+</div>
+
+<section class="content-section">
+  <div class="section-inner">
+
+    <div class="content-card fade-in visible" id="UCFView" style="cursor:pointer" onclick="window.location.href='apipages/UCFView.html'">
+      <h3>UCFView · 视点管理 <span style="float:right;font-size:13px;color:var(--green);font-weight:600">查看详情 →</span></h3>
+      <p>提供视点的保存、加载、切换和插值过渡功能，支持在数字孪生场景中预设多个观察视角，实现平滑的视点漫游与快速定位。</p>
+      <div class="note">支持视点书签、视点路径动画、多相机切换等高级功能。</div>
+    </div>
+
+    <div class="content-card fade-in visible delay-1" id="UCFVisibility">
+      <h3>UCFVisibility · 可视性</h3>
+      <p>动态控制场景中 Actor 和组件的显隐状态，支持按类别批量控制、条件过滤和渐变过渡，适用于室内分层展示、设备透视等场景。</p>
+    </div>
+
+    <div class="content-card fade-in visible delay-2" id="UCFOutlineActor">
+      <h3>UCFOutlineActor · 对象高亮</h3>
+      <p>对单个或多个 Actor 绘制外轮廓高亮，支持自定义轮廓颜色、粗细、发光强度等参数，可用于设备定位、目标指示等交互反馈。</p>
+    </div>
+
+    <div class="content-card fade-in visible delay-3" id="UCFOutlineArea">
+      <h3>UCFOutlineArea · 区域高亮</h3>
+      <p>对场景中指定区域绘制外轮廓高亮，支持矩形、圆形、多边形等区域形状，适用于安全区域标识、施工范围标注等场景。</p>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> UCFPlugin. All rights reserved. 数字孪生 · UnrealEngine 插件</p>
+</footer>
+
+</div>
+
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
