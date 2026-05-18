@@ -15,7 +15,6 @@
 :root{--api-sidebar-w:270px}
 
 .api-layout{display:flex;max-width:var(--max-w);margin:0 auto;padding:0 24px 60px;gap:28px;position:relative}
-.api-layout::before{content:'';position:absolute;top:0;left:270px;bottom:0;width:1px;background:var(--border-glass);pointer-events:none}
 
 /* ── Sidebar ── */
 .api-sidebar{
@@ -245,6 +244,9 @@
   .ep-header{padding:8px 12px}
   .ep-inner{padding:0 12px 12px}
   .ep-name{font-size:13px}
+  .p-wrap{overflow-x:auto}
+  .p-table{min-width:480px}
+  .api-layout{padding:0 12px 60px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}

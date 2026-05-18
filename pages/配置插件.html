@@ -199,7 +199,10 @@
 }
 
 /* ── Control Cards (GIF-enhanced) ── */
-.control-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.control-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  margin-top:20px;
+}
 .control-card{
   display:flex;
   flex-direction:column;
@@ -260,11 +263,30 @@
   background:var(--green);
   flex-shrink:0;
 }
+.control-card .control-info h4 .key-hint{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 10px;
+  border-radius:4px;
+  background:var(--green-glow);
+  color:var(--green);
+  font-size:12px;
+  font-weight:600;
+  margin-left:auto;
+}
+.control-card .control-info h4 .key-hint kbd{
+  font-family:'Exo 2',monospace;
+  font-size:11px;
+  font-weight:700;
+  padding:1px 5px;
+  border-radius:3px;
+  background:rgba(74,222,128,0.2);
+}
 .control-card .control-info p{
   font-size:13px;
   color:var(--text-muted);
   line-height:1.6;
-  margin-bottom:8px;
 }
 .control-card .control-info .key-hint{
   display:inline-flex;
@@ -345,7 +367,7 @@
 @media(max-width:1024px){
   .doc-sidebar{width:180px;padding-right:16px}
 }
-@media(max-width:768px){
+@media(max-width:900px){
   .doc-layout{flex-direction:column;padding:0 0 40px;gap:0}
   .doc-sidebar{display:none}
   .doc-sidebar-mobile{display:block}
@@ -354,6 +376,13 @@
   .step-card{padding:20px;gap:16px}
   .doc-section-header h2{font-size:18px}
   .doc-section-header svg{width:20px;height:20px}
+}
+@media(max-width:600px){
+  .control-grid{grid-template-columns:1fr}
+  .step-card{flex-direction:column;gap:12px}
+  .step-num{width:32px;height:32px}
+  .doc-section-header{flex-wrap:wrap}
+  .doc-section-header .section-tag{margin-left:0;order:10}
 }
 </style>
 </head>
@@ -460,9 +489,7 @@
     <!-- ─── 快速开始 ─── -->
     <section id="quickstart" class="doc-section">
       <div class="doc-section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/></svg>
         <h2>快速开始</h2>
-        <span class="section-tag">4 步完成</span>
       </div>
 
       <div class="steps">
@@ -520,9 +547,8 @@
                   </div>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>定点移动</h4>
+                  <h4><span class="dot"></span>定点移动<span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span></h4>
                   <p>按住鼠标左键水平拖动，控制 Pawn 左右移动到锚点位置；按住鼠标左键上下拖动，控制 Pawn 前后移动到锚点位置</p>
-                  <span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span>
                 </div>
               </div>
 
@@ -536,9 +562,8 @@
                   </div>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>定点旋转</h4>
+                  <h4><span class="dot"></span>定点旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span></h4>
                   <p>按住鼠标右键水平拖动，控制 Pawn 以锚点为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以锚点为中心上下旋转</p>
-                  <span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span>
                 </div>
               </div>
 
@@ -552,9 +577,8 @@
                   </div>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>定点缩放</h4>
+                  <h4><span class="dot"></span>定点缩放<span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span></h4>
                   <p>向前滚动鼠标中键，控制 Pawn 逼近锚点；向后滚动鼠标中键，控制 Pawn 远离锚点</p>
-                  <span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span>
                 </div>
               </div>
 
@@ -568,9 +592,8 @@
                   </div>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>快速聚焦</h4>
+                  <h4><span class="dot"></span>快速聚焦<span class="key-hint"><kbd>双击鼠标右键</kbd></span></h4>
                   <p>双击鼠标右键快速聚焦到锚点位置</p>
-                  <span class="key-hint"><kbd>双击鼠标右键</kbd></span>
                 </div>
               </div>
 
@@ -584,12 +607,8 @@
                   </div>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>竖向移动</h4>
+                  <h4><span class="dot"></span>竖向移动<span class="key-hint"><kbd>Q</kbd> 上升 <kbd>E</kbd> 下降</span></h4>
                   <p>按住 Q 键竖直向上移动；按住 E 键竖直向下移动</p>
-                  <div style="display:flex;gap:6px;flex-wrap:wrap">
-                    <span class="key-hint"><kbd>Q</kbd> 上升</span>
-                    <span class="key-hint"><kbd>E</kbd> 下降</span>
-                  </div>
                 </div>
               </div>
 
@@ -603,9 +622,8 @@
                   </div>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>居中旋转</h4>
+                  <h4><span class="dot"></span>居中旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span></h4>
                   <p>按住鼠标右键水平拖动，控制 Pawn 以自身为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以自身为中心上下旋转</p>
-                  <span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span>
                 </div>
               </div>
             </div>
@@ -618,9 +636,7 @@
     <!-- ─── 配置 UCFDefaultPawn ─── -->
     <section id="ucfdefaultpawn" class="doc-section">
       <div class="doc-section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <h2>配置 UCFDefaultPawn</h2>
-        <span class="section-tag">即将推出</span>
       </div>
       <div class="placeholder-section">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
@@ -632,9 +648,7 @@
     <!-- ─── 配置 POIStyle ─── -->
     <section id="poistyle" class="doc-section">
       <div class="doc-section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <h2>配置 POIStyle</h2>
-        <span class="section-tag">即将推出</span>
       </div>
       <div class="placeholder-section">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
