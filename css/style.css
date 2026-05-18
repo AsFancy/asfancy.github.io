@@ -60,8 +60,9 @@ body{
 }
 .logo-icon{
   width:40px;height:40px;
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
+.logo-icon svg{width:40px!important;height:40px!important;flex-shrink:0}
 .logo-text{
   font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;
   letter-spacing:-0.02em;
@@ -386,6 +387,15 @@ body{
 .footer-email:hover::before{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3C/svg%3E");
 }
+
+/* ── Page transition ── */
+.page-loading-overlay{
+  position:fixed;inset:0;z-index:99;
+  background:var(--bg-primary);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease;
+}
+.page-loading-overlay.active{opacity:1}
 
 /* ── Animations ── */
 .fade-in{opacity:0;transform:translateY(24px);transition:all .6s cubic-bezier(.22,1,.36,1)}

@@ -79,6 +79,9 @@
   </div>
 </nav>
 
+<!-- ─── Page loading overlay ─── -->
+<div class="page-loading-overlay" id="pageLoadingOverlay" aria-hidden="true"></div>
+
 <!-- ─── Page Content ─── -->
 <main class="page-content" id="pageContent">
 
@@ -231,32 +234,43 @@ function scrollToModules(e){
 function navigateToPage(pageName){
   const url='pages/'+encodeURIComponent(pageName)+'.html';
   const content=document.getElementById('pageContent');
+  const overlay=document.getElementById('pageLoadingOverlay');
+
+  // Fade out current content
+  content.style.transition='opacity .2s ease';
+  content.style.opacity='0';
+
+  overlay.classList.add('active');
+
   content.querySelectorAll('.hero,.section,.footer').forEach(el=>{
     if(!el.classList.contains('page-loaded')) el.style.display='none';
   });
   const old=content.querySelector('.page-loaded');
   if(old) old.remove();
 
-  const loading=document.createElement('div');
-  loading.className='page-loading';
-  loading.style.cssText='display:flex;align-items:center;justify-content:center;min-height:60vh;color:var(--text-muted);font-size:16px';
-  loading.textContent='加载中...';
-  content.appendChild(loading);
-
   fetch(url)
     .then(r=>{if(!r.ok) throw Error();return r.text()})
     .then(html=>{
-      loading.remove();
       const parser=new DOMParser();
       const doc=parser.parseFromString(html,'text/html');
       const main=doc.querySelector('.page-loaded');
-      if(main) content.appendChild(main.cloneNode(true));
-      else{const d=document.createElement('div');d.className='page-loaded';d.innerHTML=doc.body.innerHTML;content.appendChild(d)}
+      const newContent=main ? main.cloneNode(true) : (()=>{
+        const d=document.createElement('div');d.className='page-loaded';d.innerHTML=doc.body.innerHTML;return d;
+      })();
+
+      overlay.classList.remove('active');
+      content.appendChild(newContent);
+      content.style.opacity='';
       setActiveNav(pageName);
       window.scrollTo({top:0,behavior:'smooth'});
+      // Trigger fade-in animations
+      content.querySelectorAll('.fade-in').forEach(el=>{
+        requestAnimationFrame(()=>el.classList.add('visible'));
+      });
     })
     .catch(()=>{
-      // Fetch failed — redirect directly (supports file:// protocol)
+      overlay.classList.remove('active');
+      content.style.opacity='';
       window.location.href=url;
     });
 }
