@@ -12,15 +12,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <style>
 /* ── API Doc Layout ── */
-:root{--api-sidebar-w:270px}
-
+/* ── API Doc Layout ── */
 .api-layout{display:flex;max-width:var(--max-w);margin:0 auto;padding:0 24px 60px;gap:28px;position:relative}
 
 /* ── Sidebar ── */
 .api-sidebar{
-  width:var(--api-sidebar-w);flex-shrink:0;
-  position:sticky;top:calc(var(--nav-h) + 24px);height:calc(100vh - var(--nav-h) - 48px);
-  display:flex;flex-direction:column;overflow:hidden;z-index:10;
+  width:max-content;min-width:220px;flex-shrink:0;
+  position:sticky;top:calc(var(--nav-h) + 24px);align-self:flex-start;
+  display:flex;flex-direction:column;
   border-radius:var(--radius-md);
   background:var(--bg-card);border:1px solid var(--border-glass);
   backdrop-filter:blur(12px);
@@ -51,7 +50,7 @@
 .api-sidebar-search input:focus{border-color:rgba(74,222,128,0.3);box-shadow:0 0 0 3px var(--green-glow)}
 .api-sidebar-search input::placeholder{color:var(--text-dim)}
 .api-sidebar-search .s-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--text-dim);pointer-events:none}
-.api-sidebar-nav{flex:1;overflow-y:auto;padding:6px 0 12px}
+.api-sidebar-nav{overflow-y:visible;padding:6px 0 12px}
 .api-sidebar-nav::-webkit-scrollbar{width:3px}
 .snav-group{
   padding:14px 16px 4px 18px;
@@ -70,7 +69,7 @@
   content:'';position:absolute;left:-6px;top:50%;transform:translateY(-50%);
   width:3px;height:55%;border-radius:0 2px 2px 0;background:var(--green);
 }
-.snav-item .sname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.snav-item .sname{white-space:nowrap}
 
 /* ── Content ── */
 .api-content{flex:1;min-width:0}
@@ -84,10 +83,7 @@
 }
 .api-group-header .g-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .api-group-header h2{font-size:18px;font-weight:700;color:var(--text-main);letter-spacing:-.01em}
-.api-group-header .g-count{
-  font-size:13px;color:var(--text-dim);margin-left:auto;
-  background:var(--bg-glass);padding:2px 10px;border-radius:5px;font-family:'Exo 2',monospace;
-}
+.api-group-header .g-count{display:none}
 
 /* ── Endpoint Cards ── */
 .ep-card{
@@ -104,6 +100,7 @@
   padding:10px 16px;cursor:pointer;user-select:none;transition:background .15s;
 }
 .ep-header:hover{background:var(--bg-glass)}
+.ep-card.open .ep-header{background:rgba(74,222,128,0.08);border-bottom:1px solid rgba(74,222,128,0.1)}
 .ep-name{
   font-size:14px;font-weight:500;
   color:var(--text-main);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
@@ -114,7 +111,7 @@
 .ep-card.open .ep-body{display:block}
 .ep-inner{padding:0 16px 16px}
 .ep-inner > * + *{margin-top:16px}
-.ep-desc{font-size:15px;line-height:1.7;color:var(--text-muted)}
+.ep-desc{font-size:14px;line-height:1.7;color:var(--text-muted);margin-top:8px}
 
 /* Callouts */
 .callout{
@@ -139,6 +136,30 @@
   display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:1px solid var(--border-glass);
 }
 
+/* ── New: Section dividers for API cards ── */
+.ep-section{
+  display:flex;align-items:center;gap:12px;
+  margin:24px 0 14px;font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--green);
+}
+.ep-section::before,.ep-section::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(74,222,128,0.25));
+}
+.ep-section::after{background:linear-gradient(90deg,rgba(74,222,128,0.25),transparent)}
+.ep-section:first-child{margin-top:0}
+
+.ep-subsection{
+  font-size:13px;font-weight:600;color:var(--text-main);
+  display:flex;align-items:center;gap:8px;
+  padding:6px 0 8px;margin-top:2px;
+}
+.ep-subsection::before{
+  content:'';width:3px;height:14px;border-radius:2px;
+  background:var(--green);flex-shrink:0;
+}
+.ep-subsection + .p-wrap{margin-top:0}
+
 /* Params table */
 .p-wrap{overflow-x:auto;border:1px solid var(--border-glass);border-radius:var(--radius-sm)}
 .p-table{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
@@ -152,7 +173,7 @@
 .p-table tr:last-child td{border-bottom:none}
 .p-table .pn{font-family:'Exo 2',monospace;font-size:13px;color:var(--text-main);white-space:nowrap}
 .p-table .pn .nested{color:var(--text-dim)}
-.p-table .pt{font-family:'Exo 2',monospace;font-size:12px;color:var(--text-dim);white-space:nowrap}
+.p-table .pt{font-size:13px;color:var(--text-muted);white-space:nowrap}
 .p-table .pr{font-size:12px;white-space:nowrap}
 .p-table .pr.y{color:var(--green)}
 .p-table .pr.n{color:var(--text-dim)}
@@ -227,7 +248,7 @@
 
 <nav class="navbar" role="navigation" aria-label="主导航">
   <div class="nav-inner">
-    <a class="logo" href="../../index.html">
+    <a class="logo" data-href="../../index.html">
       <span class="logo-icon">
         <svg width="40" height="40" viewBox="0 0 1024 1024" aria-hidden="true">
           <path d="M474.282667 96.213333a123.477333 123.477333 0 0 0-116.181334 123.221334l-0.042666 22.826666H243.797333A104.832 104.832 0 0 0 139.093333 347.477333l-0.213333 138.922667a32 32 0 0 0 32 32.042667h54.698667c36.821333 0 66.730667 29.909333 66.730666 66.730666 0 36.821333-29.909333 66.773333-66.730666 66.773334H170.837333a32 32 0 0 0-32 31.957333l-0.170666 138.965333a105.130667 105.130667 0 0 0 105.130666 105.173334h138.965334a32 32 0 0 0 32-32v-54.869334a66.816 66.816 0 0 1 133.504 0V896c0 17.664 14.336 32 32 32h138.965333l6.912-0.213333a105.130667 105.130667 0 0 0 98.218667-104.96v-114.261334h22.869333a123.477333 123.477333 0 0 0 123.434667-123.434666l-0.213334-7.253334a123.477333 123.477333 0 0 0-123.221333-116.181333h-22.869333V347.434667l-0.213334-6.912a105.130667 105.130667 0 0 0-104.917333-98.218667l-114.304-0.042667v-22.826666a123.477333 123.477333 0 0 0-123.392-123.434667z"
@@ -239,31 +260,31 @@
       <span class="logo-text">UCFPlugin</span>
     </a>
     <ul class="nav-links" style="margin-left:auto;display:flex;gap:6px;list-style:none">
-      <li><a class="nav-item" href="../配置插件.html">配置插件</a></li>
-      <li class="nav-dropdown"><a class="nav-item active" href="../接口文档.html">接口文档 <span class="dropdown-arrow">▾</span></a>
+      <li><a class="nav-item" data-href="../配置插件.html">配置插件</a></li>
+      <li class="nav-dropdown"><a class="nav-item active" data-href="../接口文档.html">接口文档 <span class="dropdown-arrow">▾</span></a>
         <div class="nav-dropdown-menu" role="menu" aria-label="接口文档">
-          <a href="UCFView.html" role="menuitem">
+          <a data-href="UCFView.html" role="menuitem">
             <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
             <span class="menu-label">UCFView</span><span class="menu-desc">视点管理</span>
           </a>
-          <a href="../接口文档.html#UCFVisibility" role="menuitem">
+          <a data-href="../接口文档.html#UCFVisibility" role="menuitem">
             <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
             <span class="menu-label">UCFVisibility</span><span class="menu-desc">可视性</span>
           </a>
-          <a href="../接口文档.html#UCFOutlineActor" role="menuitem">
+          <a data-href="../接口文档.html#UCFOutlineActor" role="menuitem">
             <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
             <span class="menu-label">UCFOutlineActor</span><span class="menu-desc">对象高亮</span>
           </a>
-          <a href="../接口文档.html#UCFOutlineArea" role="menuitem">
+          <a data-href="../接口文档.html#UCFOutlineArea" role="menuitem">
             <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
             <span class="menu-label">UCFOutlineArea</span><span class="menu-desc">区域高亮</span>
           </a>
         </div>
       </li>
-      <li><a class="nav-item" href="../智能体.html">智能体</a></li>
-      <li><a class="nav-item" href="../插件扩展.html">插件扩展</a></li>
-      <li><a class="nav-item" href="../素材库.html">素材库</a></li>
-      <li><a class="nav-item" href="../博客分享.html">博客分享</a></li>
+      <li><a class="nav-item" data-href="../智能体.html">智能体</a></li>
+      <li><a class="nav-item" data-href="../插件扩展.html">插件扩展</a></li>
+      <li><a class="nav-item" data-href="../素材库.html">素材库</a></li>
+      <li><a class="nav-item" data-href="../博客分享.html">博客分享</a></li>
     </ul>
   </div>
 </nav>
@@ -308,6 +329,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
+
+// ── Global click handler for data-href links (suppress status bar hints) ──
+document.addEventListener('click',function(e){
+  if(e.defaultPrevented)return;
+  var a=e.target.closest('a[data-href]');
+  if(a){e.preventDefault();var h=a.getAttribute('data-href');
+    if(h.charAt(0)==='#'){var t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth'})}
+    else window.location.href=h;}
+});
 
 // ===================== DATA =====================
 const GRP = [
@@ -481,7 +511,7 @@ function renderAll() {
   GRP.forEach(g => {
     sn += `<div class="snav-group">${g.label}</div>`;
     g.apis.forEach(n => {
-      sn += `<a class="snav-item" href="#${n}" onclick="return navClick(this,'${n}')">
+      sn += `<a class="snav-item" data-href="#${n}" onclick="return navClick(this,'${n}')">
         <span class="sname">${n}</span>
       </a>`;
     });
@@ -494,7 +524,6 @@ function renderAll() {
     html += `<div class="api-group-header">
       <div class="g-dot" style="background:${g.dot}"></div>
       <h2>${g.label}</h2>
-      <span class="g-count">${g.apis.length}</span>
     </div>`;
     g.apis.forEach(n => { html += epCard(n, API[n]); });
     html += `</section>`;
@@ -512,6 +541,7 @@ function epCard(name, d) {
   </div>`;
   h += `<div class="ep-body"><div class="ep-inner">`;
 
+  // ── 功能描述 ──
   h += `<p class="ep-desc">${d.desc}</p>`;
 
   if (d.notes) {
@@ -527,54 +557,63 @@ function epCard(name, d) {
     </div>`;
   }
 
+  // ── 调用传参说明 ──
   if (!d.noReq && d.pf) {
-    h += `<div class="api-stitle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg> 请求参数</div>`;
+    h += `<div class="ep-section">调用传参说明</div>`;
     if (d.pf.length) {
+      h += `<div class="ep-subsection">固定参数</div>`;
       h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>`;
       d.pf.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pd">${p[2]}</td></tr>`);
       h += `</tbody></table></div>`;
     }
-    if (d.pi.length) {
+    if (d.pi && d.pi.length) {
+      h += `<div class="ep-subsection">Params内参数</div>`;
       h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
       d.pi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
       h += `</tbody></table></div>`;
     }
     if (d.kpi) {
-      h += `<div style="margin:6px 0 2px;font-size:11px;color:var(--text-dim)">Keyframes 数组元素：</div>`;
+      h += `<div class="ep-subsection">Keyframes数组元素</div>`;
       h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
       d.kpi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
       h += `</tbody></table></div>`;
     }
   }
 
+  // ── 调用传参示例 ──
   if (d.re) {
     d.re.forEach(ex => {
-      h += `<div class="api-stitle" style="margin-top:14px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg> ${ex.lb}</div>`;
+      h += `<div class="ep-section">${ex.lb}</div>`;
       h += codeBlock(ex.cd);
     });
   } else if (!d.noReq && d.req) {
-    h += `<div class="api-stitle" style="margin-top:14px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg> 请求示例</div>`;
+    h += `<div class="ep-section">调用传参示例</div>`;
     h += codeBlock(d.req);
     if (d.reqNote) h += `<div class="api-note">${d.reqNote}</div>`;
   }
 
-  h += `<div class="api-stitle" style="margin-top:18px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 响应参数</div>`;
+  // ── 回调参数说明 ──
+  h += `<div class="ep-section">回调参数说明</div>`;
   const cbf = d.cf || [["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Status","Boolean","操作是否成功"],["DebugInfo","String","调试信息"],["Params","Object","参数对象"]];
+  h += `<div class="ep-subsection">固定参数</div>`;
   h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>`;
   cbf.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pd">${p[2]}</td></tr>`);
   h += `</tbody></table></div>`;
   if (d.cbi) {
-    h += `<div class="p-wrap" style="margin-top:10px"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
+    h += `<div class="ep-subsection">Params内参数</div>`;
+    h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
     d.cbi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
     h += `</tbody></table></div>`;
   }
+
+  // ── 回调参数示例 ──
   if (d.ce) {
     d.ce.forEach(ex => {
-      h += `<div class="api-stitle" style="margin-top:10px">${ex.lb}</div>`;
+      h += `<div class="ep-section">${ex.lb}</div>`;
       h += codeBlock(ex.cd);
     });
   } else if (d.cb) {
-    h += `<div class="api-stitle" style="margin-top:10px">响应示例</div>`;
+    h += `<div class="ep-section">回调参数示例</div>`;
     h += codeBlock(d.cb);
   }
 
@@ -603,8 +642,13 @@ function toggleEP(h, fromNav) {
     document.querySelectorAll('.ep-card.open').forEach(c => {
       if (c !== card) c.classList.remove('open');
     });
+    card.classList.add('open');
+    if (!fromNav) {
+      setTimeout(() => { card.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
+    }
+  } else {
+    card.classList.remove('open');
   }
-  card.classList.toggle('open');
   if (!fromNav) syncNav(card.dataset.api);
 }
 
@@ -623,7 +667,7 @@ function navClick(el, name) {
 
 function syncNav(name) {
   document.querySelectorAll('.snav-item').forEach(n => {
-    n.classList.toggle('active', n.getAttribute('href') === '#' + name);
+    n.classList.toggle('active', n.getAttribute('data-href') === '#' + name);
   });
 }
 
@@ -655,15 +699,7 @@ function doFilter(q) {
   });
 }
 
-// IntersectionObserver for active nav
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) { syncNav(entry.target.dataset.api); }
-  });
-}, { rootMargin: '-80px 0px -60% 0px' });
-
 renderAll();
-document.querySelectorAll('.ep-card').forEach(c => obs.observe(c));
 </script>
 </body>
 </html>
