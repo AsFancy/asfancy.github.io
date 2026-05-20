@@ -200,8 +200,22 @@
       </span>
       <span class="logo-text">UCFPlugin</span>
     </a>
-    <p>&copy; <span id="year"></span> UCFPlugin. All rights reserved</p>
-    <a class="footer-email" href="mailto:asfancymail@gmail.com">asfancymail@gmail.com</a>
+    <p class="footer-copyright">
+      &copy; <span id="year"></span> UCFPlugin. All rights reserved
+      <span class="footer-sep">|</span>
+      <span class="footer-email" onclick="location.href='mailto:asfancymail@gmail.com'">asfancymail@gmail.com</span>
+    </p>
+    <p class="footer-stats">
+      <span class="stat-item">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        访客 <span id="busuanzi_value_site_uv">0</span>
+      </span>
+      <span class="footer-sep">|</span>
+      <span class="stat-item">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        访问 <span id="busuanzi_value_site_pv">0</span>
+      </span>
+    </p>
   </footer>
 
 </main>
@@ -330,5 +344,6 @@ document.addEventListener('click',function(e){
     else window.location.href=h;}
 });
 </script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
