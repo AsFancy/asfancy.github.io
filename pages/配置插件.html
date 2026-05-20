@@ -13,48 +13,7 @@
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="主导航">
-  <div class="nav-inner">
-    <a class="logo" data-href="../index.html">
-      <span class="logo-icon">
-        <svg width="40" height="40" viewBox="0 0 1024 1024" aria-hidden="true">
-          <path d="M474.282667 96.213333a123.477333 123.477333 0 0 0-116.181334 123.221334l-0.042666 22.826666H243.797333A104.832 104.832 0 0 0 139.093333 347.477333l-0.213333 138.922667a32 32 0 0 0 32 32.042667h54.698667c36.821333 0 66.730667 29.909333 66.730666 66.730666 0 36.821333-29.909333 66.773333-66.730666 66.773334H170.837333a32 32 0 0 0-32 31.957333l-0.170666 138.965333a105.130667 105.130667 0 0 0 105.130666 105.173334h138.965334a32 32 0 0 0 32-32v-54.869334a66.816 66.816 0 0 1 133.504 0V896c0 17.664 14.336 32 32 32h138.965333l6.912-0.213333a105.130667 105.130667 0 0 0 98.218667-104.96v-114.261334h22.869333a123.477333 123.477333 0 0 0 123.434667-123.434666l-0.213334-7.253334a123.477333 123.477333 0 0 0-123.221333-116.181333h-22.869333V347.434667l-0.213334-6.912a105.130667 105.130667 0 0 0-104.917333-98.218667l-114.304-0.042667v-22.826666a123.477333 123.477333 0 0 0-123.392-123.434667z"
-            fill="none" stroke="#4ade80" stroke-width="50" stroke-linejoin="round"/>
-          <text x="570" y="650" text-anchor="middle" font-size="220" font-weight="800"
-            fill="#4ade80" font-family="Orbitron,'Segoe UI Black','Arial Black',sans-serif">UCF</text>
-        </svg>
-      </span>
-      <span class="logo-text">UCFPlugin</span>
-    </a>
-    <ul class="nav-links" style="margin-left:auto;display:flex;gap:6px;list-style:none">
-      <li><a class="nav-item active" data-href="../pages/配置插件.html">配置插件</a></li>
-      <li class="nav-dropdown"><a class="nav-item" data-href="../pages/接口文档.html">接口文档 <span class="dropdown-arrow">▾</span></a>
-        <div class="nav-dropdown-menu" role="menu" aria-label="接口文档">
-          <a data-href="../pages/apipages/UCFView.html" role="menuitem">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-            <span class="menu-label">UCFView</span><span class="menu-desc">视点管理</span>
-          </a>
-          <a data-href="../pages/接口文档.html#UCFVisibility" role="menuitem">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
-            <span class="menu-label">UCFVisibility</span><span class="menu-desc">可视性</span>
-          </a>
-          <a data-href="../pages/接口文档.html#UCFOutlineActor" role="menuitem">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
-            <span class="menu-label">UCFOutlineActor</span><span class="menu-desc">对象高亮</span>
-          </a>
-          <a data-href="../pages/接口文档.html#UCFOutlineArea" role="menuitem">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
-            <span class="menu-label">UCFOutlineArea</span><span class="menu-desc">区域高亮</span>
-          </a>
-        </div>
-      </li>
-      <li><a class="nav-item" data-href="../pages/智能体.html">智能体</a></li>
-      <li><a class="nav-item" data-href="../pages/插件扩展.html">插件扩展</a></li>
-      <li><a class="nav-item" data-href="../pages/素材库.html">素材库</a></li>
-      <li><a class="nav-item" data-href="../pages/博客分享.html">博客分享</a></li>
-    </ul>
-  </div>
-</nav>
+<div id="navbar-container"></div>
 
 <div class="page-header">
   <div class="page-header-bg">
@@ -287,53 +246,35 @@
   <p>&copy; <span id="year"></span> UCFPlugin. All rights reserved. 数字孪生 · UnrealEngine 插件</p>
 </footer>
 
-</div>
-
+<script src="../js/common.js"></script>
 <script>
-// Footer year
-document.getElementById('year').textContent=new Date().getFullYear();
-
 // ── Sidebar active state on scroll ──
-const sections=document.querySelectorAll('.doc-section');
-const navItems=document.querySelectorAll('.doc-nav-item');
+(function(){
+  var sections=document.querySelectorAll('.doc-section');
+  var navItems=document.querySelectorAll('.doc-nav-item');
 
-function updateActiveNav(){
-  let current='';
-  const scrollPos=window.scrollY + 120;
+  function updateActiveNav(){
+    var current='';
+    var scrollPos=window.scrollY + 120;
+    sections.forEach(function(section){
+      if(section.offsetTop <= scrollPos) current=section.getAttribute('id');
+    });
+    navItems.forEach(function(item){
+      item.classList.toggle('active',item.getAttribute('data-href')==='#'+current);
+    });
+  }
 
-  sections.forEach(section=>{
-    if(section.offsetTop <= scrollPos){
-      current=section.getAttribute('id');
-    }
+  window.addEventListener('scroll',updateActiveNav,{passive:true});
+  window.addEventListener('load',updateActiveNav);
+
+  navItems.forEach(function(item){
+    item.addEventListener('click',function(e){
+      e.preventDefault();
+      var target=document.querySelector(this.getAttribute('data-href'));
+      if(target) target.scrollIntoView({behavior:'smooth'});
+    });
   });
-
-  navItems.forEach(item=>{
-    item.classList.toggle('active',item.getAttribute('data-href')==='#'+current);
-  });
-}
-
-window.addEventListener('scroll',updateActiveNav,{passive:true});
-window.addEventListener('load',updateActiveNav);
-
-// ── Smooth scroll for sidebar links ──
-navItems.forEach(item=>{
-  item.addEventListener('click',function(e){
-    e.preventDefault();
-    const target=document.querySelector(this.getAttribute('data-href'));
-    if(target){
-      target.scrollIntoView({behavior:'smooth'});
-    }
-  });
-});
-
-// ── Global click handler for data-href links (suppress status bar hints) ──
-document.addEventListener('click',function(e){
-  if(e.defaultPrevented)return;
-  var a=e.target.closest('a[data-href]');
-  if(a){e.preventDefault();var h=a.getAttribute('data-href');
-    if(h.charAt(0)==='#'){var t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth'})}
-    else window.location.href=h;}
-});
+})();
 </script>
 </body>
 </html>

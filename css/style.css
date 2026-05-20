@@ -306,28 +306,6 @@ body{
   -webkit-mask-image:radial-gradient(ellipse 60% 50% at center,black,transparent 80%);
 }
 
-/* ── Step Cards (Quick Start) ── */
-.steps{display:flex;flex-direction:column;gap:16px}
-.step-card{
-  display:flex;align-items:flex-start;gap:16px;
-  padding:20px;border-radius:var(--radius-md);
-  background:var(--bg-card);border:1px solid var(--border-glass);
-  transition:all .25s;
-}
-.step-card:hover{border-color:rgba(74,222,128,0.2)}
-.step-num{
-  width:32px;height:32px;border-radius:var(--radius-sm);
-  background:var(--green-glow);color:var(--green);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;flex-shrink:0;font-size:14px;
-}
-.step-card h4{font-size:15px;color:var(--text-main);margin-bottom:2px}
-.step-card p{font-size:14px;color:var(--text-muted)}
-.step-card code{
-  background:var(--bg-glass);padding:2px 8px;border-radius:4px;
-  font-size:13px;font-family:'Exo 2',monospace;color:var(--green);
-}
-
 /* ── Content section (for sub-pages) ── */
 .content-section{padding:0 24px 80px}
 .content-section .section-inner{max-width:var(--max-w);margin:0 auto}

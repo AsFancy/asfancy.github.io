@@ -12,10 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <style>
 /* ── API Doc Layout ── */
-/* ── API Doc Layout ── */
 .api-layout{display:flex;max-width:var(--max-w);margin:0 auto;padding:0 24px 60px;gap:28px;position:relative}
-
-/* ── Sidebar ── */
 .api-sidebar{
   width:max-content;min-width:220px;flex-shrink:0;
   position:sticky;top:calc(var(--nav-h) + 24px);align-self:flex-start;
@@ -70,12 +67,8 @@
   width:3px;height:55%;border-radius:0 2px 2px 0;background:var(--green);
 }
 .snav-item .sname{white-space:nowrap}
-
-/* ── Content ── */
 .api-content{flex:1;min-width:0}
 .api-content > * + *{margin-top:32px}
-
-/* ── Group Sections ── */
 .api-group{margin-bottom:32px}
 .api-group-header{
   display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;
@@ -83,9 +76,6 @@
 }
 .api-group-header .g-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .api-group-header h2{font-size:18px;font-weight:700;color:var(--text-main);letter-spacing:-.01em}
-.api-group-header .g-count{display:none}
-
-/* ── Endpoint Cards ── */
 .ep-card{
   background:var(--bg-card);border:1px solid var(--border-glass);
   border-radius:var(--radius-md);margin-bottom:8px;overflow:hidden;
@@ -112,8 +102,6 @@
 .ep-inner{padding:0 16px 16px}
 .ep-inner > * + *{margin-top:16px}
 .ep-desc{font-size:14px;line-height:1.7;color:var(--text-muted);margin-top:8px}
-
-/* Callouts */
 .callout{
   border-radius:var(--radius-sm);padding:12px 16px;
   display:flex;gap:10px;font-size:14px;line-height:1.7;
@@ -128,15 +116,11 @@
 .callout ul{list-style:none}
 .callout ul li{position:relative;padding-left:14px;color:var(--text-muted)}
 .callout ul li::before{content:'';position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:var(--text-dim)}
-
-/* Section title */
 .api-stitle{
   font-size:12px;font-weight:700;text-transform:uppercase;
   letter-spacing:.07em;color:var(--text-dim);
   display:flex;align-items:center;gap:6px;padding-bottom:6px;border-bottom:1px solid var(--border-glass);
 }
-
-/* ── New: Section dividers for API cards ── */
 .ep-section{
   display:flex;align-items:center;gap:12px;
   margin:24px 0 14px;font-size:12px;font-weight:700;
@@ -148,7 +132,6 @@
 }
 .ep-section::after{background:linear-gradient(90deg,rgba(74,222,128,0.25),transparent)}
 .ep-section:first-child{margin-top:0}
-
 .ep-subsection{
   font-size:13px;font-weight:600;color:var(--text-main);
   display:flex;align-items:center;gap:8px;
@@ -158,9 +141,6 @@
   content:'';width:3px;height:14px;border-radius:2px;
   background:var(--green);flex-shrink:0;
 }
-.ep-subsection + .p-wrap{margin-top:0}
-
-/* Params table */
 .p-wrap{overflow-x:auto;border:1px solid var(--border-glass);border-radius:var(--radius-sm)}
 .p-table{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
 .p-table th{
@@ -179,9 +159,6 @@
 .p-table .pr.n{color:var(--text-dim)}
 .p-table .pd{font-size:13px;color:var(--text-muted);line-height:1.5}
 .p-table .pd code{font-family:'Exo 2',monospace;font-size:12px;background:var(--green-glow);color:var(--green);padding:1px 5px;border-radius:3px}
-.api-stitle + .p-wrap{margin-top:-4px}
-
-/* Code blocks */
 .cb{border:1px solid var(--border-glass);border-radius:var(--radius-sm);overflow:hidden;transition:border-color .2s}
 .cb-h{
   display:flex;align-items:center;justify-content:space-between;
@@ -204,8 +181,7 @@
 .cb-h .cpy.done{color:var(--green)}
 .cb pre{margin:0;padding:14px;background:rgba(0,0,0,0.3);overflow-x:auto;font-size:13px;line-height:1.7}
 .cb pre code{font-family:'Exo 2',monospace;background:none!important;padding:0!important}
-.hljs{background:transparent!important}
-.hljs{color:#e2e8f0!important}
+.hljs{background:transparent!important;color:#e2e8f0!important}
 .hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a78bfa!important}
 .hljs-string,.hljs-attr{color:#6ee7b7!important}
 .hljs-number,.hljs-literal{color:#67e8f9!important}
@@ -214,20 +190,11 @@
 .hljs-property{color:#7dd3fc!important}
 .hljs-attribute{color:#fcd34d!important}
 .hljs-punctuation{color:#94a3b8!important}
-
-/* Note inline */
 .api-note{font-size:14px;color:var(--text-dim);line-height:1.7}
-
-/* ── Mobile ── */
 .api-sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:45;backdrop-filter:blur(4px)}
-
 @media(max-width:1024px){
   .api-layout{flex-direction:column;padding:0 16px 60px}
-  .api-layout::before{display:none}
-  .api-sidebar{
-    width:100%;position:relative;top:auto;height:auto;max-height:none;
-    border-radius:var(--radius-md);margin-bottom:0;
-  }
+  .api-sidebar{width:100%;position:relative;top:auto;height:auto;max-height:none;border-radius:var(--radius-md);margin-bottom:0}
   .api-sidebar-nav{max-height:260px}
 }
 @media(max-width:600px){
@@ -246,48 +213,7 @@
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="主导航">
-  <div class="nav-inner">
-    <a class="logo" data-href="../../index.html">
-      <span class="logo-icon">
-        <svg width="40" height="40" viewBox="0 0 1024 1024" aria-hidden="true">
-          <path d="M474.282667 96.213333a123.477333 123.477333 0 0 0-116.181334 123.221334l-0.042666 22.826666H243.797333A104.832 104.832 0 0 0 139.093333 347.477333l-0.213333 138.922667a32 32 0 0 0 32 32.042667h54.698667c36.821333 0 66.730667 29.909333 66.730666 66.730666 0 36.821333-29.909333 66.773333-66.730666 66.773334H170.837333a32 32 0 0 0-32 31.957333l-0.170666 138.965333a105.130667 105.130667 0 0 0 105.130666 105.173334h138.965334a32 32 0 0 0 32-32v-54.869334a66.816 66.816 0 0 1 133.504 0V896c0 17.664 14.336 32 32 32h138.965333l6.912-0.213333a105.130667 105.130667 0 0 0 98.218667-104.96v-114.261334h22.869333a123.477333 123.477333 0 0 0 123.434667-123.434666l-0.213334-7.253334a123.477333 123.477333 0 0 0-123.221333-116.181333h-22.869333V347.434667l-0.213334-6.912a105.130667 105.130667 0 0 0-104.917333-98.218667l-114.304-0.042667v-22.826666a123.477333 123.477333 0 0 0-123.392-123.434667z"
-            fill="none" stroke="#4ade80" stroke-width="50" stroke-linejoin="round"/>
-          <text x="570" y="650" text-anchor="middle" font-size="220" font-weight="800"
-            fill="#4ade80" font-family="Orbitron,'Segoe UI Black','Arial Black',sans-serif">UCF</text>
-        </svg>
-      </span>
-      <span class="logo-text">UCFPlugin</span>
-    </a>
-    <ul class="nav-links" style="margin-left:auto;display:flex;gap:6px;list-style:none">
-      <li><a class="nav-item" data-href="../配置插件.html">配置插件</a></li>
-      <li class="nav-dropdown"><a class="nav-item active" data-href="../接口文档.html">接口文档 <span class="dropdown-arrow">▾</span></a>
-        <div class="nav-dropdown-menu" role="menu" aria-label="接口文档">
-          <a data-href="UCFView.html" role="menuitem">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
-            <span class="menu-label">UCFView</span><span class="menu-desc">视点管理</span>
-          </a>
-          <a data-href="../接口文档.html#UCFVisibility" role="menuitem">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
-            <span class="menu-label">UCFVisibility</span><span class="menu-desc">可视性</span>
-          </a>
-          <a data-href="../接口文档.html#UCFOutlineActor" role="menuitem">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
-            <span class="menu-label">UCFOutlineActor</span><span class="menu-desc">对象高亮</span>
-          </a>
-          <a data-href="../接口文档.html#UCFOutlineArea" role="menuitem">
-            <span class="menu-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
-            <span class="menu-label">UCFOutlineArea</span><span class="menu-desc">区域高亮</span>
-          </a>
-        </div>
-      </li>
-      <li><a class="nav-item" data-href="../智能体.html">智能体</a></li>
-      <li><a class="nav-item" data-href="../插件扩展.html">插件扩展</a></li>
-      <li><a class="nav-item" data-href="../素材库.html">素材库</a></li>
-      <li><a class="nav-item" data-href="../博客分享.html">博客分享</a></li>
-    </ul>
-  </div>
-</nav>
+<div id="navbar-container"></div>
 
 <div class="page-loaded">
 
@@ -312,9 +238,7 @@
 </aside>
 
 <main class="api-content">
-
 <div id="groupsContainer"></div>
-
 </main>
 
 </div>
@@ -327,18 +251,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+<script src="../../js/common.js"></script>
 <script>
-document.getElementById('year').textContent=new Date().getFullYear();
-
-// ── Global click handler for data-href links (suppress status bar hints) ──
-document.addEventListener('click',function(e){
-  if(e.defaultPrevented)return;
-  var a=e.target.closest('a[data-href]');
-  if(a){e.preventDefault();var h=a.getAttribute('data-href');
-    if(h.charAt(0)==='#'){var t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth'})}
-    else window.location.href=h;}
-});
-
 // ===================== DATA =====================
 const GRP = [
   { id:"pos", label:"位置与视角", dot:"#34d399",
@@ -502,18 +416,13 @@ const API = {
 };
 
 // ===================== RENDER =====================
-
 function renderAll() {
   const flat = Object.keys(API);
-  const total = flat.length;
-
   let sn = "";
   GRP.forEach(g => {
     sn += `<div class="snav-group">${g.label}</div>`;
     g.apis.forEach(n => {
-      sn += `<a class="snav-item" data-href="#${n}" onclick="return navClick(this,'${n}')">
-        <span class="sname">${n}</span>
-      </a>`;
+      sn += `<a class="snav-item" data-href="#${n}" onclick="return navClick(this,'${n}')"><span class="sname">${n}</span></a>`;
     });
   });
   document.getElementById("snav").innerHTML = sn;
@@ -521,131 +430,79 @@ function renderAll() {
   let html = "";
   GRP.forEach(g => {
     html += `<section class="api-group" id="g-${g.id}">`;
-    html += `<div class="api-group-header">
-      <div class="g-dot" style="background:${g.dot}"></div>
-      <h2>${g.label}</h2>
-    </div>`;
+    html += `<div class="api-group-header"><div class="g-dot" style="background:${g.dot}"></div><h2>${g.label}</h2></div>`;
     g.apis.forEach(n => { html += epCard(n, API[n]); });
     html += `</section>`;
   });
   document.getElementById("groupsContainer").innerHTML = html;
-
   document.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
 }
 
 function epCard(name, d) {
   let h = `<div class="ep-card" data-api="${name}" id="${name}">`;
-  h += `<div class="ep-header" onclick="toggleEP(this)">
-    <span class="ep-name">${d.title || d.desc}</span>
-    <svg class="ep-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
-  </div>`;
+  h += `<div class="ep-header" onclick="toggleEP(this)"><span class="ep-name">${d.title || d.desc}</span><svg class="ep-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>`;
   h += `<div class="ep-body"><div class="ep-inner">`;
-
-  // ── 功能描述 ──
   h += `<p class="ep-desc">${d.desc}</p>`;
-
   if (d.notes) {
-    h += `<div class="callout warn">
-      <div><div class="c-title">注意事项</div><ul>${d.notes.map(n=>`<li>${n}</li>`).join("")}</ul></div>
-    </div>`;
+    h += `<div class="callout warn"><div><div class="c-title">注意事项</div><ul>${d.notes.map(n=>`<li>${n}</li>`).join("")}</ul></div></div>`;
   }
-
   if (d.scenario) {
-    h += `<div class="callout info">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-      <div><div class="c-title">使用场景</div><ul>${d.scenario.map(s=>`<li>${s}</li>`).join("")}</ul></div>
-    </div>`;
+    h += `<div class="callout info"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><div><div class="c-title">使用场景</div><ul>${d.scenario.map(s=>`<li>${s}</li>`).join("")}</ul></div></div>`;
   }
-
-  // ── 调用传参说明 ──
   if (!d.noReq && d.pf) {
     h += `<div class="ep-section">调用传参说明</div>`;
     if (d.pf.length) {
-      h += `<div class="ep-subsection">固定参数</div>`;
-      h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>`;
+      h += `<div class="ep-subsection">固定参数</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>`;
       d.pf.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pd">${p[2]}</td></tr>`);
       h += `</tbody></table></div>`;
     }
     if (d.pi && d.pi.length) {
-      h += `<div class="ep-subsection">Params内参数</div>`;
-      h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
+      h += `<div class="ep-subsection">Params内参数</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
       d.pi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
       h += `</tbody></table></div>`;
     }
     if (d.kpi) {
-      h += `<div class="ep-subsection">Keyframes数组元素</div>`;
-      h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
+      h += `<div class="ep-subsection">Keyframes数组元素</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
       d.kpi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
       h += `</tbody></table></div>`;
     }
   }
-
-  // ── 调用传参示例 ──
   if (d.re) {
-    d.re.forEach(ex => {
-      h += `<div class="ep-section">${ex.lb}</div>`;
-      h += codeBlock(ex.cd);
-    });
+    d.re.forEach(ex => { h += `<div class="ep-section">${ex.lb}</div>` + codeBlock(ex.cd); });
   } else if (!d.noReq && d.req) {
-    h += `<div class="ep-section">调用传参示例</div>`;
-    h += codeBlock(d.req);
+    h += `<div class="ep-section">调用传参示例</div>` + codeBlock(d.req);
     if (d.reqNote) h += `<div class="api-note">${d.reqNote}</div>`;
   }
-
-  // ── 回调参数说明 ──
   h += `<div class="ep-section">回调参数说明</div>`;
   const cbf = d.cf || [["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Status","Boolean","操作是否成功"],["DebugInfo","String","调试信息"],["Params","Object","参数对象"]];
-  h += `<div class="ep-subsection">固定参数</div>`;
-  h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>`;
+  h += `<div class="ep-subsection">固定参数</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody>`;
   cbf.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pd">${p[2]}</td></tr>`);
   h += `</tbody></table></div>`;
   if (d.cbi) {
-    h += `<div class="ep-subsection">Params内参数</div>`;
-    h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
+    h += `<div class="ep-subsection">Params内参数</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
     d.cbi.forEach(p => h += `<tr><td class="pn">${p[0]}</td><td class="pt">${p[1]}</td><td class="pr ${p[2]==="必填"?'y':'n'}">${p[2]}</td><td class="pd">${p[3]}</td></tr>`);
     h += `</tbody></table></div>`;
   }
-
-  // ── 回调参数示例 ──
   if (d.ce) {
-    d.ce.forEach(ex => {
-      h += `<div class="ep-section">${ex.lb}</div>`;
-      h += codeBlock(ex.cd);
-    });
+    d.ce.forEach(ex => { h += `<div class="ep-section">${ex.lb}</div>` + codeBlock(ex.cd); });
   } else if (d.cb) {
-    h += `<div class="ep-section">回调参数示例</div>`;
-    h += codeBlock(d.cb);
+    h += `<div class="ep-section">回调参数示例</div>` + codeBlock(d.cb);
   }
-
   h += `</div></div></div>`;
   return h;
 }
 
 function codeBlock(code) {
   const esc = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  return `<div class="cb">
-    <div class="cb-h">
-      <div class="cbl"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-      <button class="cpy" onclick="cpy(this)" data-cd="${encodeURIComponent(code)}">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        复制
-      </button>
-    </div>
-    <pre><code class="language-json">${esc}</code></pre>
-  </div>`;
+  return `<div class="cb"><div class="cb-h"><div class="cbl"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><button class="cpy" onclick="cpy(this)" data-cd="${encodeURIComponent(code)}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制</button></div><pre><code class="language-json">${esc}</code></pre></div>`;
 }
 
-// ===================== INTERACTIONS =====================
 function toggleEP(h, fromNav) {
   const card = h.closest ? h.closest('.ep-card') : h;
   if (!card.classList.contains('open')) {
-    document.querySelectorAll('.ep-card.open').forEach(c => {
-      if (c !== card) c.classList.remove('open');
-    });
+    document.querySelectorAll('.ep-card.open').forEach(c => { if (c !== card) c.classList.remove('open'); });
     card.classList.add('open');
-    if (!fromNav) {
-      setTimeout(() => { card.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
-    }
+    if (!fromNav) setTimeout(() => { card.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
   } else {
     card.classList.remove('open');
   }
@@ -655,9 +512,7 @@ function toggleEP(h, fromNav) {
 function navClick(el, name) {
   const card = document.getElementById(name);
   if (card) {
-    document.querySelectorAll('.ep-card.open').forEach(c => {
-      if (c !== card) c.classList.remove('open');
-    });
+    document.querySelectorAll('.ep-card.open').forEach(c => { if (c !== card) c.classList.remove('open'); });
     card.classList.add('open');
     setTimeout(() => { card.scrollIntoView({ behavior:'smooth', block:'start' }); }, 50);
   }
@@ -666,9 +521,7 @@ function navClick(el, name) {
 }
 
 function syncNav(name) {
-  document.querySelectorAll('.snav-item').forEach(n => {
-    n.classList.toggle('active', n.getAttribute('data-href') === '#' + name);
-  });
+  document.querySelectorAll('.snav-item').forEach(n => { n.classList.toggle('active', n.getAttribute('data-href') === '#' + name); });
 }
 
 function cpy(btn) {
@@ -676,27 +529,15 @@ function cpy(btn) {
   navigator.clipboard.writeText(code).then(() => {
     btn.classList.add('done');
     btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 已复制';
-    setTimeout(() => {
-      btn.classList.remove('done');
-      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制';
-    }, 2000);
+    setTimeout(() => { btn.classList.remove('done'); btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制'; }, 2000);
   });
 }
 
-// Search
 function doFilter(q) {
   const s = q.toLowerCase().trim();
-  document.querySelectorAll('.ep-card').forEach(c => {
-    const m = !s || c.dataset.api.toLowerCase().includes(s) || c.textContent.toLowerCase().includes(s);
-    c.style.display = m ? '' : 'none';
-  });
-  document.querySelectorAll('.snav-item').forEach(n => {
-    n.style.display = (!s || n.textContent.toLowerCase().includes(s)) ? '' : 'none';
-  });
-  document.querySelectorAll('.api-group').forEach(gs => {
-    const vis = [...gs.querySelectorAll('.ep-card')].some(e => e.style.display !== 'none');
-    gs.style.display = vis ? '' : 'none';
-  });
+  document.querySelectorAll('.ep-card').forEach(c => { c.style.display = (!s || c.dataset.api.toLowerCase().includes(s) || c.textContent.toLowerCase().includes(s)) ? '' : 'none'; });
+  document.querySelectorAll('.snav-item').forEach(n => { n.style.display = (!s || n.textContent.toLowerCase().includes(s)) ? '' : 'none'; });
+  document.querySelectorAll('.api-group').forEach(gs => { gs.style.display = [...gs.querySelectorAll('.ep-card')].some(e => e.style.display !== 'none') ? '' : 'none'; });
 }
 
 renderAll();

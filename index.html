@@ -13,64 +13,10 @@
 </head>
 <body>
 
-<!-- ─── Navbar ─── -->
-<nav class="navbar" id="navbar" role="navigation" aria-label="主导航">
-  <div class="nav-inner">
-    <a class="logo" data-href="index.html" onclick="return navigateHome(event)">
-      <span class="logo-icon">
-        <svg width="40" height="40" viewBox="0 0 1024 1024" aria-hidden="true">
-          <path d="M474.282667 96.213333a123.477333 123.477333 0 0 0-116.181334 123.221334l-0.042666 22.826666H243.797333A104.832 104.832 0 0 0 139.093333 347.477333l-0.213333 138.922667a32 32 0 0 0 32 32.042667h54.698667c36.821333 0 66.730667 29.909333 66.730666 66.730666 0 36.821333-29.909333 66.773333-66.730666 66.773334H170.837333a32 32 0 0 0-32 31.957333l-0.170666 138.965333a105.130667 105.130667 0 0 0 105.130666 105.173334h138.965334a32 32 0 0 0 32-32v-54.869334a66.816 66.816 0 0 1 133.504 0V896c0 17.664 14.336 32 32 32h138.965333l6.912-0.213333a105.130667 105.130667 0 0 0 98.218667-104.96v-114.261334h22.869333a123.477333 123.477333 0 0 0 123.434667-123.434666l-0.213334-7.253334a123.477333 123.477333 0 0 0-123.221333-116.181333h-22.869333V347.434667l-0.213334-6.912a105.130667 105.130667 0 0 0-104.917333-98.218667l-114.304-0.042667v-22.826666a123.477333 123.477333 0 0 0-123.392-123.434667z"
-            fill="none" stroke="#4ade80" stroke-width="50" stroke-linejoin="round"/>
-          <text x="570" y="650" text-anchor="middle" font-size="220" font-weight="800"
-            fill="#4ade80" font-family="Orbitron,'Segoe UI Black','Arial Black',sans-serif">UCF</text>
-        </svg>
-      </span>
-      <span class="logo-text">UCFPlugin</span>
-    </a>
+<div id="navbar-container"></div>
 
-    <ul class="nav-links" id="navLinks" role="menubar">
-      <li role="none"><button class="nav-item" data-page="配置插件" role="menuitem">配置插件</button></li>
-      <li class="nav-dropdown" role="none">
-        <button class="nav-item nav-dropdown-trigger" role="menuitem" aria-haspopup="true" onclick="window.location.href='pages/接口文档.html'">
-          接口文档 <span class="dropdown-arrow">▾</span>
-        </button>
-        <div class="nav-dropdown-menu" role="menu" aria-label="接口文档">
-          <a data-href="pages/apipages/UCFView.html" role="menuitem">
-            <span class="menu-label">UCFView</span>
-            <span class="menu-desc">视点管理</span>
-          </a>
-          <a data-href="pages/接口文档.html#UCFVisibility" role="menuitem">
-            <span class="menu-label">UCFVisibility</span>
-            <span class="menu-desc">可视性</span>
-          </a>
-          <a data-href="pages/接口文档.html#UCFOutlineActor" role="menuitem">
-            <span class="menu-label">UCFOutlineActor</span>
-            <span class="menu-desc">对象高亮</span>
-          </a>
-          <a data-href="pages/接口文档.html#UCFOutlineArea" role="menuitem">
-            <span class="menu-label">UCFOutlineArea</span>
-            <span class="menu-desc">区域高亮</span>
-          </a>
-        </div>
-      </li>
-      <li role="none"><button class="nav-item" data-page="智能体" role="menuitem">智能体</button></li>
-      <li role="none"><button class="nav-item" data-page="插件扩展" role="menuitem">插件扩展</button></li>
-      <li role="none"><button class="nav-item" data-page="素材库" role="menuitem">素材库</button></li>
-      <li role="none"><button class="nav-item" data-page="博客分享" role="menuitem">博客分享</button></li>
-    </ul>
-
-    <button class="mobile-toggle" id="mobileToggle" aria-label="切换菜单" aria-expanded="false">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
-  </div>
-</nav>
-
-<!-- ─── Page loading overlay ─── -->
 <div class="page-loading-overlay" id="pageLoadingOverlay" aria-hidden="true"></div>
 
-<!-- ─── Page Content ─── -->
 <main class="page-content" id="pageContent">
 
   <!-- ─── Hero ─── -->
@@ -177,7 +123,7 @@
 
   <!-- ─── Footer ─── -->
   <footer class="footer">
-    <a class="logo" data-href="index.html" onclick="return navigateHome(event)" style="justify-content:center;margin:0 auto 12px">
+    <a class="logo" data-href="index.html" style="justify-content:center;margin:0 auto 12px">
       <span class="logo-icon">
         <svg width="28" height="28" viewBox="0 0 1024 1024" aria-hidden="true">
           <path d="M474.282667 96.213333a123.477333 123.477333 0 0 0-116.181334 123.221334l-0.042666 22.826666H243.797333A104.832 104.832 0 0 0 139.093333 347.477333l-0.213333 138.922667a32 32 0 0 0 32 32.042667h54.698667c36.821333 0 66.730667 29.909333 66.730666 66.730666 0 36.821333-29.909333 66.773333-66.730666 66.773334H170.837333a32 32 0 0 0-32 31.957333l-0.170666 138.965333a105.130667 105.130667 0 0 0 105.130666 105.173334h138.965334a32 32 0 0 0 32-32v-54.869334a66.816 66.816 0 0 1 133.504 0V896c0 17.664 14.336 32 32 32h138.965333l6.912-0.213333a105.130667 105.130667 0 0 0 98.218667-104.96v-114.261334h22.869333a123.477333 123.477333 0 0 0 123.434667-123.434666l-0.213334-7.253334a123.477333 123.477333 0 0 0-123.221333-116.181333h-22.869333V347.434667l-0.213334-6.912a105.130667 105.130667 0 0 0-104.917333-98.218667l-114.304-0.042667v-22.826666a123.477333 123.477333 0 0 0-123.392-123.434667z"
@@ -202,22 +148,54 @@
 
 </main>
 
+<script src="js/common.js"></script>
 <script>
-// ── goHome ──
-function goHome(){
-  window.scrollTo({top:0,behavior:'smooth'});
+// ── SPA: navigate to a sub-page ──
+function navigateToPage(pageName){
+  var url='pages/'+encodeURIComponent(pageName)+'.html';
+  var content=document.getElementById('pageContent');
+  var overlay=document.getElementById('pageLoadingOverlay');
+
+  content.style.transition='opacity .2s ease';
+  content.style.opacity='0';
+  overlay.classList.add('active');
+
+  content.querySelectorAll('.hero,.section,.footer').forEach(function(el){
+    if(!el.classList.contains('page-loaded')) el.style.display='none';
+  });
+  var old=content.querySelector('.page-loaded');
+  if(old) old.remove();
+
+  fetch(url)
+    .then(function(r){if(!r.ok) throw Error();return r.text()})
+    .then(function(html){
+      var parser=new DOMParser();
+      var doc=parser.parseFromString(html,'text/html');
+      var main=doc.querySelector('.page-loaded');
+      var newContent=main ? main.cloneNode(true) : (function(){
+        var d=document.createElement('div');d.className='page-loaded';d.innerHTML=doc.body.innerHTML;return d;
+      })();
+
+      overlay.classList.remove('active');
+      content.appendChild(newContent);
+      content.style.opacity='';
+      setActiveNav(pageName);
+      window.scrollTo({top:0,behavior:'smooth'});
+      content.querySelectorAll('.fade-in').forEach(function(el){
+        requestAnimationFrame(function(){el.classList.add('visible');});
+      });
+    })
+    .catch(function(){
+      overlay.classList.remove('active');
+      content.style.opacity='';
+      window.location.href=url;
+    });
 }
 
-// ── Navigate home ──
-function navigateHome(e){
-  if(e) e.preventDefault();
-  const content=document.getElementById('pageContent');
-  content.querySelectorAll('.hero,.section,.footer').forEach(el=>el.style.display='');
-  const loaded=content.querySelector('.page-loaded');
-  if(loaded) loaded.remove();
-  setActiveNav(null);
-  goHome();
-  return false;
+function setActiveNav(pageName){
+  document.querySelectorAll('.nav-item').forEach(function(el){
+    el.classList.toggle('active',el.dataset.page===pageName);
+  });
 }
 
 // ── Scroll helpers ──
@@ -226,105 +204,28 @@ function scrollToModules(e){
   document.getElementById('modules').scrollIntoView({behavior:'smooth'});
 }
 
-// ── SPA: navigate to a sub-page ──
-function navigateToPage(pageName){
-  const url='pages/'+encodeURIComponent(pageName)+'.html';
-  const content=document.getElementById('pageContent');
-  const overlay=document.getElementById('pageLoadingOverlay');
-
-  // Fade out current content
-  content.style.transition='opacity .2s ease';
-  content.style.opacity='0';
-
-  overlay.classList.add('active');
-
-  content.querySelectorAll('.hero,.section,.footer').forEach(el=>{
-    if(!el.classList.contains('page-loaded')) el.style.display='none';
-  });
-  const old=content.querySelector('.page-loaded');
-  if(old) old.remove();
-
-  fetch(url)
-    .then(r=>{if(!r.ok) throw Error();return r.text()})
-    .then(html=>{
-      const parser=new DOMParser();
-      const doc=parser.parseFromString(html,'text/html');
-      const main=doc.querySelector('.page-loaded');
-      const newContent=main ? main.cloneNode(true) : (()=>{
-        const d=document.createElement('div');d.className='page-loaded';d.innerHTML=doc.body.innerHTML;return d;
-      })();
-
-      overlay.classList.remove('active');
-      content.appendChild(newContent);
-      content.style.opacity='';
-      setActiveNav(pageName);
-      window.scrollTo({top:0,behavior:'smooth'});
-      // Trigger fade-in animations
-      content.querySelectorAll('.fade-in').forEach(el=>{
-        requestAnimationFrame(()=>el.classList.add('visible'));
-      });
-    })
-    .catch(()=>{
-      overlay.classList.remove('active');
-      content.style.opacity='';
-      window.location.href=url;
-    });
-}
-
-// ── Highlight active nav ──
-function setActiveNav(pageName){
-  document.querySelectorAll('.nav-item').forEach(el=>{
-    el.classList.toggle('active',el.dataset.page===pageName);
-  });
-}
-
-// ── Wire nav clicks ──
-document.querySelectorAll('[data-page]').forEach(el=>{
+// ── Module card clicks and other [data-page] elements ──
+document.querySelectorAll('[data-page]').forEach(function(el){
   el.addEventListener('click',function(e){
     if(this.tagName==='A') {
       e.preventDefault();
-      const pageUrl='pages/'+encodeURIComponent(this.dataset.page)+'.html';
-      window.location.href=pageUrl;
+      window.location.href='pages/'+encodeURIComponent(this.dataset.page)+'.html';
       return;
     }
     e.preventDefault();
     navigateToPage(this.dataset.page);
-    if(window.innerWidth<=900) document.getElementById('navLinks').classList.remove('open');
   });
-});
-
-// ── Navbar scroll effect ──
-document.addEventListener('scroll',()=>{
-  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>32);
-},{passive:true});
-
-// ── Mobile menu ──
-const toggle=document.getElementById('mobileToggle');
-const navLinks=document.getElementById('navLinks');
-toggle.addEventListener('click',()=>{
-  const open=navLinks.classList.toggle('open');
-  toggle.setAttribute('aria-expanded',open);
 });
 
 // ── Scroll reveal ──
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting) entry.target.classList.add('visible');
-  });
-},{threshold:0.12});
-document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
-
-// ── Footer year ──
-document.getElementById('year').textContent=new Date().getFullYear();
-
-// ── Global click handler for data-href links (suppress status bar hints) ──
-document.addEventListener('click',function(e){
-  if(e.defaultPrevented)return;
-  var a=e.target.closest('a[data-href]');
-  if(a){e.preventDefault();var h=a.getAttribute('data-href');
-    if(h.charAt(0)==='#'){var t=document.querySelector(h);if(t)t.scrollIntoView({behavior:'smooth'})}
-    else window.location.href=h;}
-});
+(function(){
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  },{threshold:0.12});
+  document.querySelectorAll('.fade-in').forEach(function(el){observer.observe(el);});
+})();
 </script>
 <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
