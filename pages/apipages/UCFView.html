@@ -17,6 +17,7 @@
   width:max-content;min-width:220px;flex-shrink:0;
   position:sticky;top:calc(var(--nav-h) + 24px);align-self:flex-start;
   display:flex;flex-direction:column;
+  max-height:calc(100vh - var(--nav-h) - 48px);
   border-radius:var(--radius-md);
   background:var(--bg-card);border:1px solid var(--border-glass);
   backdrop-filter:blur(12px);
@@ -47,12 +48,17 @@
 .api-sidebar-search input:focus{border-color:rgba(74,222,128,0.3);box-shadow:0 0 0 3px var(--green-glow)}
 .api-sidebar-search input::placeholder{color:var(--text-dim)}
 .api-sidebar-search .s-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--text-dim);pointer-events:none}
-.api-sidebar-nav{overflow-y:visible;padding:6px 0 12px}
+.api-sidebar-nav{overflow-y:auto;flex:1;padding:6px 0 12px}
 .api-sidebar-nav::-webkit-scrollbar{width:3px}
 .snav-group{
   padding:14px 16px 4px 18px;
-  font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.1em;color:var(--text-dim);
+  font-size:12px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--green);
+  display:flex;align-items:center;gap:8px;
+}
+.snav-group::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--green);flex-shrink:0;
 }
 .snav-item{
   display:flex;align-items:center;gap:6px;
@@ -429,10 +435,7 @@ function renderAll() {
 
   let html = "";
   GRP.forEach(g => {
-    html += `<section class="api-group" id="g-${g.id}">`;
-    html += `<div class="api-group-header"><div class="g-dot" style="background:${g.dot}"></div><h2>${g.label}</h2></div>`;
     g.apis.forEach(n => { html += epCard(n, API[n]); });
-    html += `</section>`;
   });
   document.getElementById("groupsContainer").innerHTML = html;
   document.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
@@ -499,22 +502,21 @@ function codeBlock(code) {
 
 function toggleEP(h, fromNav) {
   const card = h.closest ? h.closest('.ep-card') : h;
-  if (!card.classList.contains('open')) {
-    document.querySelectorAll('.ep-card.open').forEach(c => { if (c !== card) c.classList.remove('open'); });
-    card.classList.add('open');
-    if (!fromNav) setTimeout(() => { card.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
-  } else {
-    card.classList.remove('open');
-  }
+  card.classList.toggle('open');
   if (!fromNav) syncNav(card.dataset.api);
 }
 
 function navClick(el, name) {
   const card = document.getElementById(name);
   if (card) {
-    document.querySelectorAll('.ep-card.open').forEach(c => { if (c !== card) c.classList.remove('open'); });
     card.classList.add('open');
-    setTimeout(() => { card.scrollIntoView({ behavior:'smooth', block:'start' }); }, 50);
+    const navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'));
+    const st = navH + 24;
+    const ct = card.getBoundingClientRect().top;
+    const root = document.documentElement;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(window.scrollX, window.scrollY + ct - st);
+    root.style.scrollBehavior = '';
   }
   syncNav(name);
   return false;

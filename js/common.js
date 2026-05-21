@@ -63,7 +63,7 @@ document.getElementById('navbar-container').innerHTML =
 
 // ── Active nav ──
 if (pageName) {
-  var pageMap = { 'UCFView':'接口文档' };
+  var pageMap = {  };
   var activePage = pageMap[pageName] || pageName;
   document.querySelectorAll('.nav-item[data-page]').forEach(function(el){
     if (el.getAttribute('data-page') === activePage) el.classList.add('active');
