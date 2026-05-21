@@ -53,7 +53,7 @@
 .snav-group{
   padding:14px 16px 4px 18px;
   font-size:12px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.08em;color:var(--green);
+  letter-spacing:.08em;color:var(--text-main);
   display:flex;align-items:center;gap:8px;
 }
 .snav-group::before{
@@ -105,9 +105,9 @@
 .ep-card.open .ep-arrow{transform:rotate(180deg)}
 .ep-body{display:none}
 .ep-card.open .ep-body{display:block}
-.ep-inner{padding:0 16px 16px}
-.ep-inner > * + *{margin-top:16px}
-.ep-desc{font-size:14px;line-height:1.7;color:var(--text-muted);margin-top:8px}
+.ep-inner{padding:0 20px 20px}
+.ep-inner > * + *{margin-top:20px}
+.ep-desc{font-size:15px;line-height:1.8;color:var(--text-muted);margin-top:10px}
 .callout{
   border-radius:var(--radius-sm);padding:12px 16px;
   display:flex;gap:10px;font-size:14px;line-height:1.7;
@@ -148,14 +148,14 @@
   background:var(--green);flex-shrink:0;
 }
 .p-wrap{overflow-x:auto;border:1px solid var(--border-glass);border-radius:var(--radius-sm)}
-.p-table{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+.p-table{width:100%;border-collapse:collapse;font-size:14px;min-width:540px}
 .p-table th{
-  text-align:left;padding:8px 12px;
+  text-align:left;padding:10px 14px;
   font-weight:600;color:var(--text-dim);
-  font-size:12px;text-transform:uppercase;letter-spacing:.06em;
+  font-size:11px;text-transform:uppercase;letter-spacing:.06em;
   background:var(--bg-glass);border-bottom:1px solid var(--border-glass);
 }
-.p-table td{padding:7px 12px;border-bottom:1px solid var(--border-glass);color:var(--text-muted);vertical-align:top}
+.p-table td{padding:9px 14px;border-bottom:1px solid var(--border-glass);color:var(--text-muted);vertical-align:top}
 .p-table tr:last-child td{border-bottom:none}
 .p-table .pn{font-family:'Exo 2',monospace;font-size:13px;color:var(--text-main);white-space:nowrap}
 .p-table .pn .nested{color:var(--text-dim)}
@@ -163,20 +163,15 @@
 .p-table .pr{font-size:12px;white-space:nowrap}
 .p-table .pr.y{color:var(--green)}
 .p-table .pr.n{color:var(--text-dim)}
-.p-table .pd{font-size:13px;color:var(--text-muted);line-height:1.5}
+.p-table .pd{font-size:14px;color:var(--text-muted);line-height:1.6}
 .p-table .pd code{font-family:'Exo 2',monospace;font-size:12px;background:var(--green-glow);color:var(--green);padding:1px 5px;border-radius:3px}
 .cb{border:1px solid var(--border-glass);border-radius:var(--radius-sm);overflow:hidden;transition:border-color .2s}
 .cb-h{
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:center;justify-content:flex-end;
   padding:5px 12px;background:rgba(0,0,0,0.2);
   border-bottom:1px solid var(--border-glass);
   font-size:10px;color:var(--text-dim);
 }
-.cb-h .cbl{display:flex;align-items:center;gap:5px}
-.cb-h .cbl .dot{width:7px;height:7px;border-radius:50%}
-.cb-h .cbl .dot.r{background:#ef4444}
-.cb-h .cbl .dot.y{background:#eab308}
-.cb-h .cbl .dot.g{background:#22c55e}
 .cb-h .cpy{
   display:flex;align-items:center;gap:4px;
   background:none;border:none;color:var(--text-dim);
@@ -185,7 +180,7 @@
 }
 .cb-h .cpy:hover{background:var(--bg-glass);color:var(--text-muted)}
 .cb-h .cpy.done{color:var(--green)}
-.cb pre{margin:0;padding:14px;background:rgba(0,0,0,0.3);overflow-x:auto;font-size:13px;line-height:1.7}
+.cb pre{margin:0;padding:16px;background:rgba(0,0,0,0.3);overflow-x:auto;font-size:14px;line-height:1.8}
 .cb pre code{font-family:'Exo 2',monospace;background:none!important;padding:0!important}
 .hljs{background:transparent!important;color:#e2e8f0!important}
 .hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a78bfa!important}
@@ -496,8 +491,10 @@ function epCard(name, d) {
 }
 
 function codeBlock(code) {
-  const esc = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  return `<div class="cb"><div class="cb-h"><div class="cbl"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><button class="cpy" onclick="cpy(this)" data-cd="${encodeURIComponent(code)}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制</button></div><pre><code class="language-json">${esc}</code></pre></div>`;
+  let fmt = code;
+  try { fmt = JSON.stringify(JSON.parse(code), null, 4); } catch(e) {}
+  const esc = fmt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return `<div class="cb"><div class="cb-h"><button class="cpy" onclick="cpy(this)" data-cd="${encodeURIComponent(code)}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制</button></div><pre><code class="language-json">${esc}</code></pre></div>`;
 }
 
 function toggleEP(h, fromNav) {
