@@ -99,14 +99,21 @@
 .ep-card.open .ep-header{background:rgba(74,222,128,0.08);border-bottom:1px solid rgba(74,222,128,0.1)}
 .ep-name{
   font-size:14px;font-weight:500;
-  color:var(--text-main);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--text-main);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:6px;
 }
+.ep-type{
+  font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;
+  letter-spacing:.05em;text-transform:uppercase;flex-shrink:0;
+}
+.ep-type.sync{background:var(--green-glow);color:var(--green)}
+.ep-type.trigger{background:rgba(251,191,36,0.15);color:#fbbf24}
 .ep-arrow{color:var(--text-dim);flex-shrink:0;transition:transform .3s}
 .ep-card.open .ep-arrow{transform:rotate(180deg)}
 .ep-body{display:none}
 .ep-card.open .ep-body{display:block}
 .ep-inner{padding:0 20px 20px}
 .ep-inner > * + *{margin-top:20px}
+.ep-inner > .callout.tips{margin-top:14px}
 .ep-desc{font-size:15px;line-height:1.8;color:var(--text-muted);margin-top:10px}
 .callout{
   border-radius:var(--radius-sm);padding:12px 16px;
@@ -118,6 +125,11 @@
 .callout.warn .c-title{color:#fbbf24;font-weight:600;margin-bottom:3px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 .callout.info{background:var(--indigo-glow);border:1px solid rgba(99,102,241,0.15)}
 .callout.info svg{color:var(--indigo)}
+.callout.tips{display:block;padding:0}
+.callout.tips .c-title{color:var(--indigo);font-size:12px;font-weight:700;letter-spacing:.04em;margin-bottom:6px}
+.callout.tips ul{list-style:none;margin:0;padding:0}
+.callout.tips ul li{color:var(--text-main);font-size:13px;padding:2px 0 2px 12px;position:relative}
+.callout.tips ul li::before{content:'';position:absolute;left:0;top:11px;width:4px;height:4px;border-radius:50%;background:var(--text-dim)}
 .callout.info .c-title{color:var(--indigo);font-weight:600;margin-bottom:3px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 .callout ul{list-style:none}
 .callout ul li{position:relative;padding-left:14px;color:var(--text-muted)}
@@ -283,7 +295,7 @@ const GRP = [
 
 const API = {
   "UCFView/SetDPPosition": {
-    t:"sync", title:"设置DefaultPawn的位置和视角", desc:"设置DefaultPawn的位置和视角，支持相对目标位置的反向偏移和平滑移动效果。",
+    t:"sync", title:"设置DefaultPawn的位置和视角", desc:"",
     notes:["当前 Player0 必须是 DefaultPawn 类型，否则操作失败","OffestDistance 为相对目标位置的反向偏移距离，单位为厘米","bIgnoreLag 为 false 时会启用平滑移动效果"],
     pf:[["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Params","Object","参数对象"]],
     pi:[["DesirLocation","Object","必填","目标位置，世界坐标系下的三维坐标"],["DesirLocation.X","Float","必填","X坐标，单位：厘米"],["DesirLocation.Y","Float","必填","Y坐标，单位：厘米"],["DesirLocation.Z","Float","必填","Z坐标，单位：厘米"],["DesirRotation","Object","必填","目标视角，欧拉角表示的旋转值"],["DesirRotation.Pitch","Float","必填","俯仰角，单位：度，取值 [-90,90]"],["DesirRotation.Yaw","Float","必填","偏航角，单位：度，取值 [-180,180]"],["DesirRotation.Roll","Float","必填","翻滚角，单位：度，取值 [-180,180]"],["OffestDistance","Float","选填","相对目标位置的反向偏移距离（厘米），默认 <code>0</code>"],["bIgnoreLag","Boolean","选填","是否忽略平滑移动效果，默认 <code>false</code>"]],
@@ -445,11 +457,11 @@ function renderAll() {
 
 function epCard(name, d) {
   let h = `<div class="ep-card" data-api="${name}" id="${name}">`;
-  h += `<div class="ep-header" onclick="toggleEP(this)"><span class="ep-name">${d.title || d.desc}</span><svg class="ep-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>`;
+  h += `<div class="ep-header" onclick="toggleEP(this)"><span class="ep-name">${d.t === 'trigger' ? '<span class="ep-type trigger">Trigger</span>' : '<span class="ep-type sync">Sync</span>'}${d.title || d.desc}</span><svg class="ep-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>`;
   h += `<div class="ep-body"><div class="ep-inner">`;
-  h += `<p class="ep-desc">${d.desc}</p>`;
+
   if (d.notes) {
-    h += `<div class="callout warn"><div><div class="c-title">注意事项</div><ul>${d.notes.map(n=>`<li>${n}</li>`).join("")}</ul></div></div>`;
+    h += `<div class="callout tips"><div><div class="c-title">Tips</div><ul>${d.notes.map(n=>`<li>${n}</li>`).join("")}</ul></div></div>`;
   }
   if (d.scenario) {
     h += `<div class="callout info"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><div><div class="c-title">使用场景</div><ul>${d.scenario.map(s=>`<li>${s}</li>`).join("")}</ul></div></div>`;
@@ -494,7 +506,7 @@ function epCard(name, d) {
     h += `<div class="ep-section">回调参数示例</div>` + codeBlock(d.cb);
   }
   if (d.demo) {
-    h += `<div class="api-demo"><div class="api-demo-h"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> 功能演示</div><video src="../../res/api/ucfview/${d.demo}.mp4" autoplay muted loop playsinline></video></div>`;
+    h += `<div class="api-demo"><div class="api-demo-h"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> 功能演示</div><video src="../../res/apipages/UCFView/${d.demo}.mp4" autoplay muted loop playsinline></video></div>`;
   }
   h += `</div></div></div>`;
   return h;
