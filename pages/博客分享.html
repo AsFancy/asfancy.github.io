@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>博客分享 - UCFPlugin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" type="image/svg+xml" href="../res/favicon.svg">
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div class="page-loaded">
+
+<div class="page-header">
+  <div class="page-header-bg">
+    <div class="gradient g-left"></div>
+    <div class="gradient g-right"></div>
+  </div>
+  <div class="header-grid"></div>
+  <div class="section-label" style="justify-content:center;position:relative;z-index:1">博客分享</div>
+  <h1>技术博客与案例</h1>
+  <p>分享 UCFPlugin 的使用技巧、最佳实践和数字孪生项目案例。</p>
+</div>
+
+<section class="content-section">
+  <div class="section-inner">
+
+    <div class="content-card fade-in visible" style="cursor:pointer" onclick="alert('博客详情页即将上线')">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--green-glow);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Orbitron',sans-serif;font-weight:800;font-size:20px">1</div>
+        <div>
+          <h3 style="margin-bottom:4px">UCFPlugin 入门指南：从安装到第一个数字孪生场景</h3>
+          <p>详细介绍如何在 UE5.1 项目中安装和配置 UCFPlugin，并通过内置接口快速搭建数字孪生场景。</p>
+          <span style="display:inline-block;margin-top:8px;font-size:13px;color:var(--green)">阅读更多 →</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card fade-in visible delay-1" style="cursor:pointer" onclick="alert('博客详情页即将上线')">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--indigo-glow);color:var(--indigo);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Orbitron',sans-serif;font-weight:800;font-size:20px">2</div>
+        <div>
+          <h3 style="margin-bottom:4px">视点管理在智慧园区项目中的应用实践</h3>
+          <p>以某智慧园区项目为例，讲解如何使用 UCFView 接口实现多视点预设、视点漫游和自动巡航功能。</p>
+          <span style="display:inline-block;margin-top:8px;font-size:13px;color:var(--indigo)">阅读更多 →</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card fade-in visible delay-2" style="cursor:pointer" onclick="alert('博客详情页即将上线')">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--green-glow);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Orbitron',sans-serif;font-weight:800;font-size:20px">3</div>
+        <div>
+          <h3 style="margin-bottom:4px">对象高亮与区域高亮在设备监控中的妙用</h3>
+          <p>利用 UCFOutlineActor 和 UCFOutlineArea 接口实现设备异常定位、安全区域预警等典型监控场景。</p>
+          <span style="display:inline-block;margin-top:8px;font-size:13px;color:var(--green)">阅读更多 →</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-card fade-in visible delay-3" style="cursor:pointer" onclick="alert('博客详情页即将上线')">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--indigo-glow);color:var(--indigo);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Orbitron',sans-serif;font-weight:800;font-size:20px">4</div>
+        <div>
+          <h3 style="margin-bottom:4px">UCFPlugin 性能优化：大场景数字孪生的渲染技巧</h3>
+          <p>面向大规模数字孪生场景的优化方案，涵盖 LOD 策略、遮挡剔除、实例化渲染等关键技术。</p>
+          <span style="display:inline-block;margin-top:8px;font-size:13px;color:var(--indigo)">阅读更多 →</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> UCFPlugin. All rights reserved. 数字孪生 · UnrealEngine 插件</p>
+</footer>
+
+</div>
+
+<script src="../js/common.js"></script>
+</body>
+</html>
