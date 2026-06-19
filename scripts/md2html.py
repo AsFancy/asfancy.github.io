@@ -545,7 +545,7 @@ def _build_html(title, description, grp_js, api_js):
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <style>
 /* ── API Doc Layout ── */
-.api-layout{{display:flex;max-width:var(--max-w);margin:0 auto;padding:0 24px 60px;gap:28px;position:relative}}
+.api-layout{{display:flex;width:100%;max-width:var(--max-w);margin:0 auto;padding:0 24px 60px;gap:28px;position:relative}}
 .api-sidebar{{
   width:max-content;min-width:220px;flex-shrink:0;
   position:sticky;top:calc(var(--nav-h) + 24px);align-self:flex-start;
@@ -737,7 +737,7 @@ def _build_html(title, description, grp_js, api_js):
 }}
 .api-demo-h svg{{color:var(--green)}}
 .api-demo-bilibili{{
-  position:relative;width:100%;padding-bottom:49.72%;background:#0a0a0f;
+  position:relative;width:100%;padding-bottom:56.25%;background:#0a0a0f;
 }}
 .api-demo-bilibili iframe{{
   position:absolute;top:0;left:0;width:100%;height:100%;border:0;
@@ -772,9 +772,9 @@ def _build_html(title, description, grp_js, api_js):
     <div class="gradient g-left"></div>
     <div class="gradient g-right"></div>
   </div>
-  <div class="header-grid"></div>
+
   <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">{title_html}</h1>
-  <p style="font-size:16px;color:var(--text-muted);max-width:560px;margin:0 auto 40px;line-height:1.6">{desc_html}</p>
+  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">{desc_html}</p>
 </div>
 
 <div class="api-layout">
@@ -794,14 +794,24 @@ def _build_html(title, description, grp_js, api_js):
 </div>
 
 <footer class="footer">
-  <p>&copy; <span id="year"></span> UCFPlugin. All rights reserved. 数字孪生 · UnrealEngine 插件</p>
-</footer>
+    <p class="footer-copyright">
+      <span>&copy; <span id="year"></span> UCFPlugin. All rights reserved</span>
+      <span class="footer-sep">|</span>
+      <span class="stat-item">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        访客 <span id="busuanzi_value_site_uv">0</span>
+      </span>
+      <span class="footer-sep">|</span>
+      <span class="footer-email" onclick="location.href='mailto:asfancymail@gmail.com'">asfancymail@gmail.com</span>
+    </p>
+  </footer>
 
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
 <script src="../../js/common.js"></script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
 // ===================== DATA =====================
 {grp_js}

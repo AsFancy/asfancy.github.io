@@ -15,16 +15,7 @@
 
 <div id="navbar-container"></div>
 
-<div class="page-header">
-  <div class="page-header-bg">
-    <div class="gradient g-left"></div>
-    <div class="gradient g-right"></div>
-  </div>
-  <div class="header-grid"></div>
-  <div class="section-label" style="justify-content:center;position:relative;z-index:1">配置插件</div>
-  <h1>安装与配置</h1>
-  <p>在项目中完成 UCFPlugin 的安装、基础配置与进阶调优</p>
-</div>
+<div style="padding-top:calc(var(--nav-h) + 60px)"></div>
 
 <!-- Mobile sidebar -->
 <div class="doc-sidebar-mobile" id="docSidebarMobile">
@@ -102,7 +93,7 @@
                   <iframe src="https://player.bilibili.com/player.html?bvid=BV1UnEE6jE2X&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>定点移动<span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span></h4>
+                  <h4>定点移动<span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span></h4>
                   <p>按住鼠标左键水平拖动，控制 Pawn 左右移动到锚点位置；按住鼠标左键上下拖动，控制 Pawn 前后移动到锚点位置</p>
                 </div>
               </div>
@@ -113,7 +104,7 @@
                   <iframe src="https://player.bilibili.com/player.html?bvid=BV1bnEE6jEua&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>定点旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span></h4>
+                  <h4>定点旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span></h4>
                   <p>按住鼠标右键水平拖动，控制 Pawn 以锚点为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以锚点为中心上下旋转</p>
                 </div>
               </div>
@@ -124,7 +115,7 @@
                   <iframe src="https://player.bilibili.com/player.html?bvid=BV1UnEE6jEvR&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>定点缩放<span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span></h4>
+                  <h4>定点缩放<span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span></h4>
                   <p>向前滚动鼠标中键，控制 Pawn 逼近锚点；向后滚动鼠标中键，控制 Pawn 远离锚点</p>
                 </div>
               </div>
@@ -135,7 +126,7 @@
                   <iframe src="https://player.bilibili.com/player.html?bvid=BV1tnEE6jEqZ&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>快速聚焦<span class="key-hint"><kbd>双击鼠标右键</kbd></span></h4>
+                  <h4>快速聚焦<span class="key-hint"><kbd>双击鼠标右键</kbd></span></h4>
                   <p>双击鼠标右键快速聚焦到锚点位置</p>
                 </div>
               </div>
@@ -146,7 +137,7 @@
                   <iframe src="https://player.bilibili.com/player.html?bvid=BV1bnEE6jEcz&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>竖向移动<span class="key-hint"><kbd>Q</kbd> 上升 <kbd>E</kbd> 下降</span></h4>
+                  <h4>竖向移动<span class="key-hint"><kbd>Q</kbd> 上升 <kbd>E</kbd> 下降</span></h4>
                   <p>按住 Q 键竖直向上移动；按住 E 键竖直向下移动</p>
                 </div>
               </div>
@@ -157,7 +148,7 @@
                   <iframe src="https://player.bilibili.com/player.html?bvid=BV1unEE67EFT&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
-                  <h4><span class="dot"></span>居中旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span></h4>
+                  <h4>居中旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span></h4>
                   <p>按住鼠标右键水平拖动，控制 Pawn 以自身为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以自身为中心上下旋转</p>
                 </div>
               </div>
@@ -196,10 +187,20 @@
 </div>
 
 <footer class="footer">
-  <p>&copy; <span id="year"></span> UCFPlugin. All rights reserved. 数字孪生 · UnrealEngine 插件</p>
-</footer>
+    <p class="footer-copyright">
+      <span>&copy; <span id="year"></span> UCFPlugin. All rights reserved</span>
+      <span class="footer-sep">|</span>
+      <span class="stat-item">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        访客 <span id="busuanzi_value_site_uv">0</span>
+      </span>
+      <span class="footer-sep">|</span>
+      <span class="footer-email" onclick="location.href='mailto:asfancymail@gmail.com'">asfancymail@gmail.com</span>
+    </p>
+  </footer>
 
 <script src="../js/common.js"></script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
 // ── Sidebar active state on scroll ──
 (function(){

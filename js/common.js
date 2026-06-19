@@ -27,15 +27,7 @@ document.getElementById('navbar-container').innerHTML =
     </a>
     <ul class="nav-links" id="navLinks" role="menubar">
       <li role="none"><a class="nav-item" data-page="配置插件" data-href="${prefix}pages/配置插件.html">配置插件</a></li>
-      <li class="nav-dropdown" role="none">
-        <a class="nav-item" data-page="接口文档" data-href="${prefix}pages/接口文档.html">接口文档 <span class="dropdown-arrow">▾</span></a>
-        <div class="nav-dropdown-menu" role="menu" aria-label="接口文档">
-          <a data-href="${prefix}pages/apipages/UCFView.html" role="menuitem"><span class="menu-label">UCFView</span><span class="menu-desc">视点管理</span></a>
-          <a data-href="${prefix}pages/接口文档.html#UCFVisibility" role="menuitem"><span class="menu-label">UCFVisibility</span><span class="menu-desc">可视性</span></a>
-          <a data-href="${prefix}pages/接口文档.html#UCFOutlineActor" role="menuitem"><span class="menu-label">UCFOutlineActor</span><span class="menu-desc">对象高亮</span></a>
-          <a data-href="${prefix}pages/接口文档.html#UCFOutlineArea" role="menuitem"><span class="menu-label">UCFOutlineArea</span><span class="menu-desc">区域高亮</span></a>
-        </div>
-      </li>
+      <li role="none"><a class="nav-item" data-page="接口文档" data-href="${prefix}pages/接口文档.html">接口文档</a></li>
       <li role="none"><a class="nav-item" data-page="智能体" data-href="${prefix}pages/智能体.html">智能体</a></li>
       <li role="none"><a class="nav-item" data-page="插件扩展" data-href="${prefix}pages/插件扩展.html">插件扩展</a></li>
       <li role="none"><a class="nav-item" data-page="素材库" data-href="${prefix}pages/素材库.html">素材库</a></li>

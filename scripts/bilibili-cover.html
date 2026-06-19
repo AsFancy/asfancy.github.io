@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B站视频封面生成器 - UCFPlugin</title>
+<meta name="description" content="为 UCFPlugin 接口演示视频生成 16:9 B站封面">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" type="image/svg+xml" href="../res/favicon.svg">
+<style>
+/* ── Page Setup ── */
+html,body{height:100%;overflow:auto}
+body{
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:40px 24px 60px;gap:32px;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(74,222,128,0.06), transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(99,102,241,0.05), transparent 50%);
+}
+
+/* ── Editor Panel ── */
+.editor-panel{
+  position:sticky;top:24px;
+  width:340px;flex-shrink:0;
+  border-radius:var(--radius-lg);
+  background:var(--bg-card);
+  border:1px solid var(--border-glass);
+  backdrop-filter:blur(16px) saturate(180%);
+  -webkit-backdrop-filter:blur(16px) saturate(180%);
+  padding:20px;
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+  scrollbar-gutter:stable;
+}
+.editor-panel::-webkit-scrollbar{width:4px}
+.editor-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px}
+.ep-header{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:16px;padding-bottom:14px;
+  border-bottom:1px solid var(--border-glass);
+}
+.ep-header h2{
+  font-family:'Orbitron',sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:0.04em;
+}
+.ep-header .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green-glow-strong)}
+.ep-section{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--green);margin:14px 0 8px;
+  display:flex;align-items:center;gap:6px;
+}
+.ep-section::before{content:'';width:3px;height:10px;background:var(--green);border-radius:2px}
+.ep-field{margin-bottom:10px}
+.ep-field input,.ep-field select,.ep-field textarea{
+  width:100%;padding:8px 10px;
+  background:var(--bg-glass);
+  border:1px solid var(--border-glass);
+  border-radius:var(--radius-sm);
+  color:var(--text-main);
+  font-family:'Exo 2',sans-serif;font-size:13px;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  resize:vertical;
+}
+.ep-field input:focus,.ep-field select:focus,.ep-field textarea:focus{
+  border-color:rgba(74,222,128,0.3);
+  box-shadow:0 0 0 3px var(--green-glow);
+}
+.ep-field textarea{min-height:54px;line-height:1.5}
+.ep-field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.ep-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ep-btn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 14px;border-radius:var(--radius-sm);
+  background:var(--bg-glass);border:1px solid var(--border-glass);
+  color:var(--text-main);font-family:'Exo 2',sans-serif;
+  font-size:12px;font-weight:600;cursor:pointer;
+  transition:all .2s;
+}
+.ep-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(74,222,128,0.2)}
+.ep-btn.primary{background:linear-gradient(135deg,var(--green-dark),var(--green));color:#0a0a0f;border:none;box-shadow:0 0 16px var(--green-glow)}
+.ep-btn.primary:hover{transform:translateY(-1px);box-shadow:0 0 24px var(--green-glow-strong)}
+.ep-btn svg{width:13px;height:13px;flex-shrink:0}
+
+/* ── Cover Stage (responsive wrapper, keeps 16:9 aspect) ── */
+.cover-stage{
+  flex-shrink:0;
+  position:relative;
+  width:var(--cover-w, 880px);
+  height:var(--cover-h, 495px);
+}
+
+/* ── 16:9 Cover Canvas (always 1600x900 logical, scaled by wrapper) ── */
+.cover{
+  position:absolute;top:0;left:0;
+  width:1600px;height:900px;
+  transform-origin:top left;
+  transform:scale(var(--cover-scale, 0.55));
+  overflow:hidden;
+  border-radius:8px;
+  font-family:'Exo 2',system-ui,-apple-system,sans-serif;
+  background:#0a0a0f;
+  color:#fafaf9;
+}
+.cover-bg{
+  position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(74,222,128,0.28) 0%, rgba(74,222,128,0.12) 22%, rgba(74,222,128,0.04) 45%, transparent 70%),
+    radial-gradient(circle at 0% 100%, rgba(168,85,247,0.28) 0%, rgba(168,85,247,0.12) 22%, rgba(168,85,247,0.04) 45%, transparent 70%);
+}
+.cover-vignette{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at center,rgba(0,0,0,0.25) 0%,transparent 70%);
+}
+
+/* Frosted glass overlay — softens the corner gradients */
+.cover-frost{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 50%,rgba(10,10,15,0.28) 100%);
+  backdrop-filter:blur(60px) saturate(130%);
+  -webkit-backdrop-filter:blur(60px) saturate(130%);
+}
+
+/* Inner content */
+.cover-content{
+  --k:1.2;
+  position:relative;z-index:5;
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  padding:calc(60px * var(--k)) calc(100px * var(--k)) calc(80px * var(--k));
+}
+
+/* Top brand bar */
+.cover-top{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:calc(60px * var(--k));
+}
+.cover-brand{display:flex;align-items:center;gap:calc(18px * var(--k))}
+.cover-logo{
+  position:relative;width:calc(64px * var(--k));height:calc(64px * var(--k));flex-shrink:0;
+}
+.cover-logo svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cover-logo-text{
+  position:absolute;
+  left:55.7%;top:54%;
+  transform:translate(-50%,-50%);
+  font-family:'Orbitron','Segoe UI Black','Arial Black',sans-serif;
+  font-size:calc(14px * var(--k));font-weight:800;
+  color:var(--green);
+  letter-spacing:-0.02em;
+  line-height:1;
+}
+.cover-brand-text{display:flex;flex-direction:column;line-height:1}
+.cover-brand-text .name{
+  font-family:'Orbitron',sans-serif;
+  font-size:calc(30px * var(--k));font-weight:800;letter-spacing:-0.02em;
+  margin-bottom:calc(6px * var(--k));
+}
+.cover-brand-text .tag{
+  font-size:calc(14px * var(--k));color:var(--green);font-weight:600;letter-spacing:0.06em;
+  display:flex;align-items:center;gap:calc(8px * var(--k));
+}
+.cover-brand-text .tag::before{
+  content:'';width:calc(20px * var(--k));height:calc(2px * var(--k));background:var(--green);border-radius:1px;
+}
+
+/* Center title block */
+.cover-center{flex:1;display:flex;flex-direction:column;justify-content:center;margin-top:calc(-20px * var(--k))}
+.cover-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:calc(44px * var(--k));font-weight:700;letter-spacing:-0.01em;line-height:1.2;
+  color:#fafaf9;
+  margin-bottom:calc(60px * var(--k));
+  max-width:1400px;
+}
+.cover-subtitle{
+  font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-size:calc(63px * var(--k));font-weight:800;letter-spacing:-0.03em;
+  color:var(--green);line-height:1.1;
+  margin-bottom:calc(18px * var(--k));
+  display:flex;align-items:baseline;
+  max-width:1400px;
+}
+.cover-subtitle > span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cover-subtitle .sep{
+  color:var(--text-dim);font-weight:500;
+  margin:0 calc(12px * var(--k));flex-shrink:0;
+}
+.cover-desc{
+  font-size:calc(24px * var(--k));font-style:italic;color:var(--text-muted);
+  line-height:1.5;
+  margin:0;padding:calc(6px * var(--k)) 0 calc(6px * var(--k)) calc(24px * var(--k));
+  border-left:calc(3px * var(--k)) solid var(--green);
+  max-width:1200px;
+}
+
+/* ── Responsive ── */
+@media(max-width:1400px){
+  body{padding:24px 16px;gap:20px}
+  .editor-panel{width:300px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ Editor Panel ════════ -->
+<aside class="editor-panel">
+  <div class="ep-header">
+    <span class="dot"></span>
+    <h2>封面编辑器</h2>
+  </div>
+
+  <div class="ep-section">接口类名称</div>
+  <div class="ep-field">
+    <input type="text" id="in-ns" value="UCFView" aria-label="接口类名称">
+  </div>
+
+  <div class="ep-section">接口名称</div>
+  <div class="ep-field">
+    <input type="text" id="in-method" value="SetDPPosition" aria-label="接口名称">
+  </div>
+
+  <div class="ep-section">接口描述</div>
+  <div class="ep-field">
+    <textarea id="in-desc" rows="2" aria-label="接口描述">设置 DefaultPawn 的位置和视角</textarea>
+  </div>
+
+  <div class="ep-section">下载</div>
+  <div class="ep-field">
+    <button class="ep-btn primary" onclick="downloadCover()" style="width:100%">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      下载封面 PNG
+    </button>
+  </div>
+</aside>
+
+<!-- ════════ 16:9 Cover Stage ════════ -->
+<div class="cover-stage" id="coverStage">
+  <div class="cover" id="cover">
+
+    <!-- Background layers -->
+    <div class="cover-bg"></div>
+
+    <div class="cover-vignette"></div>
+
+    <!-- Frosted glass veil -->
+    <div class="cover-frost" aria-hidden="true"></div>
+
+    <!-- Content -->
+    <div class="cover-content">
+
+      <!-- Top: brand + series -->
+      <div class="cover-top">
+        <div class="cover-brand">
+          <div class="cover-logo">
+            <svg viewBox="0 0 1024 1024" aria-hidden="true">
+              <path d="M474.282667 96.213333a123.477333 123.477333 0 0 0-116.181334 123.221334l-0.042666 22.826666H243.797333A104.832 104.832 0 0 0 139.093333 347.477333l-0.213333 138.922667a32 32 0 0 0 32 32.042667h54.698667c36.821333 0 66.730667 29.909333 66.730666 66.730666 0 36.821333-29.909333 66.773333-66.730666 66.773334H170.837333a32 32 0 0 0-32 31.957333l-0.170666 138.965333a105.130667 105.130667 0 0 0 105.130666 105.173334h138.965334a32 32 0 0 0 32-32v-54.869334a66.816 66.816 0 0 1 133.504 0V896c0 17.664 14.336 32 32 32h138.965333l6.912-0.213333a105.130667 105.130667 0 0 0 98.218667-104.96v-114.261334h22.869333a123.477333 123.477333 0 0 0 123.434667-123.434666l-0.213334-7.253334a123.477333 123.477333 0 0 0-123.221333-116.181333h-22.869333V347.434667l-0.213334-6.912a105.130667 105.130667 0 0 0-104.917333-98.218667l-114.304-0.042667v-22.826666a123.477333 123.477333 0 0 0-123.392-123.434667z"
+                fill="none" stroke="#4ade80" stroke-width="50" stroke-linejoin="round"/>
+            </svg>
+            <span class="cover-logo-text">UCF</span>
+          </div>
+          <div class="cover-brand-text">
+            <div class="name">UCFPlugin</div>
+            <div class="tag">UnrealEngine · 数字孪生插件</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: title + subtitle + description -->
+      <div class="cover-center">
+        <div class="cover-title">像素流方式接口调用演示</div>
+        <div class="cover-subtitle">
+          <span id="cv-ns">UCFView</span><span class="sep">/</span><span id="cv-method">SetDPPosition</span>
+        </div>
+        <blockquote class="cover-desc" id="cv-desc">设置 DefaultPawn 的位置和视角</blockquote>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════════ html2canvas for export ════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+// ─── Compute cover scale (fits 1600x900 into the viewport) ───
+const COVER_W = 1600, COVER_H = 900;
+const EDITOR_W = 372; // panel 340 + gap 32
+const PAD_X = 48;     // body padding-x 24 * 2
+const PAD_Y = 96;     // body padding-y + chrome
+const SAFE = 2;       // safety margin (px) against float rounding
+
+function fitCover(){
+  const availW = window.innerWidth - EDITOR_W - PAD_X;
+  const availH = window.innerHeight - PAD_Y;
+  const scale = Math.max(0.12, Math.min((availW - SAFE) / COVER_W, (availH - SAFE) / COVER_H, 1));
+  document.documentElement.style.setProperty('--cover-scale', scale);
+  document.documentElement.style.setProperty('--cover-w', (COVER_W * scale) + 'px');
+  document.documentElement.style.setProperty('--cover-h', (COVER_H * scale) + 'px');
+}
+window.addEventListener('resize', fitCover);
+fitCover();
+
+// ─── Bind inputs to cover ───
+const inputs = ['ns','method','desc'];
+const $ = id => document.getElementById('in-'+id);
+const $$ = id => document.getElementById('cv-'+id);
+
+inputs.forEach(k=>{
+  const el = $(k);
+  if(el) el.addEventListener('input', sync);
+});
+
+function sync(){
+  $$('ns').textContent = $('ns').value || 'UCFView';
+  $$('method').textContent = $('method').value || 'Method';
+  $$('desc').textContent = $('desc').value || '接口描述';
+}
+sync();
+
+// ─── Keyboard shortcuts ───
+document.addEventListener('keydown', e=>{
+  if(e.target.matches('input,textarea,select')) return;
+  if((e.ctrlKey||e.metaKey) && e.key === 's'){ downloadCover(); e.preventDefault(); }
+});
+
+// ─── Download cover as PNG ───
+async function downloadCover(){
+  if(typeof html2canvas === 'undefined'){
+    alert('html2canvas 加载失败，请使用浏览器自带的截屏功能（Windows: Win+Shift+S / Mac: Cmd+Shift+4）');
+    return;
+  }
+  const target = document.getElementById('cover');
+  const btn = event.currentTarget || document.querySelector('.ep-btn.primary');
+  const old = btn.innerHTML;
+  btn.innerHTML = '<span style="opacity:.7">生成中…</span>';
+  btn.disabled = true;
+
+  const W = 1600, H = 900, S = 2;
+  const blurPx = 60 * S;
+
+  try {
+    // Pass 1 — background only: hide content + frost, keep bg layers
+    const bgCanvas = await html2canvas(target, {
+      width: W, height: H,
+      backgroundColor: '#0a0a0f',
+      scale: S, useCORS: true, allowTaint: true,
+      logging: false,
+      onclone: doc => {
+        const c = doc.getElementById('cover');
+        if(c){
+          c.style.transform = 'none';
+          c.style.position = 'relative';
+          c.style.left = '0';
+          c.style.top = '0';
+          c.style.boxShadow = 'none';
+          c.style.borderRadius = '0';
+        }
+        const content = doc.querySelector('.cover-content');
+        if(content) content.style.display = 'none';
+        const frost = doc.querySelector('.cover-frost');
+        if(frost) frost.style.display = 'none';
+      }
+    });
+
+    // Pass 2 — foreground only: hide bg layers, transparent cover, frost w/o blur
+    const fgCanvas = await html2canvas(target, {
+      width: W, height: H,
+      backgroundColor: null,
+      scale: S, useCORS: true, allowTaint: true,
+      logging: false,
+      onclone: doc => {
+        const c = doc.getElementById('cover');
+        if(c){
+          c.style.transform = 'none';
+          c.style.position = 'relative';
+          c.style.left = '0';
+          c.style.top = '0';
+          c.style.boxShadow = 'none';
+          c.style.borderRadius = '0';
+          c.style.background = 'transparent';
+        }
+        const bgEls = doc.querySelectorAll('.cover-bg, .cover-vignette');
+        bgEls.forEach(el => el.style.display = 'none');
+        const frost = doc.querySelector('.cover-frost');
+        if(frost){
+          frost.style.backdropFilter = 'none';
+          frost.style.webkitBackdropFilter = 'none';
+        }
+      }
+    });
+
+    // Composite: blurred background + sharp foreground
+    const finalCanvas = document.createElement('canvas');
+    finalCanvas.width = bgCanvas.width;
+    finalCanvas.height = bgCanvas.height;
+    const ctx = finalCanvas.getContext('2d');
+
+    // Blur the background using native Canvas2D (always works)
+    ctx.filter = `blur(${blurPx}px) saturate(130%)`;
+    ctx.drawImage(bgCanvas, 0, 0);
+    ctx.filter = 'none';
+
+    // Draw sharp foreground (content + frost gradient) on top
+    ctx.drawImage(fgCanvas, 0, 0);
+
+    // Download
+    const link = document.createElement('a');
+    const ns = $('ns').value || 'UCFView';
+    const m = $('method').value || 'Cover';
+    link.download = `UCFPlugin_${ns}_${m}.png`.replace(/\s+/g,'_');
+    link.href = finalCanvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    btn.innerHTML = old;
+    btn.disabled = false;
+  } catch(err) {
+    console.error(err);
+    btn.innerHTML = old;
+    btn.disabled = false;
+    alert('下载失败：' + err.message + '\n请改用浏览器截屏功能。');
+  }
+}
+</script>
+
+</body>
+</html>

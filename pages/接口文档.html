@@ -16,50 +16,35 @@
 
 <div class="page-loaded">
 
-<div class="page-header">
-  <div class="page-header-bg">
-    <div class="gradient g-left"></div>
-    <div class="gradient g-right"></div>
-  </div>
-  <div class="header-grid"></div>
-  <div class="section-label" style="justify-content:center;position:relative;z-index:1">接口文档</div>
-  <h1>UCF 接口体系</h1>
-  <p>UCFPlugin 提供四大核心接口类，覆盖视点管理、可视性控制、对象与区域高亮等数字孪生常见需求。</p>
-</div>
+<div style="padding-top:calc(var(--nav-h) + 60px)"></div>
 
 <section class="content-section">
   <div class="section-inner">
 
-    <div class="content-card fade-in visible" id="UCFView" style="cursor:pointer" onclick="window.location.href='apipages/UCFView.html'">
-      <h3>UCFView · 视点管理 <span style="float:right;font-size:13px;color:var(--green);font-weight:600">查看详情 →</span></h3>
-      <p>提供视点的保存、加载、切换和插值过渡功能，支持在数字孪生场景中预设多个观察视角，实现平滑的视点漫游与快速定位。</p>
-      <div class="note">支持视点书签、视点路径动画、多相机切换等高级功能。</div>
-    </div>
-
-    <div class="content-card fade-in visible delay-1" id="UCFVisibility">
-      <h3>UCFVisibility · 可视性</h3>
-      <p>动态控制场景中 Actor 和组件的显隐状态，支持按类别批量控制、条件过滤和渐变过渡，适用于室内分层展示、设备透视等场景。</p>
-    </div>
-
-    <div class="content-card fade-in visible delay-2" id="UCFOutlineActor">
-      <h3>UCFOutlineActor · 对象高亮</h3>
-      <p>对单个或多个 Actor 绘制外轮廓高亮，支持自定义轮廓颜色、粗细、发光强度等参数，可用于设备定位、目标指示等交互反馈。</p>
-    </div>
-
-    <div class="content-card fade-in visible delay-3" id="UCFOutlineArea">
-      <h3>UCFOutlineArea · 区域高亮</h3>
-      <p>对场景中指定区域绘制外轮廓高亮，支持矩形、圆形、多边形等区域形状，适用于安全区域标识、施工范围标注等场景。</p>
+    <div class="content-card fade-in visible" id="UCFView" onclick="window.location.href='apipages/UCFView.html'">
+      <h3>UCFView · 视点管理</h3>
+      <p>视点管理，提供视点控制，视点参数、功能配置，视点切换，漫游操作等相关的接口</p>
     </div>
 
   </div>
 </section>
 
 <footer class="footer">
-  <p>&copy; <span id="year"></span> UCFPlugin. All rights reserved. 数字孪生 · UnrealEngine 插件</p>
-</footer>
+    <p class="footer-copyright">
+      <span>&copy; <span id="year"></span> UCFPlugin. All rights reserved</span>
+      <span class="footer-sep">|</span>
+      <span class="stat-item">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        访客 <span id="busuanzi_value_site_uv">0</span>
+      </span>
+      <span class="footer-sep">|</span>
+      <span class="footer-email" onclick="location.href='mailto:asfancymail@gmail.com'">asfancymail@gmail.com</span>
+    </p>
+  </footer>
 
 </div>
 
 <script src="../js/common.js"></script>
+<script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
