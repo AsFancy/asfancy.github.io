@@ -32,7 +32,17 @@ document.getElementById('navbar-container').innerHTML =
       <li role="none"><a class="nav-item" data-page="插件扩展" data-href="${prefix}pages/插件扩展.html">插件扩展</a></li>
       <li role="none"><a class="nav-item" data-page="素材库" data-href="${prefix}pages/素材库.html">素材库</a></li>
       <li role="none"><a class="nav-item" data-page="博客分享" data-href="${prefix}pages/博客分享.html">博客分享</a></li>
+      <li role="none" class="nav-item-mobile-feedback"><button class="nav-item" onclick="window.location.href='${prefix}pages/反馈建议.html'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        反馈建议
+      </button></li>
     </ul>
+    <div class="nav-actions">
+      <button class="nav-btn-feedback" onclick="window.location.href='${prefix}pages/反馈建议.html'" aria-label="反馈建议">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>反馈建议</span>
+      </button>
+    </div>
     <button class="mobile-toggle" id="mobileToggle" aria-label="切换菜单" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
