@@ -36,7 +36,7 @@
         UnrealEngine插件即装即用，敏捷开发框架与通用素材库
       </p>
       <div class="hero-actions fade-in visible delay-3">
-        <button class="btn btn-primary" onclick="navigateToPage('配置插件')">
+        <button class="btn btn-primary" onclick="window.location.href='pages/配置插件.html#quickstart'">
           快速开始
           <span class="arrow">→</span>
         </button>
@@ -136,7 +136,7 @@
 <script src="js/common.js"></script>
 <script>
 // ── SPA: navigate to a sub-page ──
-function navigateToPage(pageName){
+function navigateToPage(pageName, hash){
   const url='pages/'+encodeURIComponent(pageName)+'.html';
   const content=document.getElementById('pageContent');
   const overlay=document.getElementById('pageLoadingOverlay');
@@ -165,7 +165,16 @@ function navigateToPage(pageName){
       content.appendChild(newContent);
       content.style.opacity='';
       setActiveNav(pageName);
-      window.scrollTo({top:0,behavior:'smooth'});
+
+      if(hash){
+        requestAnimationFrame(function(){
+          var target=content.querySelector('#'+hash);
+          if(target) target.scrollIntoView({behavior:'smooth'});
+        });
+      } else {
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
+
       content.querySelectorAll('.fade-in').forEach(function(el){
         requestAnimationFrame(function(){el.classList.add('visible');});
       });
@@ -173,7 +182,7 @@ function navigateToPage(pageName){
     .catch(function(){
       overlay.classList.remove('active');
       content.style.opacity='';
-      window.location.href=url;
+      window.location.href=hash ? url+'#'+hash : url;
     });
 }
 
