@@ -283,18 +283,16 @@
 // ===================== DATA =====================
 const GRP = [
   { id:"g0", label:"视点操作", dot:"#34d399",
-    apis:["UCFView/SetDPPosition", "UCFView/SetDPLocation", "UCFView/SetDPRotation", "UCFView/GetDPPosition", "UCFView/FocusActor", "UCFView/SetDPInput", "UCFView/ResetDPInput", "UCFView/SwitchDPInput", "UCFView/SetDPInputParams", "UCFView/SwitchViewType"] },
+    apis:["UCFView/SetDPPosition", "UCFView/SetDPPositionGeo", "UCFView/SetDPLocation", "UCFView/SetDPRotation", "UCFView/GetDPPosition", "UCFView/GetDPPositionGeo", "UCFView/FocusActor", "UCFView/FocusArea", "UCFView/FocusAreaGeo", "UCFView/SetDPInput", "UCFView/ResetDPInput", "UCFView/SwitchDPInput", "UCFView/SetDPInputParams", "UCFView/SwitchViewType"] },
   { id:"g1", label:"漫游操作", dot:"#60a5fa",
-    apis:["UCFView/StartRoamUniformTime", "UCFView/StartRoamUniformSpeed", "UCFView/StartRoamCustomTime", "UCFView/PauseRoam", "UCFView/ResumeRoam", "UCFView/StopRoam", "UCFView/RestartRoam", "UCFView/OnRoamFinished"] },
-  { id:"g2", label:"重置", dot:"#fbbf24",
-    apis:["UCFView/Reset"] }
+    apis:["UCFView/StartRoamUniformTime", "UCFView/StartRoamUniformSpeed", "UCFView/StartRoamCustomTime", "UCFView/PauseRoam", "UCFView/ResumeRoam", "UCFView/StopRoam", "UCFView/RestartRoam", "UCFView/OnRoamFinished"] }
 ];
 
 const API = {
   "UCFView/SetDPPosition": {
     t:"sync",
     title:"设置视点方位",
-    notes:["仅支持UCFDefaultPawn", "视点位置严格限制在为UCFDefaultPawn配置的直棱柱区域内，传入值超出该范围时，会被设置到该直棱柱区域内最接近目标位置处", "视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值", "目标视点的角度的翻滚角（roll）值忽略，UUCFDefaultPawn不允许有翻滚角度"],
+    notes:["仅支持UCFDefaultPawn", "视点位置严格限制在为UCFDefaultPawn配置的直棱柱区域内，传入值超出该范围时，会被设置到该直棱柱区域内最接近目标位置处", "视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值", "目标视点的角度的翻滚角(roll)值忽略，UCFDefaultPawn不允许有翻滚角度"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
@@ -312,9 +310,33 @@ const API = {
   ['OffestDistance', 'Float', '选填', '相对目标位置的反向偏移距离（厘米），默认 <code>0</code>'],
   ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPPosition",\n  "Params": {\n    "DesirLocation": { "X": 1000.0, "Y": 2000.0, "Z": 500.0 },\n    "DesirRotation": { "Pitch": 0.0, "Yaw": 90.0, "Roll": 0.0 },\n    "OffestDistance": 100.0,\n    "bIgnoreLag": false\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPPosition",\n  "Params": {\n    "DesirLocation": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "DesirRotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    },\n    "OffestDistance": 0,\n    "bIgnoreLag": false\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPPosition",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
     bvid:"BV1Kwjq6sEtZ"
+  },
+  "UCFView/SetDPPositionGeo": {
+    t:"sync",
+    title:"设置视点方位（WGS84坐标系）",
+    notes:["仅支持UCFDefaultPawn", "视点位置严格限制在为UCFDefaultPawn配置的直棱柱区域内，传入值超出该范围时，会被设置到该直棱柱区域内最接近目标位置处", "视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值", "目标视点的角度的翻滚角(roll)值忽略，UCFDefaultPawn不允许有翻滚角度"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['DesirLocation', 'Object', '必填', '目标位置'],
+  ['DesirLocation.X', 'Float', '必填', '经度（度）'],
+  ['DesirLocation.Y', 'Float', '必填', '纬度（度）'],
+  ['DesirLocation.Z', 'Float', '必填', '海拔（米）'],
+  ['DesirRotation', 'Object', '必填', '目标角度'],
+  ['DesirRotation.Pitch', 'Float', '必填', '俯仰角（度）'],
+  ['DesirRotation.Yaw', 'Float', '必填', '偏航角（度）'],
+  ['DesirRotation.Roll', 'Float', '必填', '翻滚角（度），该值会被忽略'],
+  ['OffestDistance', 'Float', '选填', '相对目标位置的反向偏移距离（厘米），默认 <code>0</code>'],
+  ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPPositionGeo",\n  "Params": {\n    "DesirLocation": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "DesirRotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    },\n    "OffestDistance": 0,\n    "bIgnoreLag": false\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPPositionGeo",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFView/SetDPLocation": {
     t:"sync",
@@ -333,13 +355,13 @@ const API = {
   ['OffestDistance', 'Float', '选填', '相对目标位置的反向偏移距离（厘米），默认 <code>0</code>'],
   ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPLocation",\n  "Params": {\n    "DesirLocation": { "X": 1000.0, "Y": 2000.0, "Z": 500.0 },\n    "OffestDistance": 100.0,\n    "bIgnoreLag": false\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPLocation",\n  "Params": {\n    "DesirLocation": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "OffestDistance": 0,\n    "bIgnoreLag": false\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPLocation",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFView/SetDPRotation": {
     t:"sync",
     title:"设置视点角度",
-    notes:["仅支持UCFDefaultPawn", "视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值", "目标视点的角度的翻滚角（roll）值忽略，UUCFDefaultPawn不允许有翻滚角度"],
+    notes:["仅支持UCFDefaultPawn", "视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值", "目标视点的角度的翻滚角(roll)值忽略，UCFDefaultPawn不允许有翻滚角度"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
@@ -352,7 +374,7 @@ const API = {
   ['DesirRotation.Roll', 'Float', '必填', '翻滚角（度），该值会被忽略'],
   ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPRotation",\n  "Params": {\n    "DesirRotation": { "Pitch": 0.0, "Yaw": 90.0, "Roll": 0.0 },\n    "bIgnoreLag": false\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPRotation",\n  "Params": {\n    "DesirRotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    },\n    "bIgnoreLag": false\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPRotation",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFView/GetDPPosition": {
@@ -365,13 +387,25 @@ const API = {
   ['Params', 'Object', '参数对象']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPosition",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPosition",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "PawnLocation": { "X": 1000.0, "Y": 2000.0, "Z": 500.0 },\n    "PawnRotation": { "Pitch": -15.0, "Yaw": 90.0, "Roll": 0.0 }\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPosition",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "PawnLocation": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "PawnRotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    }\n  }\n}',
     bvid:"BV1FEjz6HEAB"
+  },
+  "UCFView/GetDPPositionGeo": {
+    t:"sync",
+    title:"获取视点地理方位",
+    notes:["仅支持UCFDefaultPawn"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPositionGeo",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPositionGeo",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "Longitude": 0.0,\n    "Latitude": 0.0,\n    "Altitude": 0.0\n  }\n}'
   },
   "UCFView/FocusActor": {
     t:"sync",
     title:"设置视点聚焦对象",
-    notes:["仅支持UCFDefaultPawn", "找到多个匹配 Tag 的对象时仅聚焦第一个", "视点聚焦中心为目标对象及其所有挂载对象的包围盒中心", "视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值", "目标视点的角度的翻滚角（roll）值忽略，UUCFDefaultPawn不允许有翻滚角度"],
+    notes:["仅支持UCFDefaultPawn", "找到多个匹配 Tag 的对象时仅聚焦第一个", "视点聚焦中心为目标对象及其所有挂载对象的包围盒中心", "视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值", "目标视点的角度的翻滚角(roll)值忽略，UCFDefaultPawn不允许有翻滚角度"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
@@ -386,9 +420,55 @@ const API = {
   ['DesirRotation.Roll', 'Float', '必填', '翻滚角（度），该值会被忽略'],
   ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusActor",\n  "Params": {\n    "TargetTag": "Building_Main",\n    "FocusOffest": 500.0,\n    "DesirRotation": { "Pitch": -30.0, "Yaw": 45.0, "Roll": 0.0 },\n    "bIgnoreLag": false\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusActor",\n  "Params": {\n    "TargetTag": "xxx",\n    "FocusOffest": 0.0,\n    "DesirRotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    },\n    "bIgnoreLag": false\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusActor",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
     bvid:"BV1FEjz6HEgn"
+  },
+  "UCFView/FocusArea": {
+    t:"sync",
+    title:"设置视点聚焦圆柱体区域",
+    notes:["仅支持UCFDefaultPawn", "圆柱体半高为0时退化为纯2D圆盘"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Center', 'Object', '必填', '圆柱体几何中心'],
+  ['Center.X', 'Float', '必填', 'X坐标（厘米）'],
+  ['Center.Y', 'Float', '必填', 'Y坐标（厘米）'],
+  ['Center.Z', 'Float', '必填', 'Z坐标（厘米）'],
+  ['Radius', 'Float', '必填', '圆柱体半径（厘米）'],
+  ['HalfHeight', 'Float', '必填', '圆柱体半高（厘米），0=纯2D圆盘'],
+  ['Pitch', 'Float', '必填', '视角俯仰角（度），取值范围[-85,85]，负=俯视，正=仰视，0=平视'],
+  ['Margin', 'Float', '选填', '视野余量系数，默认 <code>1.1</code>'],
+  ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusArea",\n  "Params": {\n    "Center": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "Radius": 0.0,\n    "HalfHeight": 0.0,\n    "Pitch": 0.0,\n    "Margin": 1.1,\n    "bIgnoreLag": false\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusArea",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFView/FocusAreaGeo": {
+    t:"sync",
+    title:"设置视点聚焦圆柱体区域（WGS84坐标系）",
+    notes:["仅支持UCFDefaultPawn", "圆柱体半高为0时退化为纯2D圆盘"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Center', 'Object', '必填', '圆柱体几何中心（WGS84坐标系）'],
+  ['Center.X', 'Float', '必填', '经度（度）'],
+  ['Center.Y', 'Float', '必填', '纬度（度）'],
+  ['Center.Z', 'Float', '必填', '海拔（米）'],
+  ['Radius', 'Float', '必填', '圆柱体半径（米）'],
+  ['HalfHeight', 'Float', '必填', '圆柱体半高（米），0=纯2D圆盘'],
+  ['Pitch', 'Float', '必填', '视角俯仰角（度），取值范围[-85,85]，负=俯视，正=仰视，0=平视'],
+  ['Margin', 'Float', '选填', '视野余量系数，默认 <code>1.1</code>'],
+  ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusAreaGeo",\n  "Params": {\n    "Center": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "Radius": 0.0,\n    "HalfHeight": 0.0,\n    "Pitch": 0.0,\n    "Margin": 1.1,\n    "bIgnoreLag": false\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusAreaGeo",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFView/SetDPInput": {
     t:"sync",
@@ -400,15 +480,15 @@ const API = {
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['HMoveInput', 'String', '必填', '水平移动输入，可选值：<code>UCFInputTagBase.LeftMouseDown</code>、<code>UCFInputTagBase.RightMouseDown</code>、<code>UCFInputTagBase.MiddleMouseDown</code>'],
-  ['VUPInput', 'String', '必填', '垂直向上移动输入，可选值：<code>UCFInputTagDefaultPawn.QDown</code>、<code>UCFInputTagDefaultPawn.EDown</code>'],
-  ['VDownInput', 'String', '必填', '垂直向下移动输入，可选值：<code>UCFInputTagDefaultPawn.QDown</code>、<code>UCFInputTagDefaultPawn.EDown</code>'],
-  ['RotateAnchorInput', 'String', '必填', '固定锚点旋转输入，可选值：<code>UCFInputTagBase.LeftMouseDown</code>、<code>UCFInputTagBase.RightMouseDown</code>、<code>UCFInputTagBase.MiddleMouseDown</code>'],
-  ['RotateSelfInput', 'String', '必填', '绕自身旋转输入，可选值：<code>UCFInputTagBase.LeftMouseDown</code>、<code>UCFInputTagBase.RightMouseDown</code>、<code>UCFInputTagBase.MiddleMouseDown</code>'],
-  ['ZoomInput', 'String', '必填', '缩放输入，可选值：<code>UCFInputTagBase.MiddleMouseRoll</code>、<code>UCFInputTagBase.LeftMouseDown</code>、<code>UCFInputTagBase.RightMouseDown</code>、<code>UCFInputTagBase.MiddleMouseDown</code>'],
-  ['FocusInput', 'String', '必填', '快速聚焦输入，可选值：<code>LeftMouseDoubleTap</code>、<code>RightMouseDoubleTap</code>、<code>MiddleMouseDoubleTap</code>']
+  ['HMoveInput', 'String', '必填', '水平移动输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown"'],
+  ['VUPInput', 'String', '必填', '垂直向上移动输入，可选值："UCFInputTagDefaultPawn.QDown", "UCFInputTagDefaultPawn.EDown"'],
+  ['VDownInput', 'String', '必填', '垂直向下移动输入，可选值："UCFInputTagDefaultPawn.QDown", "UCFInputTagDefaultPawn.EDown"'],
+  ['RotateAnchorInput', 'String', '必填', '固定锚点旋转输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown"'],
+  ['RotateSelfInput', 'String', '必填', '绕自身旋转输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown"'],
+  ['ZoomInput', 'String', '必填', '缩放输入，可选值："UCFInputTagBase.MiddleMouseRoll", "UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown"'],
+  ['FocusInput', 'String', '必填', '快速聚焦输入，可选值："LeftMouseDoubleTap", "RightMouseDoubleTap", "MiddleMouseDoubleTap"']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInput",\n  "Params": {\n    "HMoveInput": "UCFInputTagBase.LeftMouseDown",\n    "VUPInput": "UCFInputTagDefaultPawn.QDown",\n    "VDownInput": "UCFInputTagDefaultPawn.EDown",\n    "RotateAnchorInput": "UCFInputTagBase.RightMouseDown",\n    "RotateSelfInput": "UCFInputTagBase.MiddleMouseDown",\n    "ZoomInput": "UCFInputTagBase.MiddleMouseRoll",\n    "FocusInput": "LeftMouseDoubleTap"\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInput",\n  "Params": {\n    "HMoveInput": "xxx",\n    "VUPInput": "xxx",\n    "VDownInput": "xxx",\n    "RotateAnchorInput": "xxx",\n    "RotateSelfInput": "xxx",\n    "ZoomInput": "xxx",\n    "FocusInput": "xxx"\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInput",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFView/ResetDPInput": {
@@ -441,7 +521,7 @@ const API = {
   ['bEnableZoom', 'Boolean', '选填', '缩放开关'],
   ['bEnableFastFocus', 'Boolean', '选填', '快速聚焦开关']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SwitchDPInput",\n  "Params": {\n    "bEnableCollision": true,\n    "bEnableHMove": true,\n    "bEnableVMove": true,\n    "bEnableRotateWithAnchor": false,\n    "bEnableRotateWithSelf": false,\n    "bEnableZoom": true,\n    "bEnableFastFocus": true\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SwitchDPInput",\n  "Params": {\n    "bEnableCollision": false,\n    "bEnableHMove": false,\n    "bEnableVMove": false,\n    "bEnableRotateWithAnchor": false,\n    "bEnableRotateWithSelf": false,\n    "bEnableZoom": false,\n    "bEnableFastFocus": false\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SwitchDPInput",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFView/SetDPInputParams": {
@@ -455,10 +535,10 @@ const API = {
 ],
     pi:[
   ['RotateSpeed', 'Float', '选填', '旋转角速度，默认 <code>3.0</code>'],
-  ['VerticalMoveSpeed', 'Float', '选填', '单帧竖直移动距离（厘米），默认 <code>1000.0</code>'],
-  ['ZoomPercent', 'Float', '选填', '单次缩放距离相对于当前位置与参考锚点距离的百分比，取值范围 [0.1, 0.8]，默认 <code>0.4</code>'],
-  ['LagSpeed', 'Float', '选填', '滞后平滑速度，值越小滞后效果越明显，值为0即关闭，取值范围 [0.0, 8.0]，默认 <code>5.0</code>'],
-  ['FocusOffest', 'Float', '选填', '快速聚焦到中键双击位置时的相对偏移距离（厘米），默认 <code>1000.0</code>']
+  ['VerticalMoveSpeed', 'Float', '选填', '单帧竖直移动距离（cm），默认 <code>1000.0</code>'],
+  ['ZoomPercent', 'Float', '选填', '单次缩放距离相对于当前位置与参考锚点距离的百分比，取值范围：[0.1, 0.8]，默认 <code>0.4</code>'],
+  ['LagSpeed', 'Float', '选填', '滞后平滑速度，值越小滞后效果越明显，值为0即关闭，取值范围：[0.0, 8.0]，默认 <code>5.0</code>'],
+  ['FocusOffest', 'Float', '选填', '快速聚焦到中键双击位置时的相对偏移距离（cm），默认 <code>1000.0</code>']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInputParams",\n  "Params": {\n    "RotateSpeed": 3.0,\n    "VerticalMoveSpeed": 1000.0,\n    "ZoomPercent": 0.4,\n    "LagSpeed": 5.0,\n    "FocusOffest": 1000.0\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInputParams",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
@@ -466,14 +546,14 @@ const API = {
   "UCFView/SwitchViewType": {
     t:"sync",
     title:"切换视点类型",
-    notes:["若传入类型与当前类型相同，则操作无效", "切换到 Default 类型时，若不传入 Location/Rotation，则使用之前离开Default时保存的位置和角度", "从 Default 切换到 Male/Vehicle 时，若不传入Location，则通过鼠标点击确定生成位置", "从 Male/Vehicle 互相切换时，若不传入 Location/Rotation，直接在指定方位生成，否则使用当前Pawn的位置和角度直接切换"],
+    notes:["若传入类型与当前类型相同，则操作无效", "切换到 Default 类型时，若不传入 Location/Rotation，则使用之前离开Default时保存的位置和角度", "从 Default 切换到 Male/Vehicle 时，若不传入Location，则通过鼠标点击确定生成位置", "从 Male/Vehicle 互相切换时，若不传入 Location/Rotation，直接在指定方位生成，否则使用当前的位置和角度直接切换"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['ViewType', 'String', '必填', '视点类型，可选值：<code>Default</code>、<code>Male</code>、<code>Vehicle</code>'],
+  ['ViewType', 'String', '必填', '视点类型，可选值："Default"、"Male"、"Vehicle"'],
   ['Location', 'Object', '选填', '目标生成位置'],
   ['Location.X', 'Float', '', 'X坐标（厘米）'],
   ['Location.Y', 'Float', '', 'Y坐标（厘米）'],
@@ -483,13 +563,13 @@ const API = {
   ['Rotation.Yaw', 'Float', '', '偏航角（度）'],
   ['Rotation.Roll', 'Float', '', '翻滚角（度）']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SwitchViewType",\n  "Params": {\n    "ViewType": "Male",\n    "Location": { "X": 500.0, "Y": 800.0, "Z": 100.0 },\n    "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SwitchViewType",\n  "Params": {\n    "ViewType": "xxx",\n    "Location": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "Rotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    }\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SwitchViewType",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
     bvid:"BV1NKjz68Eb2"
   },
   "UCFView/StartRoamUniformTime": {
     t:"sync",
-    title:"开始漫游（均匀时间）",
+    title:"开始漫游(均匀时间)",
     notes:["仅支持UCFDefaultPawn", "路径关键帧数量需大于等于2", "漫游总时长必须大于0", "相邻关键帧之间耗时相同，速度则根据距离间隔动态变化", "漫游自动完成后触发 UCFView/OnRoamFinished"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
@@ -508,12 +588,13 @@ const API = {
   ['Keyframes[].Rotation.Roll', 'Float', '必填', '翻滚角（度），该值会被忽略'],
   ['Duration', 'Float', '必填', '漫游总时长（秒）']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamUniformTime",\n  "Params": {\n    "Keyframes": [\n      {\n        "Location": { "X": 0.0, "Y": 0.0, "Z": 200.0 },\n        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }\n      },\n      {\n        "Location": { "X": 1000.0, "Y": 1000.0, "Z": 500.0 },\n        "Rotation": { "Pitch": -15.0, "Yaw": 90.0, "Roll": 0.0 }\n      }\n    ],\n    "Duration": 10.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamUniformTime",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamUniformTime",\n  "Params": {\n    "Keyframes": [\n      {\n        "Location": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "Rotation": {\n          "Pitch": 0.0,\n          "Yaw": 90.0,\n          "Roll": 0.0\n        }\n      }\n    ],\n    "Duration": 10.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamUniformTime",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1h5KM64ED6"
   },
   "UCFView/StartRoamUniformSpeed": {
     t:"sync",
-    title:"开始漫游（均匀速度）",
+    title:"开始漫游(均匀速度)",
     notes:["仅支持UCFDefaultPawn", "路径关键帧数量需大于等于2", "漫游总时长必须大于0", "整个漫游过程保持匀速运动", "漫游自动完成后触发 UCFView/OnRoamFinished"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
@@ -532,13 +613,14 @@ const API = {
   ['Keyframes[].Rotation.Roll', 'Float', '必填', '翻滚角（度），该值会被忽略'],
   ['Duration', 'Float', '必填', '漫游总时长（秒）']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamUniformSpeed",\n  "Params": {\n    "Keyframes": [\n      {\n        "Location": { "X": 0.0, "Y": 0.0, "Z": 200.0 },\n        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }\n      },\n      {\n        "Location": { "X": 1000.0, "Y": 1000.0, "Z": 500.0 },\n        "Rotation": { "Pitch": -15.0, "Yaw": 90.0, "Roll": 0.0 }\n      }\n    ],\n    "Duration": 10.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamUniformSpeed",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamUniformSpeed",\n  "Params": {\n    "Keyframes": [\n      {\n        "Location": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "Rotation": {\n          "Pitch": 0.0,\n          "Yaw": 90.0,\n          "Roll": 0.0\n        }\n      }\n    ],\n    "Duration": 10.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamUniformSpeed",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1bEKM69Ekv"
   },
   "UCFView/StartRoamCustomTime": {
     t:"sync",
-    title:"开始漫游（自定义时间）",
-    notes:["仅支持UCFDefaultPawn", "路径关键帧数量需大于等于2", "每个关键帧可自定义到达该关键帧的用时，首个关键帧的Duration可设为0，后续关键帧的Duration必须大于0", "漫游总时长由各段Duration累加得到", "漫游自动完成后触发 UCFView/OnRoamFinished"],
+    title:"开始漫游(自定义时间)",
+    notes:["仅支持UCFDefaultPawn", "路径关键帧数量需大于等于2", "每个关键帧可自定义到达该关键帧的用时,首个关键帧的Duration可设为0，后续关键帧的Duration必须大于0", "漫游总时长由各段Duration累加得到", "漫游自动完成后触发 UCFView/OnRoamFinished"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
@@ -556,7 +638,7 @@ const API = {
   ['Keyframes[].Rotation.Roll', 'Float', '必填', '翻滚角（度），该值会被忽略'],
   ['Keyframes[].Duration', 'Float', '必填', '到达该关键帧的耗时（秒）。第一个关键帧可设为0，后续关键帧必须大于0']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamCustomTime",\n  "Params": {\n    "Keyframes": [\n      {\n        "Location": { "X": 0.0, "Y": 0.0, "Z": 200.0 },\n        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 },\n        "Duration": 0.0\n      },\n      {\n        "Location": { "X": 1000.0, "Y": 1000.0, "Z": 500.0 },\n        "Rotation": { "Pitch": -15.0, "Yaw": 90.0, "Roll": 0.0 },\n        "Duration": 5.0\n      }\n    ]\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamCustomTime",\n  "Params": {\n    "Keyframes": [\n      {\n        "Location": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "Rotation": {\n          "Pitch": 0.0,\n          "Yaw": 90.0,\n          "Roll": 0.0\n        },\n        "Duration": 10.0\n      }\n    ]\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/StartRoamCustomTime",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFView/PauseRoam": {
@@ -619,19 +701,7 @@ const API = {
   ['Params', 'Object', '参数对象']
 ],
     noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFView/OnRoamFinished",\n  "Status": true,\n  "DebugInfo": "漫游已完成",\n  "Params": {}\n}'
-  },
-  "UCFView/Reset": {
-    t:"sync",
-    title:"重置UCFView类的所有状态",
-    notes:["停止正在进行的漫游", "销毁内部创建的漫游辅助实例", "清理视点类型切换中间状态"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/Reset",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/Reset",\n  "Status": true,\n  "DebugInfo": "success",\n  "Params": {}\n}'
+    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFView/OnRoamFinished",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {}\n}'
   }
 };
 
@@ -641,7 +711,7 @@ const ICON_DEMO = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" s
 function renderAll() {
   let sn = "";
   GRP.forEach(g => {
-    sn += `<div class="snav-group">${g.label}</div>`;
+    if (g.label) sn += `<div class="snav-group">${g.label}</div>`;
     g.apis.forEach(n => {
       sn += `<a class="snav-item" data-href="#${n}" onclick="return navClick('${n}')"><span class="sname">${n}</span></a>`;
     });

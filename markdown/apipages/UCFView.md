@@ -9,10 +9,14 @@
 | 接口名称 | 功能描述 |
 | :--- | :--- |
 | [UCFView/SetDPPosition](#ucfviewsetdpposition) | 设置视点方位 |
+| [UCFView/SetDPPositionGeo](#ucfviewsetdppositiongeo) | 设置视点方位（WGS84坐标系） |
 | [UCFView/SetDPLocation](#ucfviewsetdplocation) | 设置视点位置 |
 | [UCFView/SetDPRotation](#ucfviewsetdprotation) | 设置视点角度 |
 | [UCFView/GetDPPosition](#ucfviewgetdpposition) | 获取视点方位 |
+| [UCFView/GetDPPositionGeo](#ucfviewgetdppositiongeo) | 获取视点地理方位 |
 | [UCFView/FocusActor](#ucfviewfocusactor) | 设置视点聚焦对象 |
+| [UCFView/FocusArea](#ucfviewfocusarea) | 设置视点聚焦圆柱体区域 |
+| [UCFView/FocusAreaGeo](#ucfviewfocusareageo) | 设置视点聚焦圆柱体区域（WGS84坐标系） |
 | [UCFView/SetDPInput](#ucfviewsetdpinput) | 设置视点操作的物理输入 |
 | [UCFView/ResetDPInput](#ucfviewresetdpinput) | 重置视点操作的物理输入 |
 | [UCFView/SwitchDPInput](#ucfviewswitchdpinput) | 开启或关闭视点的特定操作 |
@@ -23,20 +27,14 @@
 
 | 接口名称 | 功能描述 |
 | :--- | :--- |
-| [UCFView/StartRoamUniformTime](#ucfviewstartroamuniformtime) | 开始漫游（均匀时间） |
-| [UCFView/StartRoamUniformSpeed](#ucfviewstartroamuniformspeed) | 开始漫游（均匀速度） |
-| [UCFView/StartRoamCustomTime](#ucfviewstartroamcustomtime) | 开始漫游（自定义时间） |
+| [UCFView/StartRoamUniformTime](#ucfviewstartroamuniformtime) | 开始漫游(均匀时间) |
+| [UCFView/StartRoamUniformSpeed](#ucfviewstartroamuniformspeed) | 开始漫游(均匀速度) |
+| [UCFView/StartRoamCustomTime](#ucfviewstartroamcustomtime) | 开始漫游(自定义时间) |
 | [UCFView/PauseRoam](#ucfviewpauseroam) | 暂停漫游 |
 | [UCFView/ResumeRoam](#ucfviewresumeroam) | 继续漫游 |
 | [UCFView/StopRoam](#ucfviewstoproam) | 停止漫游 |
 | [UCFView/RestartRoam](#ucfviewrestartroam) | 重新开始漫游 |
 | [UCFView/OnRoamFinished](#ucfviewonroamfinished) | 漫游自动结束通知 |
-
-### 重置
-
-| 接口名称 | 功能描述 |
-| :--- | :--- |
-| [UCFView/Reset](#ucfviewreset) | 重置UCFView类的所有状态 |
 
 <a id="ucfviewsetdpposition"></a>
 
@@ -51,7 +49,7 @@
 - 仅支持UCFDefaultPawn
 - 视点位置严格限制在为UCFDefaultPawn配置的直棱柱区域内，传入值超出该范围时，会被设置到该直棱柱区域内最接近目标位置处
 - 视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值
-- 目标视点的角度的翻滚角（roll）值忽略，UUCFDefaultPawn不允许有翻滚角度
+- 目标视点的角度的翻滚角(roll)值忽略，UCFDefaultPawn不允许有翻滚角度
 
 #### 调用参数说明
 
@@ -83,9 +81,17 @@
   "ExecutionID": "测试ID",
   "Interface": "UCFView/SetDPPosition",
   "Params": {
-    "DesirLocation": { "X": 1000.0, "Y": 2000.0, "Z": 500.0 },
-    "DesirRotation": { "Pitch": 0.0, "Yaw": 90.0, "Roll": 0.0 },
-    "OffestDistance": 100.0,
+    "DesirLocation": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    },
+    "DesirRotation": {
+      "Pitch": 0.0,
+      "Yaw": 90.0,
+      "Roll": 0.0
+    },
+    "OffestDistance": 0,
     "bIgnoreLag": false
   }
 }
@@ -117,6 +123,88 @@
 
 [![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1Kwjq6sEtZ/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
 
+<a id="ucfviewsetdppositiongeo"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 设置视点方位（WGS84坐标系）
+
+**类型:** Sync
+
+**Tips:**
+
+- 仅支持UCFDefaultPawn
+- 视点位置严格限制在为UCFDefaultPawn配置的直棱柱区域内，传入值超出该范围时，会被设置到该直棱柱区域内最接近目标位置处
+- 视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值
+- 目标视点的角度的翻滚角(roll)值忽略，UCFDefaultPawn不允许有翻滚角度
+
+#### 调用参数说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| ExecutionID | String | 必填 | 执行ID |
+| Interface | String | 必填 | 接口名称 |
+| Params | Object | 必填 | 参数对象 |
+
+#### Params内参数
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| DesirLocation | Object | 必填 | 目标位置 |
+| DesirLocation.X | Float | 必填 | 经度（度） |
+| DesirLocation.Y | Float | 必填 | 纬度（度） |
+| DesirLocation.Z | Float | 必填 | 海拔（米） |
+| DesirRotation | Object | 必填 | 目标角度 |
+| DesirRotation.Pitch | Float | 必填 | 俯仰角（度） |
+| DesirRotation.Yaw | Float | 必填 | 偏航角（度） |
+| DesirRotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
+| OffestDistance | Float | 选填 | 相对目标位置的反向偏移距离（厘米），默认 `0` |
+| bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
+
+#### 调用参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPPositionGeo",
+  "Params": {
+    "DesirLocation": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    },
+    "DesirRotation": {
+      "Pitch": 0.0,
+      "Yaw": 90.0,
+      "Roll": 0.0
+    },
+    "OffestDistance": 0,
+    "bIgnoreLag": false
+  }
+}
+```
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 执行ID |
+| Interface | String | 接口名称 |
+| Status | Boolean | 操作是否成功 |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPPositionGeo",
+  "Status": true,
+  "DebugInfo": "成功",
+  "Params": {}
+}
+```
 
 <a id="ucfviewsetdplocation"></a>
 
@@ -157,8 +245,12 @@
   "ExecutionID": "测试ID",
   "Interface": "UCFView/SetDPLocation",
   "Params": {
-    "DesirLocation": { "X": 1000.0, "Y": 2000.0, "Z": 500.0 },
-    "OffestDistance": 100.0,
+    "DesirLocation": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    },
+    "OffestDistance": 0,
     "bIgnoreLag": false
   }
 }
@@ -198,7 +290,7 @@
 
 - 仅支持UCFDefaultPawn
 - 视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值
-- 目标视点的角度的翻滚角（roll）值忽略，UUCFDefaultPawn不允许有翻滚角度
+- 目标视点的角度的翻滚角(roll)值忽略，UCFDefaultPawn不允许有翻滚角度
 
 #### 调用参数说明
 
@@ -225,7 +317,11 @@
   "ExecutionID": "测试ID",
   "Interface": "UCFView/SetDPRotation",
   "Params": {
-    "DesirRotation": { "Pitch": 0.0, "Yaw": 90.0, "Roll": 0.0 },
+    "DesirRotation": {
+      "Pitch": 0.0,
+      "Yaw": 90.0,
+      "Roll": 0.0
+    },
     "bIgnoreLag": false
   }
 }
@@ -315,8 +411,16 @@
   "Status": true,
   "DebugInfo": "成功",
   "Params": {
-    "PawnLocation": { "X": 1000.0, "Y": 2000.0, "Z": 500.0 },
-    "PawnRotation": { "Pitch": -15.0, "Yaw": 90.0, "Roll": 0.0 }
+    "PawnLocation": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    },
+    "PawnRotation": {
+      "Pitch": 0.0,
+      "Yaw": 90.0,
+      "Roll": 0.0
+    }
   }
 }
 ```
@@ -325,6 +429,69 @@
 
 [![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1FEjz6HEAB/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
 
+<a id="ucfviewgetdppositiongeo"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 获取视点地理方位
+
+**类型:** Sync
+
+**Tips:**
+
+- 仅支持UCFDefaultPawn
+
+#### 调用参数说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| ExecutionID | String | 必填 | 执行ID |
+| Interface | String | 必填 | 接口名称 |
+| Params | Object | 必填 | 参数对象 |
+
+#### 调用参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/GetDPPositionGeo",
+  "Params": {}
+}
+```
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 执行ID |
+| Interface | String | 接口名称 |
+| Status | Boolean | 操作是否成功 |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### Params内参数（回调）
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| Longitude | Float | 经度（度） |
+| Latitude | Float | 纬度（度） |
+| Altitude | Float | 海拔（米） |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/GetDPPositionGeo",
+  "Status": true,
+  "DebugInfo": "成功",
+  "Params": {
+    "Longitude": 0.0,
+    "Latitude": 0.0,
+    "Altitude": 0.0
+  }
+}
+```
 
 <a id="ucfviewfocusactor"></a>
 
@@ -340,7 +507,7 @@
 - 找到多个匹配 Tag 的对象时仅聚焦第一个
 - 视点聚焦中心为目标对象及其所有挂载对象的包围盒中心
 - 视点角度严格限制在为UCFDefaultPawn配置的角度范围内，传入值超出该范围时，会被设置为最该范围内最接近目标角度的值
-- 目标视点的角度的翻滚角（roll）值忽略，UUCFDefaultPawn不允许有翻滚角度
+- 目标视点的角度的翻滚角(roll)值忽略，UCFDefaultPawn不允许有翻滚角度
 
 #### 调用参数说明
 
@@ -369,9 +536,13 @@
   "ExecutionID": "测试ID",
   "Interface": "UCFView/FocusActor",
   "Params": {
-    "TargetTag": "Building_Main",
-    "FocusOffest": 500.0,
-    "DesirRotation": { "Pitch": -30.0, "Yaw": 45.0, "Roll": 0.0 },
+    "TargetTag": "xxx",
+    "FocusOffest": 0.0,
+    "DesirRotation": {
+      "Pitch": 0.0,
+      "Yaw": 90.0,
+      "Roll": 0.0
+    },
     "bIgnoreLag": false
   }
 }
@@ -403,6 +574,161 @@
 
 [![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1FEjz6HEgn/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
 
+<a id="ucfviewfocusarea"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 设置视点聚焦圆柱体区域
+
+**类型:** Sync
+
+**Tips:**
+
+- 仅支持UCFDefaultPawn
+- 圆柱体半高为0时退化为纯2D圆盘
+
+#### 调用参数说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| ExecutionID | String | 必填 | 执行ID |
+| Interface | String | 必填 | 接口名称 |
+| Params | Object | 必填 | 参数对象 |
+
+#### Params内参数
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| Center | Object | 必填 | 圆柱体几何中心 |
+| Center.X | Float | 必填 | X坐标（厘米） |
+| Center.Y | Float | 必填 | Y坐标（厘米） |
+| Center.Z | Float | 必填 | Z坐标（厘米） |
+| Radius | Float | 必填 | 圆柱体半径（厘米） |
+| HalfHeight | Float | 必填 | 圆柱体半高（厘米），0=纯2D圆盘 |
+| Pitch | Float | 必填 | 视角俯仰角（度），取值范围[-85,85]，负=俯视，正=仰视，0=平视 |
+| Margin | Float | 选填 | 视野余量系数，默认 `1.1` |
+| bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
+
+#### 调用参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/FocusArea",
+  "Params": {
+    "Center": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    },
+    "Radius": 0.0,
+    "HalfHeight": 0.0,
+    "Pitch": 0.0,
+    "Margin": 1.1,
+    "bIgnoreLag": false
+  }
+}
+```
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 执行ID |
+| Interface | String | 接口名称 |
+| Status | Boolean | 操作是否成功 |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/FocusArea",
+  "Status": true,
+  "DebugInfo": "成功",
+  "Params": {}
+}
+```
+
+<a id="ucfviewfocusareageo"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 设置视点聚焦圆柱体区域（WGS84坐标系）
+
+**类型:** Sync
+
+**Tips:**
+
+- 仅支持UCFDefaultPawn
+- 圆柱体半高为0时退化为纯2D圆盘
+
+#### 调用参数说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| ExecutionID | String | 必填 | 执行ID |
+| Interface | String | 必填 | 接口名称 |
+| Params | Object | 必填 | 参数对象 |
+
+#### Params内参数
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| Center | Object | 必填 | 圆柱体几何中心（WGS84坐标系） |
+| Center.X | Float | 必填 | 经度（度） |
+| Center.Y | Float | 必填 | 纬度（度） |
+| Center.Z | Float | 必填 | 海拔（米） |
+| Radius | Float | 必填 | 圆柱体半径（米） |
+| HalfHeight | Float | 必填 | 圆柱体半高（米），0=纯2D圆盘 |
+| Pitch | Float | 必填 | 视角俯仰角（度），取值范围[-85,85]，负=俯视，正=仰视，0=平视 |
+| Margin | Float | 选填 | 视野余量系数，默认 `1.1` |
+| bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
+
+#### 调用参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/FocusAreaGeo",
+  "Params": {
+    "Center": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    },
+    "Radius": 0.0,
+    "HalfHeight": 0.0,
+    "Pitch": 0.0,
+    "Margin": 1.1,
+    "bIgnoreLag": false
+  }
+}
+```
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 执行ID |
+| Interface | String | 接口名称 |
+| Status | Boolean | 操作是否成功 |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/FocusAreaGeo",
+  "Status": true,
+  "DebugInfo": "成功",
+  "Params": {}
+}
+```
 
 <a id="ucfviewsetdpinput"></a>
 
@@ -429,13 +755,13 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| HMoveInput | String | 必填 | 水平移动输入，可选值：`UCFInputTagBase.LeftMouseDown`、`UCFInputTagBase.RightMouseDown`、`UCFInputTagBase.MiddleMouseDown` |
-| VUPInput | String | 必填 | 垂直向上移动输入，可选值：`UCFInputTagDefaultPawn.QDown`、`UCFInputTagDefaultPawn.EDown` |
-| VDownInput | String | 必填 | 垂直向下移动输入，可选值：`UCFInputTagDefaultPawn.QDown`、`UCFInputTagDefaultPawn.EDown` |
-| RotateAnchorInput | String | 必填 | 固定锚点旋转输入，可选值：`UCFInputTagBase.LeftMouseDown`、`UCFInputTagBase.RightMouseDown`、`UCFInputTagBase.MiddleMouseDown` |
-| RotateSelfInput | String | 必填 | 绕自身旋转输入，可选值：`UCFInputTagBase.LeftMouseDown`、`UCFInputTagBase.RightMouseDown`、`UCFInputTagBase.MiddleMouseDown` |
-| ZoomInput | String | 必填 | 缩放输入，可选值：`UCFInputTagBase.MiddleMouseRoll`、`UCFInputTagBase.LeftMouseDown`、`UCFInputTagBase.RightMouseDown`、`UCFInputTagBase.MiddleMouseDown` |
-| FocusInput | String | 必填 | 快速聚焦输入，可选值：`LeftMouseDoubleTap`、`RightMouseDoubleTap`、`MiddleMouseDoubleTap` |
+| HMoveInput | String | 必填 | 水平移动输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown" |
+| VUPInput | String | 必填 | 垂直向上移动输入，可选值："UCFInputTagDefaultPawn.QDown", "UCFInputTagDefaultPawn.EDown" |
+| VDownInput | String | 必填 | 垂直向下移动输入，可选值："UCFInputTagDefaultPawn.QDown", "UCFInputTagDefaultPawn.EDown" |
+| RotateAnchorInput | String | 必填 | 固定锚点旋转输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown" |
+| RotateSelfInput | String | 必填 | 绕自身旋转输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown" |
+| ZoomInput | String | 必填 | 缩放输入，可选值："UCFInputTagBase.MiddleMouseRoll", "UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown" |
+| FocusInput | String | 必填 | 快速聚焦输入，可选值："LeftMouseDoubleTap", "RightMouseDoubleTap", "MiddleMouseDoubleTap" |
 
 #### 调用参数示例
 
@@ -444,13 +770,13 @@
   "ExecutionID": "测试ID",
   "Interface": "UCFView/SetDPInput",
   "Params": {
-    "HMoveInput": "UCFInputTagBase.LeftMouseDown",
-    "VUPInput": "UCFInputTagDefaultPawn.QDown",
-    "VDownInput": "UCFInputTagDefaultPawn.EDown",
-    "RotateAnchorInput": "UCFInputTagBase.RightMouseDown",
-    "RotateSelfInput": "UCFInputTagBase.MiddleMouseDown",
-    "ZoomInput": "UCFInputTagBase.MiddleMouseRoll",
-    "FocusInput": "LeftMouseDoubleTap"
+    "HMoveInput": "xxx",
+    "VUPInput": "xxx",
+    "VDownInput": "xxx",
+    "RotateAnchorInput": "xxx",
+    "RotateSelfInput": "xxx",
+    "ZoomInput": "xxx",
+    "FocusInput": "xxx"
   }
 }
 ```
@@ -569,13 +895,13 @@
   "ExecutionID": "测试ID",
   "Interface": "UCFView/SwitchDPInput",
   "Params": {
-    "bEnableCollision": true,
-    "bEnableHMove": true,
-    "bEnableVMove": true,
+    "bEnableCollision": false,
+    "bEnableHMove": false,
+    "bEnableVMove": false,
     "bEnableRotateWithAnchor": false,
     "bEnableRotateWithSelf": false,
-    "bEnableZoom": true,
-    "bEnableFastFocus": true
+    "bEnableZoom": false,
+    "bEnableFastFocus": false
   }
 }
 ```
@@ -627,10 +953,10 @@
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
 | RotateSpeed | Float | 选填 | 旋转角速度，默认 `3.0` |
-| VerticalMoveSpeed | Float | 选填 | 单帧竖直移动距离（厘米），默认 `1000.0` |
-| ZoomPercent | Float | 选填 | 单次缩放距离相对于当前位置与参考锚点距离的百分比，取值范围 [0.1, 0.8]，默认 `0.4` |
-| LagSpeed | Float | 选填 | 滞后平滑速度，值越小滞后效果越明显，值为0即关闭，取值范围 [0.0, 8.0]，默认 `5.0` |
-| FocusOffest | Float | 选填 | 快速聚焦到中键双击位置时的相对偏移距离（厘米），默认 `1000.0` |
+| VerticalMoveSpeed | Float | 选填 | 单帧竖直移动距离（cm），默认 `1000.0` |
+| ZoomPercent | Float | 选填 | 单次缩放距离相对于当前位置与参考锚点距离的百分比，取值范围：[0.1, 0.8]，默认 `0.4` |
+| LagSpeed | Float | 选填 | 滞后平滑速度，值越小滞后效果越明显，值为0即关闭，取值范围：[0.0, 8.0]，默认 `5.0` |
+| FocusOffest | Float | 选填 | 快速聚焦到中键双击位置时的相对偏移距离（cm），默认 `1000.0` |
 
 #### 调用参数示例
 
@@ -683,7 +1009,7 @@
 - 若传入类型与当前类型相同，则操作无效
 - 切换到 Default 类型时，若不传入 Location/Rotation，则使用之前离开Default时保存的位置和角度
 - 从 Default 切换到 Male/Vehicle 时，若不传入Location，则通过鼠标点击确定生成位置
-- 从 Male/Vehicle 互相切换时，若不传入 Location/Rotation，直接在指定方位生成，否则使用当前Pawn的位置和角度直接切换
+- 从 Male/Vehicle 互相切换时，若不传入 Location/Rotation，直接在指定方位生成，否则使用当前的位置和角度直接切换
 
 #### 调用参数说明
 
@@ -697,15 +1023,15 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| ViewType | String | 必填 | 视点类型，可选值：`Default`、`Male`、`Vehicle` |
+| ViewType | String | 必填 | 视点类型，可选值："Default"、"Male"、"Vehicle" |
 | Location | Object | 选填 | 目标生成位置 |
-| Location.X | Float | | X坐标（厘米） |
-| Location.Y | Float | | Y坐标（厘米） |
-| Location.Z | Float | | Z坐标（厘米） |
+| Location.X | Float |  | X坐标（厘米） |
+| Location.Y | Float |  | Y坐标（厘米） |
+| Location.Z | Float |  | Z坐标（厘米） |
 | Rotation | Object | 选填 | 目标生成角度 |
-| Rotation.Pitch | Float | | 俯仰角（度） |
-| Rotation.Yaw | Float | | 偏航角（度） |
-| Rotation.Roll | Float | | 翻滚角（度） |
+| Rotation.Pitch | Float |  | 俯仰角（度） |
+| Rotation.Yaw | Float |  | 偏航角（度） |
+| Rotation.Roll | Float |  | 翻滚角（度） |
 
 #### 调用参数示例
 
@@ -714,9 +1040,17 @@
   "ExecutionID": "测试ID",
   "Interface": "UCFView/SwitchViewType",
   "Params": {
-    "ViewType": "Male",
-    "Location": { "X": 500.0, "Y": 800.0, "Z": 100.0 },
-    "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    "ViewType": "xxx",
+    "Location": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    },
+    "Rotation": {
+      "Pitch": 0.0,
+      "Yaw": 90.0,
+      "Roll": 0.0
+    }
   }
 }
 ```
@@ -747,12 +1081,11 @@
 
 [![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1NKjz68Eb2/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
 
-
 <a id="ucfviewstartroamuniformtime"></a>
 
 [← 返回接口一览](#接口一览)
 
-## 开始漫游（均匀时间）
+## 开始漫游(均匀时间)
 
 **类型:** Sync
 
@@ -796,12 +1129,16 @@
   "Params": {
     "Keyframes": [
       {
-        "Location": { "X": 0.0, "Y": 0.0, "Z": 200.0 },
-        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
-      },
-      {
-        "Location": { "X": 1000.0, "Y": 1000.0, "Z": 500.0 },
-        "Rotation": { "Pitch": -15.0, "Yaw": 90.0, "Roll": 0.0 }
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        }
       }
     ],
     "Duration": 10.0
@@ -831,11 +1168,15 @@
 }
 ```
 
+#### 功能演示
+
+[![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1h5KM64ED6/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
+
 <a id="ucfviewstartroamuniformspeed"></a>
 
 [← 返回接口一览](#接口一览)
 
-## 开始漫游（均匀速度）
+## 开始漫游(均匀速度)
 
 **类型:** Sync
 
@@ -879,12 +1220,16 @@
   "Params": {
     "Keyframes": [
       {
-        "Location": { "X": 0.0, "Y": 0.0, "Z": 200.0 },
-        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
-      },
-      {
-        "Location": { "X": 1000.0, "Y": 1000.0, "Z": 500.0 },
-        "Rotation": { "Pitch": -15.0, "Yaw": 90.0, "Roll": 0.0 }
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        }
       }
     ],
     "Duration": 10.0
@@ -914,11 +1259,15 @@
 }
 ```
 
+#### 功能演示
+
+[![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1bEKM69Ekv/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
+
 <a id="ucfviewstartroamcustomtime"></a>
 
 [← 返回接口一览](#接口一览)
 
-## 开始漫游（自定义时间）
+## 开始漫游(自定义时间)
 
 **类型:** Sync
 
@@ -926,7 +1275,7 @@
 
 - 仅支持UCFDefaultPawn
 - 路径关键帧数量需大于等于2
-- 每个关键帧可自定义到达该关键帧的用时，首个关键帧的Duration可设为0，后续关键帧的Duration必须大于0
+- 每个关键帧可自定义到达该关键帧的用时,首个关键帧的Duration可设为0，后续关键帧的Duration必须大于0
 - 漫游总时长由各段Duration累加得到
 - 漫游自动完成后触发 UCFView/OnRoamFinished
 
@@ -962,14 +1311,17 @@
   "Params": {
     "Keyframes": [
       {
-        "Location": { "X": 0.0, "Y": 0.0, "Z": 200.0 },
-        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 },
-        "Duration": 0.0
-      },
-      {
-        "Location": { "X": 1000.0, "Y": 1000.0, "Z": 500.0 },
-        "Rotation": { "Pitch": -15.0, "Yaw": 90.0, "Roll": 0.0 },
-        "Duration": 5.0
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        },
+        "Duration": 10.0
       }
     ]
   }
@@ -1237,61 +1589,7 @@
   "ExecutionID": "Null",
   "Interface": "UCFView/OnRoamFinished",
   "Status": true,
-  "DebugInfo": "漫游已完成",
-  "Params": {}
-}
-```
-
-<a id="ucfviewreset"></a>
-
-[← 返回接口一览](#接口一览)
-
-## 重置UCFView类的所有状态
-
-**类型:** Sync
-
-**Tips:**
-
-- 停止正在进行的漫游
-- 销毁内部创建的漫游辅助实例
-- 清理视点类型切换中间状态
-
-#### 调用参数说明
-
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
-| ExecutionID | String | 必填 | 执行ID |
-| Interface | String | 必填 | 接口名称 |
-| Params | Object | 必填 | 参数对象 |
-
-#### 调用参数示例
-
-```json
-{
-  "ExecutionID": "测试ID",
-  "Interface": "UCFView/Reset",
-  "Params": {}
-}
-```
-
-#### 回调参数说明
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| ExecutionID | String | 执行ID |
-| Interface | String | 接口名称 |
-| Status | Boolean | 操作是否成功 |
-| DebugInfo | String | 调试信息 |
-| Params | Object | 参数对象 |
-
-#### 回调参数示例
-
-```json
-{
-  "ExecutionID": "测试ID",
-  "Interface": "UCFView/Reset",
-  "Status": true,
-  "DebugInfo": "success",
+  "DebugInfo": "调试信息",
   "Params": {}
 }
 ```
