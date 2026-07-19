@@ -91,6 +91,8 @@ def parse_md(filepath):
     # State
     state = 'init'          # init, after_title, overview, api_detail
     current_group = None
+    has_groups = False      # True if any ### group heading found in overview
+    ungrouped_apis = []     # API names collected when no groups exist
     current_api = None      # current API name being parsed
     current_api_data = None
     in_overview_table = False
@@ -171,6 +173,7 @@ def parse_md(filepath):
 
         if state == 'overview':
             if stripped.startswith('### '):
+                has_groups = True
                 # New group
                 group_label = stripped[4:].strip()
                 current_group = {
@@ -182,21 +185,38 @@ def parse_md(filepath):
                 i += 1
                 continue
 
-            if stripped.startswith('|') and current_group is not None:
-                if in_overview_table and not stripped.startswith('| :'):
-                    # Parse overview table row
-                    cells = _parse_table_row(stripped)
-                    if len(cells) >= 1:
-                        # Extract API name from link: [UCFView/SetDPPosition](...)
-                        api_name = _extract_link_text(cells[0])
-                        if api_name:
-                            current_group['apis'].append(api_name)
-                elif stripped.startswith('|') and ('---' in stripped or ':---' in stripped):
-                    in_overview_table = True
+            if stripped.startswith('|'):
+                if not has_groups:
+                    # Ungrouped mode: collect APIs directly
+                    if in_overview_table and not stripped.startswith('| :'):
+                        cells = _parse_table_row(stripped)
+                        if len(cells) >= 1:
+                            api_name = _extract_link_text(cells[0])
+                            if api_name:
+                                ungrouped_apis.append(api_name)
+                    elif '---' in stripped or ':---' in stripped:
+                        in_overview_table = True
+                elif current_group is not None:
+                    if in_overview_table and not stripped.startswith('| :'):
+                        # Parse overview table row
+                        cells = _parse_table_row(stripped)
+                        if len(cells) >= 1:
+                            # Extract API name from link: [UCFView/SetDPPosition](...)
+                            api_name = _extract_link_text(cells[0])
+                            if api_name:
+                                current_group['apis'].append(api_name)
+                    elif '---' in stripped or ':---' in stripped:
+                        in_overview_table = True
                 i += 1
                 continue
 
             if stripped.startswith('<a id=') or stripped.startswith('## '):
+                # If overview had no groups, create implicit group
+                if not has_groups and ungrouped_apis:
+                    data['groups'].append({
+                        'label': '',
+                        'apis': list(ungrouped_apis)
+                    })
                 state = 'api_detail'
                 # Fall through to api_detail handling
             else:
@@ -329,6 +349,13 @@ def parse_md(filepath):
     # Finalize last API
     _commit_table(table_rows, table_ctx, current_api_data)
     _finalize_api(current_api_data, data)
+
+    # If overview had no groups (and none created yet), create implicit group
+    if not data['groups'] and ungrouped_apis:
+        data['groups'].append({
+            'label': '',
+            'apis': list(ungrouped_apis)
+        })
 
     # Build api_order from groups
     for g in data['groups']:
@@ -824,7 +851,7 @@ const ICON_DEMO = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" s
 function renderAll() {{
   let sn = "";
   GRP.forEach(g => {{
-    sn += `<div class="snav-group">${{g.label}}</div>`;
+    if (g.label) sn += `<div class="snav-group">${{g.label}}</div>`;
     g.apis.forEach(n => {{
       sn += `<a class="snav-item" data-href="#${{n}}" onclick="return navClick('${{n}}')"><span class="sname">${{n}}</span></a>`;
     }});
