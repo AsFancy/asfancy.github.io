@@ -103,7 +103,7 @@
 .ep-card.open .ep-arrow{transform:rotate(180deg)}
 .ep-body{display:none}
 .ep-card.open .ep-body{display:block}
-.ep-inner{padding:0 20px 20px}
+.ep-inner{padding:16px 20px 20px}
 .ep-inner > * + *{margin-top:20px}
 .callout{
   border-radius:var(--radius-sm);padding:12px 16px;
@@ -115,7 +115,7 @@
 .callout.warn .c-title{color:#fbbf24;font-weight:600;margin-bottom:3px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 .callout.info{background:var(--indigo-glow);border:1px solid rgba(99,102,241,0.15)}
 .callout.info svg{color:var(--indigo)}
-.callout.tips{display:block;padding:0;margin-top:16px}
+.callout.tips{display:block;padding:0}
 .callout.tips .c-title{color:var(--indigo);font-size:12px;font-weight:700;letter-spacing:.04em;margin-bottom:6px}
 .callout.tips ul{list-style:none;margin:0;padding:0}
 .callout.tips ul li{color:var(--text-main);font-size:13px;padding:2px 0 2px 12px;position:relative}
@@ -157,7 +157,7 @@
   font-size:11px;text-transform:uppercase;letter-spacing:.06em;
   background:var(--bg-glass);border-bottom:1px solid var(--border-glass);
 }
-.p-table td{padding:9px 14px;border-bottom:1px solid var(--border-glass);color:var(--text-muted);vertical-align:top}
+.p-table td{padding:9px 14px;border-bottom:1px solid var(--border-glass);color:var(--text-muted);vertical-align:top;overflow-wrap:break-word}
 .p-table tr:last-child td{border-bottom:none}
 .p-table .pn{font-family:'Exo 2',monospace;font-size:13px;color:var(--text-main);white-space:nowrap}
 .p-table .pn .nested{color:var(--text-dim)}
@@ -165,7 +165,7 @@
 .p-table .pr{font-size:12px;white-space:nowrap}
 .p-table .pr{color:var(--text-main);font-weight:600}
 .p-table .pr.n{color:var(--text-dim);font-weight:400}
-.p-table .pd{font-size:14px;color:var(--text-muted);line-height:1.6}
+.p-table .pd{font-size:14px;color:var(--text-muted);line-height:1.6;word-break:break-all}
 .p-table .pd code{font-family:'Exo 2',monospace;font-size:12px;color:var(--green);padding:0 3px;border-radius:3px}
 .cb{border:1px solid var(--border-glass);border-radius:var(--radius-sm);overflow:hidden;transition:border-color .2s}
 .cb-h{
@@ -216,7 +216,7 @@
 }
 @media(max-width:600px){
   .ep-header{padding:8px 12px}
-  .ep-inner{padding:0 12px 12px}
+  .ep-inner{padding:16px 12px 12px}
   .ep-name{font-size:13px}
   .p-wrap{overflow-x:auto}
   .p-table{min-width:480px}
@@ -386,6 +386,16 @@ const API = {
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
+    cbi:[
+  ['PawnLocation', 'Object', '-', '当前位置'],
+  ['PawnLocation.X', 'Float', '-', 'X坐标（厘米）'],
+  ['PawnLocation.Y', 'Float', '-', 'Y坐标（厘米）'],
+  ['PawnLocation.Z', 'Float', '-', 'Z坐标（厘米）'],
+  ['PawnRotation', 'Object', '-', '当前角度'],
+  ['PawnRotation.Pitch', 'Float', '-', '俯仰角（度）'],
+  ['PawnRotation.Yaw', 'Float', '-', '偏航角（度）'],
+  ['PawnRotation.Roll', 'Float', '-', '翻滚角（度）']
+],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPosition",\n  "Params": {}\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPosition",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "PawnLocation": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "PawnRotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    }\n  }\n}',
     bvid:"BV1FEjz6HEAB"
@@ -398,6 +408,11 @@ const API = {
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
+],
+    cbi:[
+  ['Longitude', 'Float', '-', '经度（度）'],
+  ['Latitude', 'Float', '-', '纬度（度）'],
+  ['Altitude', 'Float', '-', '海拔（米）']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPositionGeo",\n  "Params": {}\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/GetDPPositionGeo",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "Longitude": 0.0,\n    "Latitude": 0.0,\n    "Altitude": 0.0\n  }\n}'

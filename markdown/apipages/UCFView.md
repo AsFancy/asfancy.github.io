@@ -389,7 +389,7 @@
 | DebugInfo | String | 调试信息 |
 | Params | Object | 参数对象 |
 
-#### Params内参数（回调）
+#### Params内参数
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
@@ -469,7 +469,7 @@
 | DebugInfo | String | 调试信息 |
 | Params | Object | 参数对象 |
 
-#### Params内参数（回调）
+#### Params内参数
 
 | 字段 | 类型 | 说明 |
 |------|------|------|

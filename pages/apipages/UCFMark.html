@@ -103,7 +103,7 @@
 .ep-card.open .ep-arrow{transform:rotate(180deg)}
 .ep-body{display:none}
 .ep-card.open .ep-body{display:block}
-.ep-inner{padding:0 20px 20px}
+.ep-inner{padding:16px 20px 20px}
 .ep-inner > * + *{margin-top:20px}
 .callout{
   border-radius:var(--radius-sm);padding:12px 16px;
@@ -115,7 +115,7 @@
 .callout.warn .c-title{color:#fbbf24;font-weight:600;margin-bottom:3px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 .callout.info{background:var(--indigo-glow);border:1px solid rgba(99,102,241,0.15)}
 .callout.info svg{color:var(--indigo)}
-.callout.tips{display:block;padding:0;margin-top:16px}
+.callout.tips{display:block;padding:0}
 .callout.tips .c-title{color:var(--indigo);font-size:12px;font-weight:700;letter-spacing:.04em;margin-bottom:6px}
 .callout.tips ul{list-style:none;margin:0;padding:0}
 .callout.tips ul li{color:var(--text-main);font-size:13px;padding:2px 0 2px 12px;position:relative}
@@ -157,7 +157,7 @@
   font-size:11px;text-transform:uppercase;letter-spacing:.06em;
   background:var(--bg-glass);border-bottom:1px solid var(--border-glass);
 }
-.p-table td{padding:9px 14px;border-bottom:1px solid var(--border-glass);color:var(--text-muted);vertical-align:top}
+.p-table td{padding:9px 14px;border-bottom:1px solid var(--border-glass);color:var(--text-muted);vertical-align:top;overflow-wrap:break-word}
 .p-table tr:last-child td{border-bottom:none}
 .p-table .pn{font-family:'Exo 2',monospace;font-size:13px;color:var(--text-main);white-space:nowrap}
 .p-table .pn .nested{color:var(--text-dim)}
@@ -165,7 +165,7 @@
 .p-table .pr{font-size:12px;white-space:nowrap}
 .p-table .pr{color:var(--text-main);font-weight:600}
 .p-table .pr.n{color:var(--text-dim);font-weight:400}
-.p-table .pd{font-size:14px;color:var(--text-muted);line-height:1.6}
+.p-table .pd{font-size:14px;color:var(--text-muted);line-height:1.6;word-break:break-all}
 .p-table .pd code{font-family:'Exo 2',monospace;font-size:12px;color:var(--green);padding:0 3px;border-radius:3px}
 .cb{border:1px solid var(--border-glass);border-radius:var(--radius-sm);overflow:hidden;transition:border-color .2s}
 .cb-h{
@@ -216,7 +216,7 @@
 }
 @media(max-width:600px){
   .ep-header{padding:8px 12px}
-  .ep-inner{padding:0 12px 12px}
+  .ep-inner{padding:16px 12px 12px}
   .ep-name{font-size:13px}
   .p-wrap{overflow-x:auto}
   .p-table{min-width:480px}
@@ -329,6 +329,10 @@ const API = {
   ['POIData[].lon', 'Object', '必填', 'POI经度坐标'],
   ['POIData[].lat', 'Object', '必填', 'POI维度坐标'],
   ['POIData[].config', 'Object', '选填', 'POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息']
+],
+    cbi:[
+  ['MaxHeight', 'Float', '-', '所创建的POI实例中Z值的最大值（厘米）'],
+  ['MinHeight', 'Float', '-', '所创建的POI实例中Z值的最小值（厘米）']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOIGeo",\n  "Params": {\n    "Group": "xxx",\n    "StyleRef": "xxx",\n    "StyleConfig": {},\n    "POIData": [\n      {\n        "id": "xxx",\n        "lon": {},\n        "lat": {},\n        "config": {}\n      }\n    ]\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOIGeo",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "MaxHeight": 0.0,\n    "MinHeight": 0.0\n  }\n}'
@@ -568,6 +572,11 @@ const API = {
   ['DebugInfo', 'String', '调试信息'],
   ['Params', 'Object', '参数对象']
 ],
+    cbi:[
+  ['PID', 'String', '-', 'POI实例ID'],
+  ['Group', 'String', '-', 'POI实例所属组别'],
+  ['Location', 'Object', '-', 'POI实例的三维世界坐标']
+],
     noReq:true,
     cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIClicked",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {}\n  }\n}'
   },
@@ -581,6 +590,11 @@ const API = {
   ['DebugInfo', 'String', '调试信息'],
   ['Params', 'Object', '参数对象']
 ],
+    cbi:[
+  ['PID', 'String', '-', 'POI实例ID'],
+  ['Group', 'String', '-', 'POI实例所属组别'],
+  ['Location', 'Object', '-', 'POI实例的三维世界坐标']
+],
     noReq:true,
     cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIHovered",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {}\n  }\n}'
   },
@@ -593,6 +607,11 @@ const API = {
   ['Status', 'Boolean', '固定为 <code>true</code>'],
   ['DebugInfo', 'String', '调试信息'],
   ['Params', 'Object', '参数对象']
+],
+    cbi:[
+  ['PID', 'String', '-', 'POI实例ID'],
+  ['Group', 'String', '-', 'POI实例所属组别'],
+  ['Location', 'Object', '-', 'POI实例的三维世界坐标']
 ],
     noReq:true,
     cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIUnhovered",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {}\n  }\n}'

@@ -422,7 +422,13 @@ def _commit_table(table_rows, table_ctx, api_data):
                 formatted.append([row[0], row[1], _convert_inline_code(row[2])])
         api_data['cf'] = formatted
     elif table_ctx == 'cbi':
-        api_data['cbi'] = [[r[0], r[1], r[2], _convert_inline_code(r[3])] for r in table_rows if len(r) >= 4]
+        formatted = []
+        for r in table_rows:
+            if len(r) >= 4:
+                formatted.append([r[0], r[1], r[2], _convert_inline_code(r[3])])
+            elif len(r) >= 3:
+                formatted.append([r[0], r[1], '-', _convert_inline_code(r[2])])
+        api_data['cbi'] = formatted
 
 
 def _finalize_api(api_data, data):
@@ -663,7 +669,7 @@ def _build_html(title, description, grp_js, api_js):
 .ep-card.open .ep-arrow{{transform:rotate(180deg)}}
 .ep-body{{display:none}}
 .ep-card.open .ep-body{{display:block}}
-.ep-inner{{padding:0 20px 20px}}
+.ep-inner{{padding:16px 20px 20px}}
 .ep-inner > * + *{{margin-top:20px}}
 .callout{{
   border-radius:var(--radius-sm);padding:12px 16px;
@@ -675,7 +681,7 @@ def _build_html(title, description, grp_js, api_js):
 .callout.warn .c-title{{color:#fbbf24;font-weight:600;margin-bottom:3px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}}
 .callout.info{{background:var(--indigo-glow);border:1px solid rgba(99,102,241,0.15)}}
 .callout.info svg{{color:var(--indigo)}}
-.callout.tips{{display:block;padding:0;margin-top:16px}}
+.callout.tips{{display:block;padding:0}}
 .callout.tips .c-title{{color:var(--indigo);font-size:12px;font-weight:700;letter-spacing:.04em;margin-bottom:6px}}
 .callout.tips ul{{list-style:none;margin:0;padding:0}}
 .callout.tips ul li{{color:var(--text-main);font-size:13px;padding:2px 0 2px 12px;position:relative}}
@@ -717,7 +723,7 @@ def _build_html(title, description, grp_js, api_js):
   font-size:11px;text-transform:uppercase;letter-spacing:.06em;
   background:var(--bg-glass);border-bottom:1px solid var(--border-glass);
 }}
-.p-table td{{padding:9px 14px;border-bottom:1px solid var(--border-glass);color:var(--text-muted);vertical-align:top}}
+.p-table td{{padding:9px 14px;border-bottom:1px solid var(--border-glass);color:var(--text-muted);vertical-align:top;overflow-wrap:break-word}}
 .p-table tr:last-child td{{border-bottom:none}}
 .p-table .pn{{font-family:'Exo 2',monospace;font-size:13px;color:var(--text-main);white-space:nowrap}}
 .p-table .pn .nested{{color:var(--text-dim)}}
@@ -725,7 +731,7 @@ def _build_html(title, description, grp_js, api_js):
 .p-table .pr{{font-size:12px;white-space:nowrap}}
 .p-table .pr{{color:var(--text-main);font-weight:600}}
 .p-table .pr.n{{color:var(--text-dim);font-weight:400}}
-.p-table .pd{{font-size:14px;color:var(--text-muted);line-height:1.6}}
+.p-table .pd{{font-size:14px;color:var(--text-muted);line-height:1.6;word-break:break-all}}
 .p-table .pd code{{font-family:'Exo 2',monospace;font-size:12px;color:var(--green);padding:0 3px;border-radius:3px}}
 .cb{{border:1px solid var(--border-glass);border-radius:var(--radius-sm);overflow:hidden;transition:border-color .2s}}
 .cb-h{{
@@ -776,7 +782,7 @@ def _build_html(title, description, grp_js, api_js):
 }}
 @media(max-width:600px){{
   .ep-header{{padding:8px 12px}}
-  .ep-inner{{padding:0 12px 12px}}
+  .ep-inner{{padding:16px 12px 12px}}
   .ep-name{{font-size:13px}}
   .p-wrap{{overflow-x:auto}}
   .p-table{{min-width:480px}}
