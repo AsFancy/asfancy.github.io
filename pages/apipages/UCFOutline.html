@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UCFMark - 标记管理 - UCFPlugin</title>
+<title>UCFOutline - 高亮管理 - UCFPlugin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -240,8 +240,8 @@
     <div class="gradient g-right"></div>
   </div>
 
-  <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCFMark - 标记管理</h1>
-  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">提供POI标绘、二维标绘、三维标绘等接口</p>
+  <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCFOutline - 高亮管理</h1>
+  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">支持按Tag区分多个对象高亮，支持区域高亮</p>
 </div>
 
 <div class="api-layout">
@@ -282,348 +282,297 @@
 <script>
 // ===================== DATA =====================
 const GRP = [
-  { id:"g0", label:"POI标绘", dot:"#34d399",
-    apis:["UCFMark/CreatePOI", "UCFMark/CreatePOIGeo", "UCFMark/SetGroupVisibility", "UCFMark/SetIDVisibility", "UCFMark/UpdatePOIGroup", "UCFMark/UpdatePOIStyle", "UCFMark/SetGroupAutoFocus", "UCFMark/FocusPOI", "UCFMark/EnableAdaptiveScale", "UCFMark/DisableAdaptiveScale", "UCFMark/EnableGroupClustering", "UCFMark/DisableGroupClustering", "UCFMark/DebugClustering", "UCFMark/ClearGroup", "UCFMark/ClearID", "UCFMark/ClearAll", "UCFMark/OnPOIClicked", "UCFMark/OnPOIHovered", "UCFMark/OnPOIUnhovered"] }
+  { id:"g0", label:"对象高亮", dot:"#34d399",
+    apis:["UCFOutline/OutlineActor", "UCFOutline/ApplyOutlineDefault", "UCFOutline/SetOutlineFill", "UCFOutline/SetOutlineBeat", "UCFOutline/SetOutlineWidth", "UCFOutline/SetOutlineWidthRef", "UCFOutline/SetOutlineEmissive", "UCFOutline/SetOutlineOpacity", "UCFOutline/UnOutlineActor", "UCFOutline/UnOutlineAllActor"] },
+  { id:"g1", label:"区域高亮", dot:"#60a5fa",
+    apis:["UCFOutline/OutlineArea", "UCFOutline/ApplyAreaDefault", "UCFOutline/SetOutGray", "UCFOutline/SetOutColor", "UCFOutline/SetAreaFill", "UCFOutline/SetAreaOpacity", "UCFOutline/SetAreaColor", "UCFOutline/SetAreaEmissive", "UCFOutline/UnOutlineArea"] }
 ];
 
 const API = {
-  "UCFMark/CreatePOI": {
+  "UCFOutline/OutlineActor": {
     t:"sync",
-    title:"创建POI(UE坐标系)",
-    notes:["StyleConfig和POIData[].config必须适配所指定的StyleRef，否则配置项都不会被应用", "StyleRef对应的UMG类可选重写SetStyleConfig，用于解析并应用StyleConfig", "StyleRef对应的UMG类可选重写SetInstanceData，用于解析并应用POIData[].config", "与POI聚合功能无先后调用顺序要求"],
+    title:"高亮Actor",
+    notes:["可重复调用更新高亮颜色，累计高亮颜色值不得超过256种", "若该Actor上有多个Tag符合，按第一个符合的Tag对应颜色值高亮", "若同时启用高亮Area，高亮Actor优先"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Group', 'String', '必填', 'POI分组'],
-  ['StyleRef', 'String', '必填', 'POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C'],
-  ['StyleConfig', 'Object', '选填', 'POI样式配置，必须适配所指定的StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效'],
-  ['POIData', 'Array&lt;Object&gt;', '必填', 'POI数据'],
-  ['{}.id', 'String', '必填', 'POI唯一标识'],
-  ['{}.vec', 'Object', '必填', 'POI世界坐标位置'],
-  ['vec.X', 'Float', '必填', 'X坐标（厘米）'],
-  ['vec.Y', 'Float', '必填', 'Y坐标（厘米）'],
-  ['vec.Z', 'Float', '必填', 'Z坐标（厘米）'],
-  ['{}.config', 'Object', '选填', 'POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息']
+  ['ColorTag', 'Array&lt;Object&gt;', '必填', '高亮颜色与对应的Tag'],
+  ['{}.Color', 'Object', '必填', '高亮颜色'],
+  ['Color.R', 'Int', '必填', 'R通道值，取值范围[0,255]'],
+  ['Color.G', 'Int', '必填', 'G通道值，取值范围[0,255]'],
+  ['Color.B', 'Int', '必填', 'B通道值，取值范围[0,255]'],
+  ['{}.Tag', 'Array&lt;String&gt;', '必填', '高亮颜色对应的Tag']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOI",\n  "Params": {\n    "Group": "xxx",\n    "StyleRef": "xxx",\n    "StyleConfig": {},\n    "POIData": [\n      {\n        "id": "xxx",\n        "vec": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "config": {}\n      },\n      {\n        "id": "xxx",\n        "vec": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "config": {}\n      },\n      {\n        "id": "xxx",\n        "vec": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "config": {}\n      }\n    ]\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOI",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/OutlineActor",\n  "Params": {\n    "ColorTag": [\n      {\n        "Color": {\n          "R": 0,\n          "G": 0,\n          "B": 0\n        },\n        "Tag": [\n          "xxx",\n          "xxx",\n          "xxx"\n        ]\n      },\n      {\n        "Color": {\n          "R": 0,\n          "G": 0,\n          "B": 0\n        },\n        "Tag": [\n          "xxx",\n          "xxx",\n          "xxx"\n        ]\n      },\n      {\n        "Color": {\n          "R": 0,\n          "G": 0,\n          "B": 0\n        },\n        "Tag": [\n          "xxx",\n          "xxx",\n          "xxx"\n        ]\n      }\n    ]\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/OutlineActor",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1z2GK6EEQ4"
   },
-  "UCFMark/CreatePOIGeo": {
+  "UCFOutline/ApplyOutlineDefault": {
     t:"sync",
-    title:"创建POI(WGS84坐标系)",
-    notes:["WGS84坐标会按照项目配置的坐标参考转为UE坐标，对于Z坐标则按照转换后的UE坐标进行竖向射线检测获取到碰撞位置的Z值，否则默认为100厘米", "StyleConfig和POIData[].config必须适配所指定的StyleRef，否则配置项都不会被应用", "StyleRef对应的UMG类可选重写SetStyleConfig，用于解析并应用StyleConfig", "StyleRef对应的UMG类可选重写SetInstanceData，用于解析并应用POIData[].config", "与POI聚合功能无先后调用顺序要求"],
+    title:"应用默认高亮Actor效果",
+    notes:["OutlineOpacity：1", "OutlineEmissive：1", "OutlineFill：false", "OutlineBeat：false", "OutlineWidth：1.5", "OutlineWidthRef：5000"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/ApplyOutlineDefault",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/ApplyOutlineDefault",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFOutline/SetOutlineFill": {
+    t:"sync",
+    title:"设置高亮填充",
+    notes:["启用高亮填充后整个Actor被高亮，无单独描边效果"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Group', 'String', '必填', 'POI分组'],
-  ['StyleRef', 'String', '必填', 'POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C'],
-  ['StyleConfig', 'Object', '选填', 'POI样式配置，必须适配所指定的StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效'],
-  ['POIData', 'Array&lt;Object&gt;', '必填', 'POI数据'],
-  ['{}.id', 'String', '必填', 'POI唯一标识'],
-  ['{}.lon', 'Float', '必填', 'POI经度坐标（度）'],
-  ['{}.lat', 'Float', '必填', 'POI纬度坐标（度）'],
-  ['{}.config', 'Object', '选填', 'POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息']
+  ['OutlineFill', 'Boolean', '必填', '高亮填充开关']
 ],
-    cbi:[
-  ['MaxHeight', 'Float', '-', '所创建的POI实例中Z值的最大值（厘米）'],
-  ['MinHeight', 'Float', '-', '所创建的POI实例中Z值的最小值（厘米）']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOIGeo",\n  "Params": {\n    "Group": "xxx",\n    "StyleRef": "xxx",\n    "StyleConfig": {},\n    "POIData": [\n      {\n        "id": "xxx",\n        "lon": 0.0,\n        "lat": 0.0,\n        "config": {}\n      },\n      {\n        "id": "xxx",\n        "lon": 0.0,\n        "lat": 0.0,\n        "config": {}\n      },\n      {\n        "id": "xxx",\n        "lon": 0.0,\n        "lat": 0.0,\n        "config": {}\n      }\n    ]\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOIGeo",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "MaxHeight": 0.0,\n    "MinHeight": 0.0\n  }\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineFill",\n  "Params": {\n    "OutlineFill": false\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineFill",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1FyGK6DEqh"
   },
-  "UCFMark/SetGroupVisibility": {
+  "UCFOutline/SetOutlineBeat": {
     t:"sync",
-    title:"按Group设置POI可视性",
-    notes:["Group必须有效"],
+    title:"设置高亮频闪",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Groups', 'Array&lt;String&gt;', '必填', 'POI分组名称'],
-  ['bVisible', 'Boolean', '必填', 'true为显示，false为隐藏']
+  ['OutlineBeat', 'Boolean', '必填', '高亮频闪开关']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetGroupVisibility",\n  "Params": {\n    "Groups": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ],\n    "bVisible": false\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetGroupVisibility",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineBeat",\n  "Params": {\n    "OutlineBeat": false\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineBeat",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1z2GK6EExh"
   },
-  "UCFMark/SetIDVisibility": {
+  "UCFOutline/SetOutlineWidth": {
     t:"sync",
-    title:"按ID设置POI可视性",
-    notes:["POIID必须有效"],
+    title:"设置高亮描边线宽",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['POIIDs', 'Array&lt;String&gt;', '必填', 'POI唯一标识'],
-  ['bVisible', 'Boolean', '必填', 'true为显示，false为隐藏']
+  ['OutlineWidth', 'Float', '必填', '高亮描边线宽（像素），取值范围[0.5,5]']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetIDVisibility",\n  "Params": {\n    "POIIDs": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ],\n    "bVisible": false\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetIDVisibility",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineWidth",\n  "Params": {\n    "OutlineWidth": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineWidth",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/UpdatePOIGroup": {
+  "UCFOutline/SetOutlineWidthRef": {
     t:"sync",
-    title:"按ID更新POI的Group",
-    notes:["POIID必须有效"],
+    title:"设置高亮描边线宽距离基准",
+    notes:["高亮描边线宽为像素单位，由于透视投影的存在，物体离相机越远，其在屏幕上占据的总像素就越少，会导致固定像素宽度的描边占比越来越大"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['POIIDs', 'Array&lt;String&gt;', '必填', 'POI唯一标识'],
-  ['NewGroup', 'String', '必填', '新Group名称']
+  ['OutlineWidthRef', 'Float', '必填', '高亮描边线宽距离基准（cm）']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/UpdatePOIGroup",\n  "Params": {\n    "POIIDs": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ],\n    "NewGroup": "xxx"\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/UpdatePOIGroup",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineWidthRef",\n  "Params": {\n    "OutlineWidthRef": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineWidthRef",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/UpdatePOIStyle": {
+  "UCFOutline/SetOutlineEmissive": {
     t:"sync",
-    title:"按ID更新POI样式",
-    notes:["POIID必须有效", "StyleConfig必须适配所指定的StyleRef或POI实例的实际StyleRef，否则配置项都不会被应用", "StyleRef对应的UMG类可选重写SetStyleConfig，用于解析并应用StyleConfig"],
+    title:"设置高亮自发光",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['POIIDs', 'Array&lt;String&gt;', '必填', 'POI唯一标识'],
-  ['StyleRef', 'String', '选填', 'POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C'],
-  ['StyleConfig', 'Object', '选填', 'POI样式配置，必须适配所传入的StyleRef或POI实例的实际StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效']
+  ['OutlineEmissive', 'Float', '必填', '高亮自发光，取值范围[1,10]']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/UpdatePOIStyle",\n  "Params": {\n    "POIIDs": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ],\n    "StyleRef": "xxx",\n    "StyleConfig": {}\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/UpdatePOIStyle",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineEmissive",\n  "Params": {\n    "OutlineEmissive": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineEmissive",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/SetGroupAutoFocus": {
+  "UCFOutline/SetOutlineOpacity": {
     t:"sync",
-    title:"按Group设置POI自动聚焦功能开关",
-    notes:["Group必须有效", "仅当 autofocus=true 时，光标点击POI实例后才会自动聚焦到该POI的世界坐标位置"],
+    title:"设置高亮透明度",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Group', 'String', '必填', 'POI分组名称'],
-  ['autofocus', 'Boolean', '必填', '是否开启自动聚焦'],
-  ['offset', 'Float', '选填', '聚焦时视点相对于世界坐标的反向偏移距离（厘米），默认 <code>5000</code>']
+  ['OutlineOpacity', 'Float', '必填', '高亮透明度，取值范围[0,1]']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetGroupAutoFocus",\n  "Params": {\n    "Group": "xxx",\n    "autofocus": false,\n    "offset": 5000\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetGroupAutoFocus",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineOpacity",\n  "Params": {\n    "OutlineOpacity": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutlineOpacity",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/FocusPOI": {
+  "UCFOutline/UnOutlineActor": {
     t:"sync",
-    title:"按ID聚焦到指定POI实例",
-    notes:["POIID必须有效", "POI实例被用户手动隐藏时拒绝聚焦", "POI实例所在Group启用了聚合且该POI当前被聚合隐藏时拒绝聚焦"],
+    title:"取消Actor高亮",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['POIID', 'String', '必填', 'POI唯一标识'],
-  ['Rotation', 'Object', '选填', '目标角度，不传则保持当前Pawn角度'],
-  ['Rotation.Pitch', 'Float', '必填', '俯仰角（度）'],
-  ['Rotation.Yaw', 'Float', '必填', '偏航角（度）'],
-  ['Rotation.Roll', 'Float', '必填', '翻滚角（度）（该值会被忽略）'],
-  ['Offset', 'Float', '选填', '相对WorldLocation的反向偏移距离（厘米），不传则使用POI实例自身的offset值'],
-  ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
+  ['Tags', 'Array&lt;String&gt;', '必填', '需要取消高亮的Actor的标签数组']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/FocusPOI",\n  "Params": {\n    "POIID": "xxx",\n    "Rotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    },\n    "Offset": 0.0,\n    "bIgnoreLag": false\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/FocusPOI",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/UnOutlineActor",\n  "Params": {\n    "Tags": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ]\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/UnOutlineActor",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/EnableAdaptiveScale": {
+  "UCFOutline/UnOutlineAllActor": {
     t:"sync",
-    title:"启用POI尺寸自适应",
+    title:"取消所有Actor高亮",
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/UnOutlineAllActor",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/UnOutlineAllActor",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFOutline/OutlineArea": {
+    t:"sync",
+    title:"高亮多边形区域",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['MinHeight', 'Float', '必填', 'POI原始尺寸对应的高度值，小于等于此值时保持正常尺寸'],
-  ['MaxHeight', 'Float', '必填', 'POI按MinScale的尺寸对应的高度值，大于等于此值时按MinScale缩放尺寸'],
-  ['MinScale', 'Float', '必填', '最小缩放比例，取值范围(0,1)']
+  ['PolygonsList', 'Array&lt;Array&lt;Object&gt;&gt;', '必填', '多边形顶点列表数组，支持多个多边形'],
+  ['[].[]', 'Array&lt;Object&gt;', '必填', '单个多边形的顶点数组'],
+  ['{}.X', 'Float', '必填', '顶点X坐标'],
+  ['{}.Y', 'Float', '必填', '顶点Y坐标'],
+  ['AreaMinZ', 'Float', '必填', '多边形区域竖向最小值'],
+  ['AreaMaxZ', 'Float', '必填', '多边形区域竖向最大值']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/EnableAdaptiveScale",\n  "Params": {\n    "MinHeight": 0.0,\n    "MaxHeight": 0.0,\n    "MinScale": 0.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/EnableAdaptiveScale",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/OutlineArea",\n  "Params": {\n    "PolygonsList": [\n      [\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        },\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        },\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        }\n      ],\n      [\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        },\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        },\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        }\n      ],\n      [\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        },\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        },\n        {\n          "X": 1000.0,\n          "Y": 2000.0\n        }\n      ]\n    ],\n    "AreaMinZ": 0.0,\n    "AreaMaxZ": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/OutlineArea",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1z2GK6EEq3"
   },
-  "UCFMark/DisableAdaptiveScale": {
+  "UCFOutline/ApplyAreaDefault": {
     t:"sync",
-    title:"关闭POI尺寸自适应",
+    title:"应用默认多边形区域效果",
+    notes:["OutGray：0.1", "OutColor：FLinearColor(0.227451f, 0.227451f, 0.227451f)", "AreaFill：false", "AreaColor：FLinearColor(0.104136f, 0.030858f, 1.0f)", "AreaOpacity：1", "AreaEmissive：1"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DisableAdaptiveScale",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DisableAdaptiveScale",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/ApplyAreaDefault",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/ApplyAreaDefault",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/EnableGroupClustering": {
+  "UCFOutline/SetOutGray": {
     t:"sync",
-    title:"按Group启用POI聚合",
-    notes:["每个Group拥有独立的聚合配置，互不干扰", "聚合功能基于四叉树实现，非叶子节点对应的聚合POI位置以所有子节点POI位置的平均值计算，非四叉树中心点", "以参数MaxHeight对应四叉树的最小深度0，参数MinHeight对应四叉树的最大深度MaxDepth，视点的Z值作为动态变量映射得到目标深度", "以视点二维坐标为中心、目标深度对应节点尺寸大小的详情窗口，从FullImpactDepth层起与各深度下的节点的包围盒做相交判定：节点包围盒与详情窗口相交的继续分裂以提供更细粒度，不相交的在当前深度聚合，自然形成近处精细、远处粗粒度的渐变聚合梯度", "StyleRef对应的UMG类可选重写SetAggregateCount，可用于设置显示聚合数量", "与POI创建功能无先后调用顺序要求"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['Group', 'String', '必填', 'POI分组名称'],
-  ['StyleRef', 'String', '选填', '聚合POI样式引用路径，即派生自UCFPOIbase的UMG资产，默认值/UCFPlugin/UCFPlugin/UCFMark/UCFPOI/ClusterStyle/Cluster_Style2.Cluster_Style2_C'],
-  ['MaxDepth', 'Int', '选填', '四叉树最大深度，默认值4，取值范围[2,8]'],
-  ['MinHeight', 'Float', '选填', '四叉树最大深度对应的高度值，默认值0，视点高度≤该值时目标深度达MaxDepth，详情窗口内相交的节点将递归划分到叶子层级'],
-  ['MaxHeight', 'Float', '选填', '四叉树深度0对应的高度值，默认值10000，视点高度≥该值时目标深度为0，详情窗口覆盖全域，所有节点聚合为1个根节点'],
-  ['FullImpactDepth', 'Int', '选填', '无相交判定的全局覆盖深度，默认值1，深度小于该值的节点不做详情窗口相交判定，统一随TargetDepth分裂']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/EnableGroupClustering",\n  "Params": {\n    "Group": "xxx",\n    "StyleRef": "xxx",\n    "MaxDepth": 0,\n    "MinHeight": 0.0,\n    "MaxHeight": 0.0,\n    "FullImpactDepth": 0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/EnableGroupClustering",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
-    bvid:"BV1a5KM64EJq"
-  },
-  "UCFMark/DisableGroupClustering": {
-    t:"sync",
-    title:"按Group关闭POI聚合",
-    notes:["Group必须有效"],
+    title:"设置多边形外区域的去色强度",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Group', 'String', '必填', 'Group名称']
+  ['OutGray', 'Float', '必填', '多边形外区域的去色强度,取值范围[0,1]，值为1时完全去色']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DisableGroupClustering",\n  "Params": {\n    "Group": "xxx"\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DisableGroupClustering",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutGray",\n  "Params": {\n    "OutGray": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutGray",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1ZSGK6jE9h"
   },
-  "UCFMark/DebugClustering": {
+  "UCFOutline/SetOutColor": {
     t:"sync",
-    title:"调试指定Group的聚合功能",
-    notes:["Group必须有效", "必须指定目标Group，用于查看对应的四叉树效果", "Shipping版本禁用"],
+    title:"设置多边形外区域的颜色",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Group', 'String', '必填', '目标Group名称'],
-  ['bEnable', 'Boolean', '必填', '是否启用调试绘制'],
-  ['NodeRange', 'Float', '选填', '受影响节点的绘制线宽，默认 <code>20.0</code>'],
-  ['ViewRange', 'Float', '选填', '详情窗口范围线的绘制线宽，默认 <code>30.0</code>']
+  ['OutColor', 'Object', '必填', '遮罩区域颜色'],
+  ['OutColor.R', 'Float', '必填', 'R通道值，取值范围[0,1]'],
+  ['OutColor.G', 'Float', '必填', 'G通道值，取值范围[0,1]'],
+  ['OutColor.B', 'Float', '必填', 'B通道值，取值范围[0,1]']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DebugClustering",\n  "Params": {\n    "Group": "xxx",\n    "bEnable": false,\n    "NodeRange": 20.0,\n    "ViewRange": 30.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DebugClustering",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutColor",\n  "Params": {\n    "OutColor": {\n      "R": 0.0,\n      "G": 0.0,\n      "B": 0.0\n    }\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetOutColor",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1BSGK6jEij"
   },
-  "UCFMark/ClearGroup": {
+  "UCFOutline/SetAreaFill": {
     t:"sync",
-    title:"按Group删除POI",
-    notes:["Group必须有效"],
+    title:"设置多边形区域填充",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Groups', 'Array&lt;String&gt;', '必填', 'POI分组名称']
+  ['AreaFill', 'Boolean', '必填', '是否填充多边形区域']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearGroup",\n  "Params": {\n    "Groups": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ]\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearGroup",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetAreaFill",\n  "Params": {\n    "AreaFill": false\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetAreaFill",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/ClearID": {
+  "UCFOutline/SetAreaOpacity": {
     t:"sync",
-    title:"按ID删除POI",
-    notes:["POIID必须有效"],
+    title:"设置多边形区域填充透明度",
+    notes:["仅启用多边形区域填充时生效"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['POIIDs', 'Array&lt;String&gt;', '必填', 'POI唯一标识']
+  ['AreaOpacity', 'Float', '必填', '多边形区域填充透明度,取值范围[0,1]']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearID",\n  "Params": {\n    "POIIDs": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ]\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearID",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetAreaOpacity",\n  "Params": {\n    "AreaOpacity": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetAreaOpacity",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/ClearAll": {
+  "UCFOutline/SetAreaColor": {
     t:"sync",
-    title:"清除所有POI",
+    title:"设置多边形区域填充颜色",
+    notes:["仅启用多边形区域填充时生效"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearAll",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearAll",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    pi:[
+  ['AreaColor', 'Object', '必填', '多边形区域填充颜色'],
+  ['AreaColor.R', 'Float', '必填', 'R通道值，取值范围[0,1]'],
+  ['AreaColor.G', 'Float', '必填', 'G通道值，取值范围[0,1]'],
+  ['AreaColor.B', 'Float', '必填', 'B通道值，取值范围[0,1]']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetAreaColor",\n  "Params": {\n    "AreaColor": {\n      "R": 0.0,\n      "G": 0.0,\n      "B": 0.0\n    }\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetAreaColor",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1nyGK6DEhn"
   },
-  "UCFMark/OnPOIClicked": {
-    t:"trigger",
-    title:"光标点击POI实例通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFMark/OnPOIClicked"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
+  "UCFOutline/SetAreaEmissive": {
+    t:"sync",
+    title:"设置多边形区域填充自发光强度",
+    notes:["仅启用多边形区域填充时生效"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    cbi:[
-  ['PID', 'String', '-', 'POI实例ID'],
-  ['Group', 'String', '-', 'POI实例所属组别'],
-  ['Location', 'Object', '-', 'POI实例的三维世界坐标'],
-  ['Location.X', 'Float', '-', 'X坐标（厘米）'],
-  ['Location.Y', 'Float', '-', 'Y坐标（厘米）'],
-  ['Location.Z', 'Float', '-', 'Z坐标（厘米）']
+    pi:[
+  ['AreaEmissive', 'Float', '必填', '多边形区域填充自发光强度,取值范围[1,10]']
 ],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIClicked",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    }\n  }\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetAreaEmissive",\n  "Params": {\n    "AreaEmissive": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/SetAreaEmissive",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/OnPOIHovered": {
-    t:"trigger",
-    title:"光标悬停POI实例通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFMark/OnPOIHovered"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
+  "UCFOutline/UnOutlineArea": {
+    t:"sync",
+    title:"取消高亮多边形区域",
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    cbi:[
-  ['PID', 'String', '-', 'POI实例ID'],
-  ['Group', 'String', '-', 'POI实例所属组别'],
-  ['Location', 'Object', '-', 'POI实例的三维世界坐标'],
-  ['Location.X', 'Float', '-', 'X坐标（厘米）'],
-  ['Location.Y', 'Float', '-', 'Y坐标（厘米）'],
-  ['Location.Z', 'Float', '-', 'Z坐标（厘米）']
-],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIHovered",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    }\n  }\n}'
-  },
-  "UCFMark/OnPOIUnhovered": {
-    t:"trigger",
-    title:"光标取消悬停POI实例通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFMark/OnPOIUnhovered"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
-  ['Params', 'Object', '参数对象']
-],
-    cbi:[
-  ['PID', 'String', '-', 'POI实例ID'],
-  ['Group', 'String', '-', 'POI实例所属组别'],
-  ['Location', 'Object', '-', 'POI实例的三维世界坐标'],
-  ['Location.X', 'Float', '-', 'X坐标（厘米）'],
-  ['Location.Y', 'Float', '-', 'Y坐标（厘米）'],
-  ['Location.Z', 'Float', '-', 'Z坐标（厘米）']
-],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIUnhovered",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    }\n  }\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/UnOutlineArea",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFOutline/UnOutlineArea",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   }
 };
 

@@ -1,6 +1,6 @@
-# UCFMark API
+# UCFMark - 标记管理
 
-标记管理, 提供POI标绘、二维标绘、三维标绘等接口
+提供POI标绘、二维标绘、三维标绘等接口
 
 ## 接口一览
 
@@ -58,13 +58,13 @@
 | Group | String | 必填 | POI分组 |
 | StyleRef | String | 必填 | POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C |
 | StyleConfig | Object | 选填 | POI样式配置，必须适配所指定的StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效 |
-| POIData | Array | 必填 | POI数据 |
-| POIData[].id | String | 必填 | POI唯一标识 |
-| POIData[].vec | Object | 必填 | POI世界坐标位置 |
-| POIData[].vec.x | Float | 必填 | X坐标（厘米） |
-| POIData[].vec.y | Float | 必填 | Y坐标（厘米） |
-| POIData[].vec.z | Float | 必填 | Z坐标（厘米） |
-| POIData[].config | Object | 选填 | POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息 |
+| POIData | `Array<Object>` | 必填 | POI数据 |
+| {}.id | String | 必填 | POI唯一标识 |
+| {}.vec | Object | 必填 | POI世界坐标位置 |
+| vec.X | Float | 必填 | X坐标（厘米） |
+| vec.Y | Float | 必填 | Y坐标（厘米） |
+| vec.Z | Float | 必填 | Z坐标（厘米） |
+| {}.config | Object | 选填 | POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息 |
 
 #### 调用参数示例
 
@@ -80,9 +80,27 @@
       {
         "id": "xxx",
         "vec": {
-          "x": 1000.0,
-          "y": 2000.0,
-          "z": 500.0
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "config": {}
+      },
+      {
+        "id": "xxx",
+        "vec": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "config": {}
+      },
+      {
+        "id": "xxx",
+        "vec": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
         },
         "config": {}
       }
@@ -144,11 +162,11 @@
 | Group | String | 必填 | POI分组 |
 | StyleRef | String | 必填 | POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C |
 | StyleConfig | Object | 选填 | POI样式配置，必须适配所指定的StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效 |
-| POIData | Array | 必填 | POI数据 |
-| POIData[].id | String | 必填 | POI唯一标识 |
-| POIData[].lon | Object | 必填 | POI经度坐标 |
-| POIData[].lat | Object | 必填 | POI维度坐标 |
-| POIData[].config | Object | 选填 | POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息 |
+| POIData | `Array<Object>` | 必填 | POI数据 |
+| {}.id | String | 必填 | POI唯一标识 |
+| {}.lon | Float | 必填 | POI经度坐标（度） |
+| {}.lat | Float | 必填 | POI纬度坐标（度） |
+| {}.config | Object | 选填 | POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息 |
 
 #### 调用参数示例
 
@@ -163,8 +181,20 @@
     "POIData": [
       {
         "id": "xxx",
-        "lon": {},
-        "lat": {},
+        "lon": 0.0,
+        "lat": 0.0,
+        "config": {}
+      },
+      {
+        "id": "xxx",
+        "lon": 0.0,
+        "lat": 0.0,
+        "config": {}
+      },
+      {
+        "id": "xxx",
+        "lon": 0.0,
+        "lat": 0.0,
         "config": {}
       }
     ]
@@ -228,7 +258,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| Groups | Array<String> | 必填 | POI分组名称 |
+| Groups | `Array<String>` | 必填 | POI分组名称 |
 | bVisible | Boolean | 必填 | true为显示，false为隐藏 |
 
 #### 调用参数示例
@@ -239,6 +269,8 @@
   "Interface": "UCFMark/SetGroupVisibility",
   "Params": {
     "Groups": [
+      "xxx",
+      "xxx",
       "xxx"
     ],
     "bVisible": false
@@ -292,7 +324,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| POIIDs | Array<String> | 必填 | POI唯一标识 |
+| POIIDs | `Array<String>` | 必填 | POI唯一标识 |
 | bVisible | Boolean | 必填 | true为显示，false为隐藏 |
 
 #### 调用参数示例
@@ -303,6 +335,8 @@
   "Interface": "UCFMark/SetIDVisibility",
   "Params": {
     "POIIDs": [
+      "xxx",
+      "xxx",
       "xxx"
     ],
     "bVisible": false
@@ -356,7 +390,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| POIIDs | Array<String> | 必填 | POI唯一标识 |
+| POIIDs | `Array<String>` | 必填 | POI唯一标识 |
 | NewGroup | String | 必填 | 新Group名称 |
 
 #### 调用参数示例
@@ -367,6 +401,8 @@
   "Interface": "UCFMark/UpdatePOIGroup",
   "Params": {
     "POIIDs": [
+      "xxx",
+      "xxx",
       "xxx"
     ],
     "NewGroup": "xxx"
@@ -422,7 +458,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| POIIDs | Array<String> | 必填 | POI唯一标识 |
+| POIIDs | `Array<String>` | 必填 | POI唯一标识 |
 | StyleRef | String | 选填 | POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C |
 | StyleConfig | Object | 选填 | POI样式配置，必须适配所传入的StyleRef或POI实例的实际StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效 |
 
@@ -434,6 +470,8 @@
   "Interface": "UCFMark/UpdatePOIStyle",
   "Params": {
     "POIIDs": [
+      "xxx",
+      "xxx",
       "xxx"
     ],
     "StyleRef": "xxx",
@@ -557,9 +595,9 @@
 |------|------|:----:|------|
 | POIID | String | 必填 | POI唯一标识 |
 | Rotation | Object | 选填 | 目标角度，不传则保持当前Pawn角度 |
-| Rotation.Pitch | Float |  | 俯仰角（度） |
-| Rotation.Yaw | Float |  | 偏航角（度） |
-| Rotation.Roll | Float |  | 翻滚角（度）（该值会被忽略） |
+| Rotation.Pitch | Float | 必填 | 俯仰角（度） |
+| Rotation.Yaw | Float | 必填 | 偏航角（度） |
+| Rotation.Roll | Float | 必填 | 翻滚角（度）（该值会被忽略） |
 | Offset | Float | 选填 | 相对WorldLocation的反向偏移距离（厘米），不传则使用POI实例自身的offset值 |
 | bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
 
@@ -943,7 +981,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| Groups | Array<String> | 必填 | POI分组名称 |
+| Groups | `Array<String>` | 必填 | POI分组名称 |
 
 #### 调用参数示例
 
@@ -953,6 +991,8 @@
   "Interface": "UCFMark/ClearGroup",
   "Params": {
     "Groups": [
+      "xxx",
+      "xxx",
       "xxx"
     ]
   }
@@ -1005,7 +1045,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| POIIDs | Array<String> | 必填 | POI唯一标识 |
+| POIIDs | `Array<String>` | 必填 | POI唯一标识 |
 
 #### 调用参数示例
 
@@ -1015,6 +1055,8 @@
   "Interface": "UCFMark/ClearID",
   "Params": {
     "POIIDs": [
+      "xxx",
+      "xxx",
       "xxx"
     ]
   }
@@ -1116,6 +1158,9 @@
 | PID | String | POI实例ID |
 | Group | String | POI实例所属组别 |
 | Location | Object | POI实例的三维世界坐标 |
+| Location.X | Float | X坐标（厘米） |
+| Location.Y | Float | Y坐标（厘米） |
+| Location.Z | Float | Z坐标（厘米） |
 
 #### 回调参数示例
 
@@ -1128,7 +1173,11 @@
   "Params": {
     "PID": "xxx",
     "Group": "xxx",
-    "Location": {}
+    "Location": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    }
   }
 }
 ```
@@ -1158,6 +1207,9 @@
 | PID | String | POI实例ID |
 | Group | String | POI实例所属组别 |
 | Location | Object | POI实例的三维世界坐标 |
+| Location.X | Float | X坐标（厘米） |
+| Location.Y | Float | Y坐标（厘米） |
+| Location.Z | Float | Z坐标（厘米） |
 
 #### 回调参数示例
 
@@ -1170,7 +1222,11 @@
   "Params": {
     "PID": "xxx",
     "Group": "xxx",
-    "Location": {}
+    "Location": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    }
   }
 }
 ```
@@ -1200,6 +1256,9 @@
 | PID | String | POI实例ID |
 | Group | String | POI实例所属组别 |
 | Location | Object | POI实例的三维世界坐标 |
+| Location.X | Float | X坐标（厘米） |
+| Location.Y | Float | Y坐标（厘米） |
+| Location.Z | Float | Z坐标（厘米） |
 
 #### 回调参数示例
 
@@ -1212,7 +1271,11 @@
   "Params": {
     "PID": "xxx",
     "Group": "xxx",
-    "Location": {}
+    "Location": {
+      "X": 1000.0,
+      "Y": 2000.0,
+      "Z": 500.0
+    }
   }
 }
 ```

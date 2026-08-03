@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UCFMark - 标记管理 - UCFPlugin</title>
+<title>UCF - 接口管理 - UCFPlugin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -240,8 +240,8 @@
     <div class="gradient g-right"></div>
   </div>
 
-  <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCFMark - 标记管理</h1>
-  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">提供POI标绘、二维标绘、三维标绘等接口</p>
+  <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCF - 接口管理</h1>
+  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">提供全局重置，接口类重置等接口。UCF定义为接口管理类UCFIManager对外的简称、区分于派生自UCFIBase的接口类，不会被重置</p>
 </div>
 
 <div class="api-layout">
@@ -282,348 +282,35 @@
 <script>
 // ===================== DATA =====================
 const GRP = [
-  { id:"g0", label:"POI标绘", dot:"#34d399",
-    apis:["UCFMark/CreatePOI", "UCFMark/CreatePOIGeo", "UCFMark/SetGroupVisibility", "UCFMark/SetIDVisibility", "UCFMark/UpdatePOIGroup", "UCFMark/UpdatePOIStyle", "UCFMark/SetGroupAutoFocus", "UCFMark/FocusPOI", "UCFMark/EnableAdaptiveScale", "UCFMark/DisableAdaptiveScale", "UCFMark/EnableGroupClustering", "UCFMark/DisableGroupClustering", "UCFMark/DebugClustering", "UCFMark/ClearGroup", "UCFMark/ClearID", "UCFMark/ClearAll", "UCFMark/OnPOIClicked", "UCFMark/OnPOIHovered", "UCFMark/OnPOIUnhovered"] }
+  { id:"g0", label:"重置接口", dot:"#34d399",
+    apis:["UCF/ResetInterface", "UCF/ResetAll"] }
 ];
 
 const API = {
-  "UCFMark/CreatePOI": {
+  "UCF/ResetInterface": {
     t:"sync",
-    title:"创建POI(UE坐标系)",
-    notes:["StyleConfig和POIData[].config必须适配所指定的StyleRef，否则配置项都不会被应用", "StyleRef对应的UMG类可选重写SetStyleConfig，用于解析并应用StyleConfig", "StyleRef对应的UMG类可选重写SetInstanceData，用于解析并应用POIData[].config", "与POI聚合功能无先后调用顺序要求"],
+    title:"重置指定接口类状态",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Group', 'String', '必填', 'POI分组'],
-  ['StyleRef', 'String', '必填', 'POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C'],
-  ['StyleConfig', 'Object', '选填', 'POI样式配置，必须适配所指定的StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效'],
-  ['POIData', 'Array&lt;Object&gt;', '必填', 'POI数据'],
-  ['{}.id', 'String', '必填', 'POI唯一标识'],
-  ['{}.vec', 'Object', '必填', 'POI世界坐标位置'],
-  ['vec.X', 'Float', '必填', 'X坐标（厘米）'],
-  ['vec.Y', 'Float', '必填', 'Y坐标（厘米）'],
-  ['vec.Z', 'Float', '必填', 'Z坐标（厘米）'],
-  ['{}.config', 'Object', '选填', 'POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息']
+  ['Interface', 'String', '必填', '需要重置的接口类名（如 "UCFView"）']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOI",\n  "Params": {\n    "Group": "xxx",\n    "StyleRef": "xxx",\n    "StyleConfig": {},\n    "POIData": [\n      {\n        "id": "xxx",\n        "vec": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "config": {}\n      },\n      {\n        "id": "xxx",\n        "vec": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "config": {}\n      },\n      {\n        "id": "xxx",\n        "vec": {\n          "X": 1000.0,\n          "Y": 2000.0,\n          "Z": 500.0\n        },\n        "config": {}\n      }\n    ]\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOI",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCF/ResetInterface",\n  "Params": {\n    "Interface": "UCFView"\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCF/ResetInterface",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFMark/CreatePOIGeo": {
+  "UCF/ResetAll": {
     t:"sync",
-    title:"创建POI(WGS84坐标系)",
-    notes:["WGS84坐标会按照项目配置的坐标参考转为UE坐标，对于Z坐标则按照转换后的UE坐标进行竖向射线检测获取到碰撞位置的Z值，否则默认为100厘米", "StyleConfig和POIData[].config必须适配所指定的StyleRef，否则配置项都不会被应用", "StyleRef对应的UMG类可选重写SetStyleConfig，用于解析并应用StyleConfig", "StyleRef对应的UMG类可选重写SetInstanceData，用于解析并应用POIData[].config", "与POI聚合功能无先后调用顺序要求"],
+    title:"重置所有接口类状态",
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    pi:[
-  ['Group', 'String', '必填', 'POI分组'],
-  ['StyleRef', 'String', '必填', 'POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C'],
-  ['StyleConfig', 'Object', '选填', 'POI样式配置，必须适配所指定的StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效'],
-  ['POIData', 'Array&lt;Object&gt;', '必填', 'POI数据'],
-  ['{}.id', 'String', '必填', 'POI唯一标识'],
-  ['{}.lon', 'Float', '必填', 'POI经度坐标（度）'],
-  ['{}.lat', 'Float', '必填', 'POI纬度坐标（度）'],
-  ['{}.config', 'Object', '选填', 'POI实例配置，必须适配所指定的StyleRef，是对StyleRef中子控件的特定参数配置，仅对该POI实例生效，例如需要额外显示的文本信息']
-],
-    cbi:[
-  ['MaxHeight', 'Float', '-', '所创建的POI实例中Z值的最大值（厘米）'],
-  ['MinHeight', 'Float', '-', '所创建的POI实例中Z值的最小值（厘米）']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOIGeo",\n  "Params": {\n    "Group": "xxx",\n    "StyleRef": "xxx",\n    "StyleConfig": {},\n    "POIData": [\n      {\n        "id": "xxx",\n        "lon": 0.0,\n        "lat": 0.0,\n        "config": {}\n      },\n      {\n        "id": "xxx",\n        "lon": 0.0,\n        "lat": 0.0,\n        "config": {}\n      },\n      {\n        "id": "xxx",\n        "lon": 0.0,\n        "lat": 0.0,\n        "config": {}\n      }\n    ]\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/CreatePOIGeo",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "MaxHeight": 0.0,\n    "MinHeight": 0.0\n  }\n}'
-  },
-  "UCFMark/SetGroupVisibility": {
-    t:"sync",
-    title:"按Group设置POI可视性",
-    notes:["Group必须有效"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['Groups', 'Array&lt;String&gt;', '必填', 'POI分组名称'],
-  ['bVisible', 'Boolean', '必填', 'true为显示，false为隐藏']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetGroupVisibility",\n  "Params": {\n    "Groups": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ],\n    "bVisible": false\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetGroupVisibility",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/SetIDVisibility": {
-    t:"sync",
-    title:"按ID设置POI可视性",
-    notes:["POIID必须有效"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['POIIDs', 'Array&lt;String&gt;', '必填', 'POI唯一标识'],
-  ['bVisible', 'Boolean', '必填', 'true为显示，false为隐藏']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetIDVisibility",\n  "Params": {\n    "POIIDs": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ],\n    "bVisible": false\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetIDVisibility",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/UpdatePOIGroup": {
-    t:"sync",
-    title:"按ID更新POI的Group",
-    notes:["POIID必须有效"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['POIIDs', 'Array&lt;String&gt;', '必填', 'POI唯一标识'],
-  ['NewGroup', 'String', '必填', '新Group名称']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/UpdatePOIGroup",\n  "Params": {\n    "POIIDs": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ],\n    "NewGroup": "xxx"\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/UpdatePOIGroup",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/UpdatePOIStyle": {
-    t:"sync",
-    title:"按ID更新POI样式",
-    notes:["POIID必须有效", "StyleConfig必须适配所指定的StyleRef或POI实例的实际StyleRef，否则配置项都不会被应用", "StyleRef对应的UMG类可选重写SetStyleConfig，用于解析并应用StyleConfig"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['POIIDs', 'Array&lt;String&gt;', '必填', 'POI唯一标识'],
-  ['StyleRef', 'String', '选填', 'POI样式引用路径，即派生自UCFPOIbase的UMG资产，例如/Game/POI/BP_MyPOI.BP_MyPOI_C'],
-  ['StyleConfig', 'Object', '选填', 'POI样式配置，必须适配所传入的StyleRef或POI实例的实际StyleRef，是对StyleRef中子控件的统一参数配置，对所有POI实例生效']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/UpdatePOIStyle",\n  "Params": {\n    "POIIDs": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ],\n    "StyleRef": "xxx",\n    "StyleConfig": {}\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/UpdatePOIStyle",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/SetGroupAutoFocus": {
-    t:"sync",
-    title:"按Group设置POI自动聚焦功能开关",
-    notes:["Group必须有效", "仅当 autofocus=true 时，光标点击POI实例后才会自动聚焦到该POI的世界坐标位置"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['Group', 'String', '必填', 'POI分组名称'],
-  ['autofocus', 'Boolean', '必填', '是否开启自动聚焦'],
-  ['offset', 'Float', '选填', '聚焦时视点相对于世界坐标的反向偏移距离（厘米），默认 <code>5000</code>']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetGroupAutoFocus",\n  "Params": {\n    "Group": "xxx",\n    "autofocus": false,\n    "offset": 5000\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/SetGroupAutoFocus",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/FocusPOI": {
-    t:"sync",
-    title:"按ID聚焦到指定POI实例",
-    notes:["POIID必须有效", "POI实例被用户手动隐藏时拒绝聚焦", "POI实例所在Group启用了聚合且该POI当前被聚合隐藏时拒绝聚焦"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['POIID', 'String', '必填', 'POI唯一标识'],
-  ['Rotation', 'Object', '选填', '目标角度，不传则保持当前Pawn角度'],
-  ['Rotation.Pitch', 'Float', '必填', '俯仰角（度）'],
-  ['Rotation.Yaw', 'Float', '必填', '偏航角（度）'],
-  ['Rotation.Roll', 'Float', '必填', '翻滚角（度）（该值会被忽略）'],
-  ['Offset', 'Float', '选填', '相对WorldLocation的反向偏移距离（厘米），不传则使用POI实例自身的offset值'],
-  ['bIgnoreLag', 'Boolean', '选填', '是否忽略平滑移动效果，默认 <code>false</code>']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/FocusPOI",\n  "Params": {\n    "POIID": "xxx",\n    "Rotation": {\n      "Pitch": 0.0,\n      "Yaw": 90.0,\n      "Roll": 0.0\n    },\n    "Offset": 0.0,\n    "bIgnoreLag": false\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/FocusPOI",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/EnableAdaptiveScale": {
-    t:"sync",
-    title:"启用POI尺寸自适应",
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['MinHeight', 'Float', '必填', 'POI原始尺寸对应的高度值，小于等于此值时保持正常尺寸'],
-  ['MaxHeight', 'Float', '必填', 'POI按MinScale的尺寸对应的高度值，大于等于此值时按MinScale缩放尺寸'],
-  ['MinScale', 'Float', '必填', '最小缩放比例，取值范围(0,1)']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/EnableAdaptiveScale",\n  "Params": {\n    "MinHeight": 0.0,\n    "MaxHeight": 0.0,\n    "MinScale": 0.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/EnableAdaptiveScale",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/DisableAdaptiveScale": {
-    t:"sync",
-    title:"关闭POI尺寸自适应",
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DisableAdaptiveScale",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DisableAdaptiveScale",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/EnableGroupClustering": {
-    t:"sync",
-    title:"按Group启用POI聚合",
-    notes:["每个Group拥有独立的聚合配置，互不干扰", "聚合功能基于四叉树实现，非叶子节点对应的聚合POI位置以所有子节点POI位置的平均值计算，非四叉树中心点", "以参数MaxHeight对应四叉树的最小深度0，参数MinHeight对应四叉树的最大深度MaxDepth，视点的Z值作为动态变量映射得到目标深度", "以视点二维坐标为中心、目标深度对应节点尺寸大小的详情窗口，从FullImpactDepth层起与各深度下的节点的包围盒做相交判定：节点包围盒与详情窗口相交的继续分裂以提供更细粒度，不相交的在当前深度聚合，自然形成近处精细、远处粗粒度的渐变聚合梯度", "StyleRef对应的UMG类可选重写SetAggregateCount，可用于设置显示聚合数量", "与POI创建功能无先后调用顺序要求"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['Group', 'String', '必填', 'POI分组名称'],
-  ['StyleRef', 'String', '选填', '聚合POI样式引用路径，即派生自UCFPOIbase的UMG资产，默认值/UCFPlugin/UCFPlugin/UCFMark/UCFPOI/ClusterStyle/Cluster_Style2.Cluster_Style2_C'],
-  ['MaxDepth', 'Int', '选填', '四叉树最大深度，默认值4，取值范围[2,8]'],
-  ['MinHeight', 'Float', '选填', '四叉树最大深度对应的高度值，默认值0，视点高度≤该值时目标深度达MaxDepth，详情窗口内相交的节点将递归划分到叶子层级'],
-  ['MaxHeight', 'Float', '选填', '四叉树深度0对应的高度值，默认值10000，视点高度≥该值时目标深度为0，详情窗口覆盖全域，所有节点聚合为1个根节点'],
-  ['FullImpactDepth', 'Int', '选填', '无相交判定的全局覆盖深度，默认值1，深度小于该值的节点不做详情窗口相交判定，统一随TargetDepth分裂']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/EnableGroupClustering",\n  "Params": {\n    "Group": "xxx",\n    "StyleRef": "xxx",\n    "MaxDepth": 0,\n    "MinHeight": 0.0,\n    "MaxHeight": 0.0,\n    "FullImpactDepth": 0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/EnableGroupClustering",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
-    bvid:"BV1a5KM64EJq"
-  },
-  "UCFMark/DisableGroupClustering": {
-    t:"sync",
-    title:"按Group关闭POI聚合",
-    notes:["Group必须有效"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['Group', 'String', '必填', 'Group名称']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DisableGroupClustering",\n  "Params": {\n    "Group": "xxx"\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DisableGroupClustering",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/DebugClustering": {
-    t:"sync",
-    title:"调试指定Group的聚合功能",
-    notes:["Group必须有效", "必须指定目标Group，用于查看对应的四叉树效果", "Shipping版本禁用"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['Group', 'String', '必填', '目标Group名称'],
-  ['bEnable', 'Boolean', '必填', '是否启用调试绘制'],
-  ['NodeRange', 'Float', '选填', '受影响节点的绘制线宽，默认 <code>20.0</code>'],
-  ['ViewRange', 'Float', '选填', '详情窗口范围线的绘制线宽，默认 <code>30.0</code>']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DebugClustering",\n  "Params": {\n    "Group": "xxx",\n    "bEnable": false,\n    "NodeRange": 20.0,\n    "ViewRange": 30.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/DebugClustering",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/ClearGroup": {
-    t:"sync",
-    title:"按Group删除POI",
-    notes:["Group必须有效"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['Groups', 'Array&lt;String&gt;', '必填', 'POI分组名称']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearGroup",\n  "Params": {\n    "Groups": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ]\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearGroup",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/ClearID": {
-    t:"sync",
-    title:"按ID删除POI",
-    notes:["POIID必须有效"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['POIIDs', 'Array&lt;String&gt;', '必填', 'POI唯一标识']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearID",\n  "Params": {\n    "POIIDs": [\n      "xxx",\n      "xxx",\n      "xxx"\n    ]\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearID",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/ClearAll": {
-    t:"sync",
-    title:"清除所有POI",
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearAll",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMark/ClearAll",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFMark/OnPOIClicked": {
-    t:"trigger",
-    title:"光标点击POI实例通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFMark/OnPOIClicked"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
-  ['Params', 'Object', '参数对象']
-],
-    cbi:[
-  ['PID', 'String', '-', 'POI实例ID'],
-  ['Group', 'String', '-', 'POI实例所属组别'],
-  ['Location', 'Object', '-', 'POI实例的三维世界坐标'],
-  ['Location.X', 'Float', '-', 'X坐标（厘米）'],
-  ['Location.Y', 'Float', '-', 'Y坐标（厘米）'],
-  ['Location.Z', 'Float', '-', 'Z坐标（厘米）']
-],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIClicked",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    }\n  }\n}'
-  },
-  "UCFMark/OnPOIHovered": {
-    t:"trigger",
-    title:"光标悬停POI实例通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFMark/OnPOIHovered"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
-  ['Params', 'Object', '参数对象']
-],
-    cbi:[
-  ['PID', 'String', '-', 'POI实例ID'],
-  ['Group', 'String', '-', 'POI实例所属组别'],
-  ['Location', 'Object', '-', 'POI实例的三维世界坐标'],
-  ['Location.X', 'Float', '-', 'X坐标（厘米）'],
-  ['Location.Y', 'Float', '-', 'Y坐标（厘米）'],
-  ['Location.Z', 'Float', '-', 'Z坐标（厘米）']
-],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIHovered",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    }\n  }\n}'
-  },
-  "UCFMark/OnPOIUnhovered": {
-    t:"trigger",
-    title:"光标取消悬停POI实例通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFMark/OnPOIUnhovered"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
-  ['Params', 'Object', '参数对象']
-],
-    cbi:[
-  ['PID', 'String', '-', 'POI实例ID'],
-  ['Group', 'String', '-', 'POI实例所属组别'],
-  ['Location', 'Object', '-', 'POI实例的三维世界坐标'],
-  ['Location.X', 'Float', '-', 'X坐标（厘米）'],
-  ['Location.Y', 'Float', '-', 'Y坐标（厘米）'],
-  ['Location.Z', 'Float', '-', 'Z坐标（厘米）']
-],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMark/OnPOIUnhovered",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "PID": "xxx",\n    "Group": "xxx",\n    "Location": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    }\n  }\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCF/ResetAll",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCF/ResetAll",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   }
 };
 

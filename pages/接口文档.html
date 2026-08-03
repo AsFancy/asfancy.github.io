@@ -9,6 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
 <link rel="icon" type="image/svg+xml" href="../res/favicon.svg">
+<style>
+/* 卡片标题「接口类 - 中文说明」中的接口类部分使用主题色突出 */
+.content-card h3 .card-api{color:var(--green)}
+</style>
 </head>
 <body>
 
@@ -22,13 +26,28 @@
   <div class="section-inner">
 
     <div class="content-card fade-in visible" id="UCFView" onclick="window.location.href='apipages/UCFView.html'">
-      <h3>UCFView · 视点管理</h3>
-      <p>视点管理，提供视点控制，视点参数、功能配置，视点切换，漫游操作等相关的接口</p>
+      <h3><span class="card-api">UCFView</span> - 视点管理</h3>
+      <p>提供视点控制，视点参数、功能配置，视点切换，漫游操作等相关的接口</p>
     </div>
 
     <div class="content-card fade-in visible" id="UCFMark" onclick="window.location.href='apipages/UCFMark.html'">
-      <h3>UCFMark · 标记管理</h3>
-      <p>标记管理, 提供POI标绘、二维标绘、三维标绘等接口</p>
+      <h3><span class="card-api">UCFMark</span> - 标记管理</h3>
+      <p>提供POI标绘、二维标绘、三维标绘等接口</p>
+    </div>
+
+    <div class="content-card fade-in visible" id="UCF" onclick="window.location.href='apipages/UCF.html'">
+      <h3><span class="card-api">UCF</span> - 接口管理</h3>
+      <p>提供全局重置，接口类重置等接口。UCF定义为接口管理类UCFIManager对外的简称、区分于派生自UCFIBase的接口类，不会被重置</p>
+    </div>
+
+    <div class="content-card fade-in visible" id="UCFAgent" onclick="window.location.href='apipages/UCFAgent.html'">
+      <h3><span class="card-api">UCFAgent</span> - Agent连接管理</h3>
+      <p>提供与Agent端的连接、鉴权、断开等接口</p>
+    </div>
+
+    <div class="content-card fade-in visible" id="UCFOutline" onclick="window.location.href='apipages/UCFOutline.html'">
+      <h3><span class="card-api">UCFOutline</span> - 高亮管理</h3>
+      <p>支持按Tag区分多个对象高亮，支持区域高亮</p>
     </div>
 
   </div>

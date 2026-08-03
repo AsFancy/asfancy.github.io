@@ -1,6 +1,6 @@
-# UCFView API
+# UCFView - 视点管理
 
-视点管理，提供视点控制，视点参数、功能配置，视点切换，漫游操作等相关的接口
+提供视点控制，视点参数、功能配置，视点切换，漫游操作等相关的接口
 
 ## 接口一览
 
@@ -524,7 +524,7 @@
 | TargetTag | String | 必填 | 目标对象的Tag标识 |
 | FocusOffest | Float | 选填 | 相对包围盒中心的反向偏移距离（厘米）。若不传入或小于0，则使用包围盒最大边长的2倍 |
 | DesirRotation | Object | 选填 | 目标角度，欧拉角表示的旋转值。若不传入则保持当前视点的角度不变 |
-| DesirRotation.Pitch | Float | 必填 | 俯仰角（度） |
+| DesirRotation.Pitch Float | 必填 |  | 俯仰角（度） |
 | DesirRotation.Yaw | Float | 必填 | 偏航角（度） |
 | DesirRotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
 | bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
@@ -539,7 +539,7 @@
     "TargetTag": "xxx",
     "FocusOffest": 0.0,
     "DesirRotation": {
-      "Pitch": 0.0,
+      "Pitch Float": "null",
       "Yaw": 90.0,
       "Roll": 0.0
     },
@@ -1025,13 +1025,13 @@
 |------|------|:----:|------|
 | ViewType | String | 必填 | 视点类型，可选值："Default"、"Male"、"Vehicle" |
 | Location | Object | 选填 | 目标生成位置 |
-| Location.X | Float |  | X坐标（厘米） |
-| Location.Y | Float |  | Y坐标（厘米） |
-| Location.Z | Float |  | Z坐标（厘米） |
+| Location.X | Float | 必填 | X坐标（厘米） |
+| Location.Y | Float | 必填 | Y坐标（厘米） |
+| Location.Z | Float | 必填 | Z坐标（厘米） |
 | Rotation | Object | 选填 | 目标生成角度 |
-| Rotation.Pitch | Float |  | 俯仰角（度） |
-| Rotation.Yaw | Float |  | 偏航角（度） |
-| Rotation.Roll | Float |  | 翻滚角（度） |
+| Rotation.Pitch | Float | 必填 | 俯仰角（度） |
+| Rotation.Yaw | Float | 必填 | 偏航角（度） |
+| Rotation.Roll | Float | 必填 | 翻滚角（度） |
 
 #### 调用参数示例
 
@@ -1109,15 +1109,15 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| Keyframes | Array | 必填 | 关键帧数组 |
-| Keyframes[].Location | Object | 必填 | 关键帧位置 |
-| Keyframes[].Location.X | Float | 必填 | X坐标（厘米） |
-| Keyframes[].Location.Y | Float | 必填 | Y坐标（厘米） |
-| Keyframes[].Location.Z | Float | 必填 | Z坐标（厘米） |
-| Keyframes[].Rotation | Object | 必填 | 关键帧角度 |
-| Keyframes[].Rotation.Pitch | Float | 必填 | 俯仰角（度） |
-| Keyframes[].Rotation.Yaw | Float | 必填 | 偏航角（度） |
-| Keyframes[].Rotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
+| Keyframes | `Array<Object>` | 必填 | 关键帧数组 |
+| {}.Location | Object | 必填 | 关键帧位置 |
+| Location.X | Float | 必填 | X坐标（厘米） |
+| Location.Y | Float | 必填 | Y坐标（厘米） |
+| Location.Z | Float | 必填 | Z坐标（厘米） |
+| {}.Rotation | Object | 必填 | 关键帧角度 |
+| Rotation.Pitch | Float | 必填 | 俯仰角（度） |
+| Rotation.Yaw | Float | 必填 | 偏航角（度） |
+| Rotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
 | Duration | Float | 必填 | 漫游总时长（秒） |
 
 #### 调用参数示例
@@ -1128,6 +1128,30 @@
   "Interface": "UCFView/StartRoamUniformTime",
   "Params": {
     "Keyframes": [
+      {
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        }
+      },
+      {
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        }
+      },
       {
         "Location": {
           "X": 1000.0,
@@ -1200,15 +1224,15 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| Keyframes | Array | 必填 | 关键帧数组 |
-| Keyframes[].Location | Object | 必填 | 关键帧位置 |
-| Keyframes[].Location.X | Float | 必填 | X坐标（厘米） |
-| Keyframes[].Location.Y | Float | 必填 | Y坐标（厘米） |
-| Keyframes[].Location.Z | Float | 必填 | Z坐标（厘米） |
-| Keyframes[].Rotation | Object | 必填 | 关键帧角度 |
-| Keyframes[].Rotation.Pitch | Float | 必填 | 俯仰角（度） |
-| Keyframes[].Rotation.Yaw | Float | 必填 | 偏航角（度） |
-| Keyframes[].Rotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
+| Keyframes | `Array<Object>` | 必填 | 关键帧数组 |
+| {}.Location | Object | 必填 | 关键帧位置 |
+| Location.X | Float | 必填 | X坐标（厘米） |
+| Location.Y | Float | 必填 | Y坐标（厘米） |
+| Location.Z | Float | 必填 | Z坐标（厘米） |
+| {}.Rotation | Object | 必填 | 关键帧角度 |
+| Rotation.Pitch | Float | 必填 | 俯仰角（度） |
+| Rotation.Yaw | Float | 必填 | 偏航角（度） |
+| Rotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
 | Duration | Float | 必填 | 漫游总时长（秒） |
 
 #### 调用参数示例
@@ -1219,6 +1243,30 @@
   "Interface": "UCFView/StartRoamUniformSpeed",
   "Params": {
     "Keyframes": [
+      {
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        }
+      },
+      {
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        }
+      },
       {
         "Location": {
           "X": 1000.0,
@@ -1291,16 +1339,16 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| Keyframes | Array | 必填 | 关键帧数组 |
-| Keyframes[].Location | Object | 必填 | 关键帧位置 |
-| Keyframes[].Location.X | Float | 必填 | X坐标（厘米） |
-| Keyframes[].Location.Y | Float | 必填 | Y坐标（厘米） |
-| Keyframes[].Location.Z | Float | 必填 | Z坐标（厘米） |
-| Keyframes[].Rotation | Object | 必填 | 关键帧角度 |
-| Keyframes[].Rotation.Pitch | Float | 必填 | 俯仰角（度） |
-| Keyframes[].Rotation.Yaw | Float | 必填 | 偏航角（度） |
-| Keyframes[].Rotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
-| Keyframes[].Duration | Float | 必填 | 到达该关键帧的耗时（秒）。第一个关键帧可设为0，后续关键帧必须大于0 |
+| Keyframes | `Array<Object>` | 必填 | 关键帧数组 |
+| {}.Location | Object | 必填 | 关键帧位置 |
+| Location.X | Float | 必填 | X坐标（厘米） |
+| Location.Y | Float | 必填 | Y坐标（厘米） |
+| Location.Z | Float | 必填 | Z坐标（厘米） |
+| {}.Rotation | Object | 必填 | 关键帧角度 |
+| Rotation.Pitch | Float | 必填 | 俯仰角（度） |
+| Rotation.Yaw | Float | 必填 | 偏航角（度） |
+| Rotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
+| {}.Duration | Float | 必填 | 到达该关键帧的耗时（秒）。第一个关键帧可设为0，后续关键帧必须大于0 |
 
 #### 调用参数示例
 
@@ -1310,6 +1358,32 @@
   "Interface": "UCFView/StartRoamCustomTime",
   "Params": {
     "Keyframes": [
+      {
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        },
+        "Duration": 10.0
+      },
+      {
+        "Location": {
+          "X": 1000.0,
+          "Y": 2000.0,
+          "Z": 500.0
+        },
+        "Rotation": {
+          "Pitch": 0.0,
+          "Yaw": 90.0,
+          "Roll": 0.0
+        },
+        "Duration": 10.0
+      },
       {
         "Location": {
           "X": 1000.0,

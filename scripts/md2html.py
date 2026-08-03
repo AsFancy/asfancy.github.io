@@ -14,12 +14,21 @@
 
     MD_PATH    - 包含 .md 文件的文件夹路径（必填）
     HTML_PATH  - 输出 .html 文件的文件夹路径（可选，默认为 MD_PATH）
+    INDEX_PATH - 接口文档索引页路径（可选，默认为 ../pages/接口文档.html）
 
     示例 .env：
         MD_PATH=../pages/apipages
         HTML_PATH=../pages/apipages
+        INDEX_PATH=../pages/接口文档.html
 
     配置好后直接运行：python md2html.py
+
+索引页同步：
+    转换完成后，脚本会按 MD_PATH 下的全部 .md 文件重建 INDEX_PATH 中
+    <section class="content-section"><div class="section-inner"> 内的卡片列表，
+    每个 .md 对应一张可点击跳转到生成页面的卡片。该区域内的手工修改会被覆盖。
+    卡片标题取 .md 的 h1；若为「UCFView - 视点管理」这种格式，接口类部分会被
+    包进 <span class="card-api">，由索引页样式渲染成主题绿色。
 """
 
 import re
@@ -28,6 +37,10 @@ import os
 import json
 import glob as glob_mod
 from pathlib import Path
+
+
+# 索引页（接口文档）默认路径，相对于本脚本所在目录
+DEFAULT_INDEX_PATH = '../pages/接口文档.html'
 
 
 def load_env(env_path):
@@ -47,13 +60,14 @@ def load_env(env_path):
 
 
 def get_default_paths():
-    """Get MD_PATH and HTML_PATH from .env file if present."""
+    """Get MD_PATH, HTML_PATH and INDEX_PATH from .env file if present."""
     script_dir = Path(__file__).parent
     env_path = script_dir / '.env'
     env_vars = load_env(env_path)
     md_path = env_vars.get('MD_PATH', '')
     html_path = env_vars.get('HTML_PATH', '')
-    return md_path, html_path
+    index_path = env_vars.get('INDEX_PATH', DEFAULT_INDEX_PATH)
+    return md_path, html_path, index_path
 
 
 # ── Color palette for groups (cycled) ──────────────────────────────────
@@ -385,8 +399,33 @@ def _parse_table_row(line):
 
 
 def _convert_inline_code(text):
-    """Convert markdown backtick `code` to HTML <code> tags."""
-    return re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
+    """Convert markdown backtick `code` to HTML <code> tags.
+
+    The content is HTML-escaped so angle brackets inside `Array<Object>` don't get
+    re-parsed as HTML tags by the browser.
+    """
+    def repl(m):
+        content = (m.group(1)
+                   .replace('&', '&amp;')
+                   .replace('<', '&lt;')
+                   .replace('>', '&gt;'))
+        return f'<code>{content}</code>'
+    return re.sub(r'`([^`]+)`', repl, text)
+
+
+def _strip_inline_code(text):
+    """Strip markdown backticks without emitting <code> tags.
+
+    Used for the type column where the backticks were only there to keep
+    `Array<Object>` from breaking Markdown table parsing. The angle brackets
+    are still HTML-escaped so the browser doesn't re-parse `<Object>` as a tag.
+    """
+    def repl(m):
+        return (m.group(1)
+                .replace('&', '&amp;')
+                .replace('<', '&lt;')
+                .replace('>', '&gt;'))
+    return re.sub(r'`([^`]+)`', repl, text)
 
 
 def _extract_link_text(cell):
@@ -406,28 +445,28 @@ def _commit_table(table_rows, table_ctx, api_data):
         formatted = []
         for row in table_rows:
             if len(row) >= 4:
-                formatted.append([row[0], row[1], _convert_inline_code(row[3])])
+                formatted.append([row[0], _strip_inline_code(row[1]), _convert_inline_code(row[3])])
             elif len(row) >= 3:
-                formatted.append([row[0], row[1], _convert_inline_code(row[2])])
+                formatted.append([row[0], _strip_inline_code(row[1]), _convert_inline_code(row[2])])
         api_data['pf'] = formatted
     elif table_ctx == 'pi':
-        api_data['pi'] = [[r[0], r[1], r[2], _convert_inline_code(r[3])] for r in table_rows if len(r) >= 4]
+        api_data['pi'] = [[r[0], _strip_inline_code(r[1]), r[2], _convert_inline_code(r[3])] for r in table_rows if len(r) >= 4]
     elif table_ctx == 'cf':
         # Custom callback fields (different from default)
         formatted = []
         for row in table_rows:
             if len(row) >= 4:
-                formatted.append([row[0], row[1], _convert_inline_code(row[3])])
+                formatted.append([row[0], _strip_inline_code(row[1]), _convert_inline_code(row[3])])
             elif len(row) >= 3:
-                formatted.append([row[0], row[1], _convert_inline_code(row[2])])
+                formatted.append([row[0], _strip_inline_code(row[1]), _convert_inline_code(row[2])])
         api_data['cf'] = formatted
     elif table_ctx == 'cbi':
         formatted = []
         for r in table_rows:
             if len(r) >= 4:
-                formatted.append([r[0], r[1], r[2], _convert_inline_code(r[3])])
+                formatted.append([r[0], _strip_inline_code(r[1]), r[2], _convert_inline_code(r[3])])
             elif len(r) >= 3:
-                formatted.append([r[0], r[1], '-', _convert_inline_code(r[2])])
+                formatted.append([r[0], _strip_inline_code(r[1]), '-', _convert_inline_code(r[2])])
         api_data['cbi'] = formatted
 
 
@@ -713,9 +752,9 @@ def _build_html(title, description, grp_js, api_js):
 }}
 .p-wrap{{overflow-x:auto;border:1px solid var(--border-glass);border-radius:var(--radius-sm)}}
 .p-table{{width:100%;border-collapse:collapse;font-size:14px;min-width:540px;table-layout:fixed}}
-.p-table th:nth-child(1),.p-table td:nth-child(1){{width:25%}}
-.p-table th:nth-child(2),.p-table td:nth-child(2){{width:12.5%}}
-.p-table th:nth-child(3),.p-table td:nth-child(3){{width:12.5%}}
+.p-table th:nth-child(1),.p-table td:nth-child(1){{width:20%}}
+.p-table th:nth-child(2),.p-table td:nth-child(2){{width:23%}}
+.p-table th:nth-child(3),.p-table td:nth-child(3){{width:7%;padding-left:6px;padding-right:6px}}
 .p-table th:nth-child(4),.p-table td:nth-child(4){{width:50%}}
 .p-table th{{
   text-align:left;padding:10px 14px;
@@ -727,7 +766,7 @@ def _build_html(title, description, grp_js, api_js):
 .p-table tr:last-child td{{border-bottom:none}}
 .p-table .pn{{font-family:'Exo 2',monospace;font-size:13px;color:var(--text-main);white-space:nowrap}}
 .p-table .pn .nested{{color:var(--text-dim)}}
-.p-table .pt{{font-size:13px;color:var(--text-muted);white-space:nowrap}}
+.p-table .pt{{font-size:13px;color:var(--text-muted);overflow-wrap:break-word}}
 .p-table .pr{{font-size:12px;white-space:nowrap}}
 .p-table .pr{{color:var(--text-main);font-weight:600}}
 .p-table .pr.n{{color:var(--text-dim);font-weight:400}}
@@ -878,6 +917,10 @@ function epCard(name, d) {{
   h += `<div class="ep-header" onclick="toggleEP(this)"><span class="ep-name">${{typeBadge}}${{d.title}}</span><svg class="ep-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>`;
   h += `<div class="ep-body"><div class="ep-inner">`;
 
+  // Add a space inside empty brackets so they read as wrapping content
+  // rather than as a tight block. Empty braces/arrays gain a single space.
+  const fmtPn = s => s.split('{{}}').join('{{ }}').split('[]').join('[ ]');
+
   if (d.notes) {{
     h += `<div class="callout tips"><div><div class="c-title">Tips</div><ul>${{d.notes.map(n=>`<li>${{n}}</li>`).join("")}}</ul></div></div>`;
   }}
@@ -887,18 +930,18 @@ function epCard(name, d) {{
   if (!d.noReq && d.pf) {{
     h += `<div class="ep-section">调用参数说明</div>`;
     if (d.pf.length) {{
-      h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:56px">必填</th><th>说明</th></tr></thead><tbody>`;
-      d.pf.forEach(p => h += `<tr><td class="pn">${{p[0]}}</td><td class="pt">${{p[1]}}</td><td class="pr">必填</td><td class="pd">${{p[2]}}</td></tr>`);
+      h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>`;
+      d.pf.forEach(p => h += `<tr><td class="pn">${{fmtPn(p[0])}}</td><td class="pt">${{p[1]}}</td><td class="pr">必填</td><td class="pd">${{p[2]}}</td></tr>`);
       h += `</tbody></table></div>`;
     }}
     if (d.pi && d.pi.length) {{
-      h += `<div class="ep-subsection">Params内参数</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:56px">必填</th><th>说明</th></tr></thead><tbody>`;
-      d.pi.forEach(p => h += `<tr><td class="pn">${{p[0]}}</td><td class="pt">${{p[1]}}</td><td class="pr ${{p[2]==="必填"?'y':'n'}}">${{p[2]}}</td><td class="pd">${{p[3]}}</td></tr>`);
+      h += `<div class="ep-subsection">Params内参数</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>`;
+      d.pi.forEach(p => h += `<tr><td class="pn">${{fmtPn(p[0])}}</td><td class="pt">${{p[1]}}</td><td class="pr ${{p[2]==="必填"?'y':'n'}}">${{p[2]}}</td><td class="pd">${{p[3]}}</td></tr>`);
       h += `</tbody></table></div>`;
     }}
     if (d.kpi) {{
-      h += `<div class="ep-subsection">Keyframes数组元素</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:50px">必填</th><th>说明</th></tr></thead><tbody>`;
-      d.kpi.forEach(p => h += `<tr><td class="pn">${{p[0]}}</td><td class="pt">${{p[1]}}</td><td class="pr ${{p[2]==="必填"?'y':'n'}}">${{p[2]}}</td><td class="pd">${{p[3]}}</td></tr>`);
+      h += `<div class="ep-subsection">Keyframes数组元素</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>`;
+      d.kpi.forEach(p => h += `<tr><td class="pn">${{fmtPn(p[0])}}</td><td class="pt">${{p[1]}}</td><td class="pr ${{p[2]==="必填"?'y':'n'}}">${{p[2]}}</td><td class="pd">${{p[3]}}</td></tr>`);
       h += `</tbody></table></div>`;
     }}
   }}
@@ -910,12 +953,12 @@ function epCard(name, d) {{
   }}
   h += `<div class="ep-section">回调参数说明</div>`;
   const cbf = d.cf || [["ExecutionID","String","执行ID"],["Interface","String","接口名称"],["Status","Boolean","操作是否成功"],["DebugInfo","String","调试信息"],["Params","Object","参数对象"]];
-  h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:56px">必填</th><th>说明</th></tr></thead><tbody>`;
-  cbf.forEach(p => h += `<tr><td class="pn">${{p[0]}}</td><td class="pt">${{p[1]}}</td><td class="pr">-</td><td class="pd">${{p[2]}}</td></tr>`);
+  h += `<div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>`;
+  cbf.forEach(p => h += `<tr><td class="pn">${{fmtPn(p[0])}}</td><td class="pt">${{p[1]}}</td><td class="pr">-</td><td class="pd">${{p[2]}}</td></tr>`);
   h += `</tbody></table></div>`;
   if (d.cbi) {{
-    h += `<div class="ep-subsection">Params内参数</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th style="width:56px">必填</th><th>说明</th></tr></thead><tbody>`;
-    d.cbi.forEach(p => h += `<tr><td class="pn">${{p[0]}}</td><td class="pt">${{p[1]}}</td><td class="pr ${{p[2]==="必填"?'y':'n'}}">${{p[2]}}</td><td class="pd">${{p[3]}}</td></tr>`);
+    h += `<div class="ep-subsection">Params内参数</div><div class="p-wrap"><table class="p-table"><thead><tr><th>字段</th><th>类型</th><th>必填</th><th>说明</th></tr></thead><tbody>`;
+    d.cbi.forEach(p => h += `<tr><td class="pn">${{fmtPn(p[0])}}</td><td class="pt">${{p[1]}}</td><td class="pr ${{p[2]==="必填"?'y':'n'}}">${{p[2]}}</td><td class="pd">${{p[3]}}</td></tr>`);
     h += `</tbody></table></div>`;
   }}
   if (d.ce) {{
@@ -997,10 +1040,151 @@ renderAll();
 </html>'''
 
 
+# ── Index Page Sync (接口文档.html) ────────────────────────────────────
+
+# 索引页卡片区域：<section class="content-section"> 里的 <div class="section-inner">
+INDEX_SECTION_RE = re.compile(
+    r'(<section class="content-section">\s*<div class="section-inner">)'
+    r'(.*?)'
+    r'(</div>\s*</section>)',
+    re.DOTALL)
+
+# 已有卡片的 id，用于保持原有排序
+INDEX_CARD_ID_RE = re.compile(r'<div class="content-card[^"]*"\s+id="([^"]+)"')
+
+# 卡片标题中的「接口类 - 中文说明」分隔符，接口类部分会被标为主题色
+CARD_TITLE_SPLIT_RE = re.compile(r'^(\S+)(\s*[-–—·]\s+)(.+)$')
+
+
+def _escape_html_text(s):
+    """Escape text for HTML element content."""
+    return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
+
+def _escape_html_attr(s):
+    """Escape text for a double-quoted HTML attribute."""
+    return _escape_html_text(s).replace('"', '&quot;').replace("'", '&#39;')
+
+
+def parse_md_header(filepath):
+    """Read only the h1 title and the first paragraph (description) of a md file."""
+    title = ''
+    desc_lines = []
+    with open(filepath, 'r', encoding='utf-8') as f:
+        for raw in f:
+            line = raw.strip()
+            if not title:
+                if line.startswith('# '):
+                    title = line[2:].strip()
+                continue
+            if line.startswith('#'):
+                break
+            if not line:
+                if desc_lines:
+                    break
+                continue
+            desc_lines.append(line)
+    return title, ' '.join(desc_lines)
+
+
+def _format_card_title(title):
+    """Render the card title, highlighting the leading API class in the theme color.
+
+    "UCFView - 视点管理" -> '<span class="card-api">UCFView</span> - 视点管理'
+    Titles without a separator are rendered as-is.
+    """
+    match = CARD_TITLE_SPLIT_RE.match(title.strip())
+    if not match:
+        return _escape_html_text(title)
+    api, sep, rest = match.groups()
+    return (f'<span class="card-api">{_escape_html_text(api)}</span>'
+            f'{_escape_html_text(sep)}{_escape_html_text(rest)}')
+
+
+def _build_index_card(card_id, title, description, href):
+    """Build one clickable card for the index page."""
+    return (
+        f'    <div class="content-card fade-in visible" id="{_escape_html_attr(card_id)}"'
+        f' onclick="window.location.href=\'{_escape_html_attr(href)}\'">\n'
+        f'      <h3>{_format_card_title(title)}</h3>\n'
+        f'      <p>{_escape_html_text(description)}</p>\n'
+        f'    </div>'
+    )
+
+
+
+def collect_index_cards(md_paths, index_path, html_dir=None):
+    """Build the card list (id, title, description, href) for the index page.
+
+    md_paths: all .md files that should appear on the index page.
+    html_dir: output folder for generated .html; None means alongside the .md.
+    Files whose generated .html does not exist are skipped.
+    """
+    index_dir = os.path.dirname(os.path.abspath(index_path))
+    cards = []
+    for md_path in md_paths:
+        base = os.path.splitext(os.path.basename(md_path))[0]
+        if html_dir:
+            out_path = os.path.join(html_dir, base + '.html')
+        else:
+            out_path = os.path.splitext(md_path)[0] + '.html'
+        if not os.path.isfile(out_path):
+            print(f"  Index: skip {base} (missing {out_path})")
+            continue
+        title, description = parse_md_header(md_path)
+        if not title:
+            title = base
+        href = os.path.relpath(os.path.abspath(out_path), index_dir).replace(os.sep, '/')
+        cards.append({'id': base, 'title': title, 'desc': description, 'href': href})
+    return cards
+
+
+def update_index(index_path, cards):
+    """Rebuild the card list inside the index page's .section-inner block.
+
+    Existing cards keep their current order (matched by id); new cards are
+    appended. All card content is regenerated from the markdown sources.
+    """
+    if not cards:
+        return False
+    if not os.path.isfile(index_path):
+        print(f"  Index: file not found, skipped: {index_path}")
+        return False
+
+    with open(index_path, 'r', encoding='utf-8') as f:
+        html = f.read()
+
+    match = INDEX_SECTION_RE.search(html)
+    if not match:
+        print(f"  Index: <section class=\"content-section\"> block not found, skipped: {index_path}")
+        return False
+
+    # Keep the order of the cards already on the page, append the new ones
+    existing_ids = INDEX_CARD_ID_RE.findall(match.group(2))
+    by_id = {c['id']: c for c in cards}
+    ordered = [by_id.pop(cid) for cid in existing_ids if cid in by_id]
+    ordered += [c for c in cards if c['id'] in by_id]
+
+    blocks = [_build_index_card(c['id'], c['title'], c['desc'], c['href']) for c in ordered]
+    inner = '\n\n' + '\n\n'.join(blocks) + '\n\n  '
+    new_html = html[:match.start(2)] + inner + html[match.end(2):]
+
+    if new_html == html:
+        print(f"  Index: up to date ({len(ordered)} cards): {index_path}")
+        return False
+
+    with open(index_path, 'w', encoding='utf-8') as f:
+        f.write(new_html)
+    print(f"  Index: updated ({len(ordered)} cards): {index_path}")
+    return True
+
+
 # ── Main ───────────────────────────────────────────────────────────────
 
 def main():
-    md_default, html_default = get_default_paths()
+    md_default, html_default, index_default = get_default_paths()
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    index_path = os.path.abspath(os.path.join(script_dir, index_default))
 
     if len(sys.argv) < 2:
         if md_default:
@@ -1029,6 +1213,7 @@ def main():
                 inputs.append(arg)
         html_dir = None
 
+    md_dirs = []
     for input_path in inputs:
         if not input_path.endswith('.md'):
             print(f"  Skipping non-markdown file: {input_path}")
@@ -1045,6 +1230,10 @@ def main():
             base = os.path.splitext(input_path)[0]
             output_path = base + '.html'
 
+        src_dir = os.path.dirname(os.path.abspath(input_path))
+        if src_dir not in md_dirs:
+            md_dirs.append(src_dir)
+
         print(f"Converting: {input_path} -> {output_path}")
         try:
             data = parse_md(input_path)
@@ -1054,6 +1243,14 @@ def main():
             print(f"  ERROR: {e}")
             import traceback
             traceback.print_exc()
+
+    # Sync the index page with every .md found in the processed source folders
+    all_md = []
+    for d in md_dirs:
+        all_md.extend(sorted(glob_mod.glob(os.path.join(d, '*.md'))))
+    if all_md:
+        print(f"Updating index: {index_path}")
+        update_index(index_path, collect_index_cards(all_md, index_path, html_dir))
 
 
 if __name__ == '__main__':
