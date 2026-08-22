@@ -29,20 +29,8 @@ document.getElementById('navbar-container').innerHTML =
       <li role="none"><a class="nav-item" data-page="配置插件" data-href="${prefix}pages/配置插件.html">配置插件</a></li>
       <li role="none"><a class="nav-item" data-page="接口文档" data-href="${prefix}pages/接口文档.html">接口文档</a></li>
       <li role="none"><a class="nav-item" data-page="智能体" data-href="${prefix}pages/智能体.html">智能体</a></li>
-      <li role="none"><a class="nav-item" data-page="插件扩展" data-href="${prefix}pages/插件扩展.html">插件扩展</a></li>
-      <li role="none"><a class="nav-item" data-page="素材库" data-href="${prefix}pages/素材库.html">素材库</a></li>
-      <li role="none"><a class="nav-item" data-page="博客分享" data-href="${prefix}pages/博客分享.html">博客分享</a></li>
-      <li role="none" class="nav-item-mobile-feedback"><button class="nav-item" onclick="window.location.href='${prefix}pages/反馈建议.html'">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        反馈建议
-      </button></li>
+      <li role="none"><a class="nav-item" data-page="技术思考" data-href="${prefix}pages/技术思考.html">技术思考</a></li>
     </ul>
-    <div class="nav-actions">
-      <button class="nav-btn-feedback" onclick="window.location.href='${prefix}pages/反馈建议.html'" aria-label="反馈建议">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span>反馈建议</span>
-      </button>
-    </div>
     <button class="mobile-toggle" id="mobileToggle" aria-label="切换菜单" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
@@ -52,7 +40,11 @@ document.getElementById('navbar-container').innerHTML =
 // ── Active nav ──
 if (pageName) {
   document.querySelectorAll('.nav-item[data-page]').forEach(function(el){
-    if (el.getAttribute('data-page') === pageName) el.classList.add('active');
+    if (el.getAttribute('data-page') === pageName) {
+      el.classList.add('active');
+      var dd = el.closest('.nav-dropdown');
+      if (dd) dd.classList.add('is-active');
+    }
   });
 }
 
@@ -94,17 +86,29 @@ document.addEventListener('click', function(e){
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// ── Navbar scroll effect ──
-let scrollTicking = false;
-document.addEventListener('scroll', function(){
-  if (!scrollTicking) {
-    window.requestAnimationFrame(function(){
-      const nav = document.getElementById('navbar');
-      if (nav) nav.classList.toggle('scrolled', window.scrollY > 32);
-      scrollTicking = false;
+// ── Navbar scroll effect (IO-based, no scroll listener) ──
+(function(){
+  const nav = document.getElementById('navbar');
+  if (!nav || !('IntersectionObserver' in window)) return;
+  const sentinel = document.createElement('div');
+  sentinel.style.cssText = 'position:absolute;top:32px;left:0;width:1px;height:1px;pointer-events:none;';
+  document.body.appendChild(sentinel);
+  new IntersectionObserver(function(entries){
+    nav.classList.toggle('scrolled', !entries[0].isIntersecting);
+  }, { rootMargin: '0px 0px 0px 0px', threshold: 0 }).observe(sentinel);
+})();
+
+// ── Pause hero/page-header gradient animations when offscreen ──
+(function(){
+  if (!('IntersectionObserver' in window)) return;
+  const targets = document.querySelectorAll('.hero, .page-header');
+  if (!targets.length) return;
+  const io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      entry.target.classList.toggle('paused-bg', !entry.isIntersecting);
     });
-    scrollTicking = true;
-  }
-}, { passive: true });
+  }, { threshold: 0 });
+  targets.forEach(function(el){ io.observe(el); });
+})();
 
 })();

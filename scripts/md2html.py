@@ -624,8 +624,8 @@ def _build_html(title, description, grp_js, api_js):
   display:flex;flex-direction:column;
   max-height:calc(100vh - var(--nav-h) - 48px);
   border-radius:var(--radius-md);
-  background:var(--bg-card);border:1px solid var(--border-glass);
-  backdrop-filter:blur(12px);
+  background:var(--bg-secondary);border:1px solid var(--border-glass);
+  contain:layout style paint;
 }}
 .api-sidebar-search{{
   padding:10px 12px;flex-shrink:0;position:relative;
@@ -667,9 +667,8 @@ def _build_html(title, description, grp_js, api_js):
   display:flex;align-items:center;gap:6px;
   padding:7px 12px 7px 18px;margin:1px 6px;border-radius:5px;
   font-size:14px;font-weight:500;color:var(--text-muted);
-  cursor:pointer;transition:all .15s;text-decoration:none;position:relative;
+  cursor:pointer;transition:none;text-decoration:none;position:relative;
 }}
-.snav-item:hover{{color:var(--text-main);background:var(--green-glow)}}
 .snav-item.active{{color:var(--green);background:var(--green-glow)}}
 .snav-item.active::before{{
   content:'';position:absolute;left:-6px;top:50%;transform:translateY(-50%);
@@ -681,17 +680,16 @@ def _build_html(title, description, grp_js, api_js):
 .ep-card{{
   background:var(--bg-card);border:1px solid var(--border-glass);
   border-radius:var(--radius-md);margin-bottom:8px;overflow:hidden;
-  transition:border-color .2s,box-shadow .2s;
+  transition:border-color .08s;contain:content;
 }}
 .ep-card.open{{
   border-color:rgba(74,222,128,0.2);
-  box-shadow:0 0 0 1px var(--green-glow),0 8px 32px rgba(0,0,0,0.25);
+  box-shadow:0 0 0 1px var(--green-glow),0 4px 12px rgba(0,0,0,0.25);
 }}
 .ep-header{{
   display:flex;align-items:center;gap:10px;
-  padding:10px 16px;cursor:pointer;user-select:none;transition:background .15s;
+  padding:10px 16px;cursor:pointer;user-select:none;
 }}
-.ep-header:hover{{background:var(--bg-glass)}}
 .ep-card.open .ep-header{{background:rgba(74,222,128,0.08);border-bottom:1px solid rgba(74,222,128,0.1)}}
 .ep-name{{
   font-size:14px;font-weight:500;
@@ -783,7 +781,7 @@ def _build_html(title, description, grp_js, api_js):
   display:flex;align-items:center;gap:4px;
   background:none;border:none;color:var(--text-dim);
   cursor:pointer;font-size:12px;font-family:'Exo 2',sans-serif;
-  padding:3px 8px;border-radius:4px;transition:all .15s;
+  padding:3px 8px;border-radius:4px;transition:background-color .15s,color .15s;
 }}
 .cb-h .cpy:hover{{background:var(--bg-glass);color:var(--text-muted)}}
 .cb-h .cpy.done{{color:var(--green)}}
@@ -986,32 +984,28 @@ function toggleEP(h) {{
   syncNav(card.dataset.api);
 }}
 
+const SCROLL_OFFSET = 88; // --nav-h (64) + 24
+
 function navClick(name) {{
   const card = document.getElementById(name);
   if (card) {{
     card.classList.add('open');
-    const navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'));
-    const st = navH + 24;
-    const ct = card.getBoundingClientRect().top;
-    const root = document.documentElement;
-    root.style.scrollBehavior = 'auto';
-    window.scrollTo(window.scrollX, window.scrollY + ct - st);
-    root.style.scrollBehavior = '';
+    window.scrollTo(window.scrollX, window.scrollY + card.getBoundingClientRect().top - SCROLL_OFFSET);
   }}
   syncNav(name);
   return false;
 }}
 
 function syncNav(name) {{
-  document.querySelectorAll('.snav-item').forEach(n => {{ n.classList.toggle('active', n.getAttribute('data-href') === '#' + name); }});
   const target = document.querySelector(`.snav-item[data-href="#${{name}}"]`);
-  if (target) {{
-    const navContainer = document.getElementById('snav');
-    const targetRect = target.getBoundingClientRect();
-    const containerRect = navContainer.getBoundingClientRect();
-    if (targetRect.top < containerRect.top || targetRect.bottom > containerRect.bottom) {{
-      navContainer.scrollTo({{ top: target.offsetTop - containerRect.height / 3, behavior: 'smooth' }});
-    }}
+  if (!target) return;
+  document.querySelectorAll('.snav-item.active').forEach(n => n.classList.remove('active'));
+  target.classList.add('active');
+  const navContainer = document.getElementById('snav');
+  const tRect = target.getBoundingClientRect();
+  const cRect = navContainer.getBoundingClientRect();
+  if (tRect.top < cRect.top || tRect.bottom > cRect.bottom) {{
+    navContainer.scrollTop = target.offsetTop - cRect.height / 3;
   }}
 }}
 

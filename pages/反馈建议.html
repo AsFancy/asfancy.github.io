@@ -6,7 +6,9 @@
 <title>反馈建议 - UCFPlugin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap"></noscript>
 <link rel="stylesheet" href="../css/style.css">
 <link rel="icon" type="image/svg+xml" href="../res/favicon.svg">
 </head>
@@ -53,17 +55,16 @@
 
   <!-- ─── Footer ─── -->
   <footer class="footer">
-    <p class="footer-copyright">
-      <span>&copy; <span id="year"></span> UCFPlugin. All rights reserved</span>
-      <span class="footer-sep">|</span>
-      <span class="stat-item">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        访客 <span id="busuanzi_value_site_uv">0</span>
-      </span>
-      <span class="footer-sep">|</span>
-      <span class="footer-email" onclick="location.href='mailto:asfancymail@gmail.com'">asfancymail@gmail.com</span>
-    </p>
-  </footer>
+  <div class="footer-visitor">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
+  </div>
+</footer>
 
 </div>
 
