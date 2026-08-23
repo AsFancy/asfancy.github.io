@@ -71,7 +71,7 @@
 | DesirRotation.Pitch | Float | 必填 | 俯仰角（度） |
 | DesirRotation.Yaw | Float | 必填 | 偏航角（度） |
 | DesirRotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
-| OffestDistance | Float | 选填 | 相对目标位置的反向偏移距离（厘米），默认 `0` |
+| OffsetDistance | Float | 选填 | 相对目标位置的反向偏移距离（厘米），默认 `0` |
 | bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
 
 #### 调用参数示例
@@ -91,7 +91,7 @@
       "Yaw": 90.0,
       "Roll": 0.0
     },
-    "OffestDistance": 0,
+    "OffsetDistance": 0,
     "bIgnoreLag": false
   }
 }
@@ -158,7 +158,7 @@
 | DesirRotation.Pitch | Float | 必填 | 俯仰角（度） |
 | DesirRotation.Yaw | Float | 必填 | 偏航角（度） |
 | DesirRotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
-| OffestDistance | Float | 选填 | 相对目标位置的反向偏移距离（厘米），默认 `0` |
+| OffsetDistance | Float | 选填 | 相对目标位置的反向偏移距离（厘米），默认 `0` |
 | bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
 
 #### 调用参数示例
@@ -178,7 +178,7 @@
       "Yaw": 90.0,
       "Roll": 0.0
     },
-    "OffestDistance": 0,
+    "OffsetDistance": 0,
     "bIgnoreLag": false
   }
 }
@@ -235,7 +235,7 @@
 | DesirLocation.X | Float | 必填 | X坐标（厘米） |
 | DesirLocation.Y | Float | 必填 | Y坐标（厘米） |
 | DesirLocation.Z | Float | 必填 | Z坐标（厘米） |
-| OffestDistance | Float | 选填 | 相对目标位置的反向偏移距离（厘米），默认 `0` |
+| OffsetDistance | Float | 选填 | 相对目标位置的反向偏移距离（厘米），默认 `0` |
 | bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
 
 #### 调用参数示例
@@ -250,7 +250,7 @@
       "Y": 2000.0,
       "Z": 500.0
     },
-    "OffestDistance": 0,
+    "OffsetDistance": 0,
     "bIgnoreLag": false
   }
 }
@@ -522,9 +522,9 @@
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
 | TargetTag | String | 必填 | 目标对象的Tag标识 |
-| FocusOffest | Float | 选填 | 相对包围盒中心的反向偏移距离（厘米）。若不传入或小于0，则使用包围盒最大边长的2倍 |
+| FocusOffset | Float | 选填 | 相对包围盒中心的反向偏移距离（厘米）。若不传入或小于0，则使用包围盒最大边长的2倍 |
 | DesirRotation | Object | 选填 | 目标角度，欧拉角表示的旋转值。若不传入则保持当前视点的角度不变 |
-| DesirRotation.Pitch Float | 必填 |  | 俯仰角（度） |
+| DesirRotation.Pitch | Float | 必填 | 俯仰角（度） |
 | DesirRotation.Yaw | Float | 必填 | 偏航角（度） |
 | DesirRotation.Roll | Float | 必填 | 翻滚角（度），该值会被忽略 |
 | bIgnoreLag | Boolean | 选填 | 是否忽略平滑移动效果，默认 `false` |
@@ -537,9 +537,9 @@
   "Interface": "UCFView/FocusActor",
   "Params": {
     "TargetTag": "xxx",
-    "FocusOffest": 0.0,
+    "FocusOffset": 0.0,
     "DesirRotation": {
-      "Pitch Float": "null",
+      "Pitch": 0.0,
       "Yaw": 90.0,
       "Roll": 0.0
     },
@@ -956,7 +956,7 @@
 | VerticalMoveSpeed | Float | 选填 | 单帧竖直移动距离（cm），默认 `1000.0` |
 | ZoomPercent | Float | 选填 | 单次缩放距离相对于当前位置与参考锚点距离的百分比，取值范围：[0.1, 0.8]，默认 `0.4` |
 | LagSpeed | Float | 选填 | 滞后平滑速度，值越小滞后效果越明显，值为0即关闭，取值范围：[0.0, 8.0]，默认 `5.0` |
-| FocusOffest | Float | 选填 | 快速聚焦到中键双击位置时的相对偏移距离（cm），默认 `1000.0` |
+| FocusOffset | Float | 选填 | 快速聚焦到中键双击位置时的相对偏移距离（cm），默认 `1000.0` |
 
 #### 调用参数示例
 
@@ -969,7 +969,7 @@
     "VerticalMoveSpeed": 1000.0,
     "ZoomPercent": 0.4,
     "LagSpeed": 5.0,
-    "FocusOffest": 1000.0
+    "FocusOffset": 1000.0
   }
 }
 ```

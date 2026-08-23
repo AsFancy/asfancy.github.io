@@ -94,7 +94,7 @@
               <!-- 定点移动 -->
               <div class="control-card">
                 <div class="gif-wrap">
-                  <iframe src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEYy&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEYy&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
                   <h4>定点移动<span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span></h4>
@@ -105,7 +105,7 @@
               <!-- 定点旋转 -->
               <div class="control-card">
                 <div class="gif-wrap">
-                  <iframe src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEvB&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEvB&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
                   <h4>定点旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span></h4>
@@ -116,7 +116,7 @@
               <!-- 定点缩放 -->
               <div class="control-card">
                 <div class="gif-wrap">
-                  <iframe src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEof&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEof&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
                   <h4>定点缩放<span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span></h4>
@@ -127,7 +127,7 @@
               <!-- 快速聚焦 -->
               <div class="control-card">
                 <div class="gif-wrap">
-                  <iframe src="https://player.bilibili.com/player.html?bvid=BV1YujB6BETw&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1YujB6BETw&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
                   <h4>快速聚焦<span class="key-hint"><kbd>双击鼠标右键</kbd></span></h4>
@@ -138,7 +138,7 @@
               <!-- 竖向移动 -->
               <div class="control-card">
                 <div class="gif-wrap">
-                  <iframe src="https://player.bilibili.com/player.html?bvid=BV1XujB6BERs&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BERs&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
                   <h4>竖向移动<span class="key-hint"><kbd>Q</kbd> 上升 <kbd>E</kbd> 下降</span></h4>
@@ -149,7 +149,7 @@
               <!-- 居中旋转 -->
               <div class="control-card">
                 <div class="gif-wrap">
-                  <iframe src="https://player.bilibili.com/player.html?bvid=BV1YujB6BEt3&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1YujB6BEt3&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
                 </div>
                 <div class="control-info">
                   <h4>居中旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span></h4>
@@ -204,27 +204,32 @@
 
 </div>
 
-<script src="../js/common.js"></script>
+<script defer src="../js/common.js"></script>
 <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
-// ── Sidebar active state on scroll ──
+// ── Sidebar active state (IntersectionObserver, no scroll thrash) ──
 (function(){
   var sections=document.querySelectorAll('.doc-section');
   var navItems=document.querySelectorAll('.doc-nav-item');
+  var navMap=new Map();
+  navItems.forEach(function(n){
+    var h=n.getAttribute('data-href');
+    if(h && h.charAt(0)==='#') navMap.set(h.slice(1),n);
+  });
 
-  function updateActiveNav(){
-    var current='';
-    var scrollPos=window.scrollY + 120;
-    sections.forEach(function(section){
-      if(section.offsetTop <= scrollPos) current=section.getAttribute('id');
+  var io=new IntersectionObserver(function(entries){
+    // Pick the topmost intersecting section
+    var top=null;
+    entries.forEach(function(en){
+      if(en.isIntersecting && (!top || en.boundingClientRect.top < top.boundingClientRect.top)) top=en;
     });
-    navItems.forEach(function(item){
-      item.classList.toggle('active',item.getAttribute('data-href')==='#'+current);
-    });
-  }
+    if(top){
+      var id=top.target.id;
+      navItems.forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-href')==='#'+id); });
+    }
+  },{rootMargin:'-120px 0px -55% 0px',threshold:0});
 
-  window.addEventListener('scroll',updateActiveNav,{passive:true});
-  window.addEventListener('load',updateActiveNav);
+  sections.forEach(function(s){ io.observe(s); });
 
   navItems.forEach(function(item){
     item.addEventListener('click',function(e){
@@ -232,12 +237,8 @@
       var target=document.querySelector(this.getAttribute('data-href'));
       if(target){
         var navH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'));
-        var st=navH+24;
         var ct=target.getBoundingClientRect().top;
-        var root=document.documentElement;
-        root.style.scrollBehavior='auto';
-        window.scrollTo(window.scrollX,window.scrollY+ct-st);
-        root.style.scrollBehavior='';
+        window.scrollTo(window.scrollX,window.scrollY+ct-(navH||64)-24);
       }
     });
   });

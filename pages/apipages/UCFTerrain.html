@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UCFAgent - Agent连接管理 - UCFPlugin</title>
+<title>UCFTerrain - 地形分析 - UCFPlugin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap">
@@ -236,8 +236,8 @@
 
 <div class="page-header" style="padding:120px 24px 30px;text-align:center">
 
-  <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCFAgent - Agent连接管理</h1>
-  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">提供与Agent端的连接、鉴权、断开等接口</p>
+  <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCFTerrain - 地形分析</h1>
+  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">支持高程分析、坡度坡向分析</p>
 </div>
 
 <div class="api-layout">
@@ -279,82 +279,181 @@
 // ===================== DATA =====================
 window.GRP = [
   { id:"g0", label:"", dot:"#34d399",
-    apis:["UCFAgent/ConnectAgent", "UCFAgent/AuthenticateAgent", "UCFAgent/DisconnectAgent", "UCFAgent/IsConnectAgent", "UCFAgent/OnDisconnected"] }
+    apis:["UCFTerrain/EnableTerrain", "UCFTerrain/OnDoPoint", "UCFTerrain/OnUndoPoint", "UCFTerrain/OnFinishOnce", "UCFTerrain/SwitchType", "UCFTerrain/SetShowMark", "UCFTerrain/SetOpacity", "UCFTerrain/SetInterval", "UCFTerrain/SetWidth", "UCFTerrain/SetStep", "UCFTerrain/ClearOnce", "UCFTerrain/CancelTerrain"] }
 ];
 
 window.API = {
-  "UCFAgent/ConnectAgent": {
-    t:"async",
-    title:"连接Agent",
-    notes:["不支持WebSocket方式调用", "若传入地址与当前已连接地址相同且处于已连接状态，直接返回成功，与当前已连接地址不同，自动断开旧连接并连接到新地址"],
+  "UCFTerrain/EnableTerrain": {
+    t:"sync",
+    title:"启用地形分析",
+    notes:["默认为高程分析", "进行地形分析的区域必须接受贴花效果", "cesiumforunreal的3D Tiles加载策略限制，暂不支持cesium地形"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['ServerURL', 'String', '必填', 'Agent端地址'],
-  ['TimeOut', 'Float', '选填', '超时时间（秒），默认 <code>5.0</code>']
+  ['Offset', 'Float', '选填', '高程基准偏移值，单位cm，默认0，等于基准海平面']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/ConnectAgent",\n  "Params": {\n    "ServerURL": "xxx",\n    "TimeOut": 5.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/ConnectAgent",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/EnableTerrain",\n  "Params": {\n    "Offset": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/EnableTerrain",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFAgent/AuthenticateAgent": {
-    t:"sync",
-    title:"Agent鉴权",
-    notes:["不支持WebSocket方式调用", "应在连接Agentc成功之后调用"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['PairId', 'String', '必填', '鉴权配对ID(自行生成)'],
-  ['Token', 'String', '必填', '鉴权令牌(Agent端生成)']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/AuthenticateAgent",\n  "Params": {\n    "PairId": "xxx",\n    "Token": "xxx"\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/AuthenticateAgent",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFAgent/DisconnectAgent": {
-    t:"sync",
-    title:"断开Agent",
-    notes:["不支持WebSocket方式调用"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/DisconnectAgent",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/DisconnectAgent",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFAgent/IsConnectAgent": {
-    t:"sync",
-    title:"查询Agent连接状态",
-    notes:["不支持WebSocket方式调用"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    cbi:[
-  ['bConnected', 'Boolean', '-', '是否连接']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/IsConnectAgent",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/IsConnectAgent",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "bConnected": false\n  }\n}'
-  },
-  "UCFAgent/OnDisconnected": {
+  "UCFTerrain/OnDoPoint": {
     t:"trigger",
-    title:"Agent被动断开通知",
-    notes:["仅Agent端断开或网络异常导致连接断开时触发，主动断开不会触发"],
+    title:"添加关键点操作通知",
     cf:[
   ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFAgent/OnDisconnected"</code>'],
+  ['Interface', 'String', '接口名称，固定为 <code>"UCFTerrain/OnDoPoint"</code>'],
   ['Status', 'Boolean', '固定为 <code>true</code>'],
   ['DebugInfo', 'String', '调试信息'],
   ['Params', 'Object', '参数对象']
 ],
     noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFAgent/OnDisconnected",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {}\n}'
+    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFTerrain/OnDoPoint",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/OnUndoPoint": {
+    t:"trigger",
+    title:"撤销关键点操作通知",
+    cf:[
+  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
+  ['Interface', 'String', '接口名称，固定为 <code>"UCFTerrain/OnUndoPoint"</code>'],
+  ['Status', 'Boolean', '固定为 <code>true</code>'],
+  ['DebugInfo', 'String', '调试信息'],
+  ['Params', 'Object', '参数对象']
+],
+    noReq:true,
+    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFTerrain/OnUndoPoint",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/OnFinishOnce": {
+    t:"trigger",
+    title:"完成单次地形分析通知",
+    cf:[
+  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
+  ['Interface', 'String', '接口名称，固定为 <code>"UCFTerrain/OnFinishOnce"</code>'],
+  ['Status', 'Boolean', '固定为 <code>true</code>'],
+  ['DebugInfo', 'String', '调试信息'],
+  ['Params', 'Object', '参数对象']
+],
+    cbi:[
+  ['ID', 'Int', '-', '本次地形分析对应的ID值'],
+  ['MinHeight', 'Float', '-', '本次地形分析得到的高程极小值，单位m，保留两位小数(仅高程分析时返回)'],
+  ['MaxHeight', 'Float', '-', '本次地形分析得到的高程极大值，单位m，保留两位小数(仅高程分析时返回)']
+],
+    noReq:true,
+    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFTerrain/OnFinishOnce",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "ID": 0,\n    "MinHeight": 0.0,\n    "MaxHeight": 0.0\n  }\n}'
+  },
+  "UCFTerrain/SwitchType": {
+    t:"sync",
+    title:"切换地形分析类别",
+    notes:["默认为高程分析", "单次地形分析进行时不允许操作"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Type', 'Int', '必填', '地形分析类别，0为高程分析，1为坡度分析']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SwitchType",\n  "Params": {\n    "Type": 0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SwitchType",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/SetShowMark": {
+    t:"sync",
+    title:"设置地形分析标识的可视性",
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Status', 'Boolean', '必填', '可视性，true即显示']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetShowMark",\n  "Params": {\n    "Status": false\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetShowMark",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/SetOpacity": {
+    t:"sync",
+    title:"设置地形分析效果透明度",
+    notes:["默认值为0.85", "单次地形分析进行时不允许操作"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Opacity', 'Int', '必填', '透明度，取值范围[0,1]']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetOpacity",\n  "Params": {\n    "Opacity": 0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetOpacity",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/SetInterval": {
+    t:"sync",
+    title:"设置高程分析等高距",
+    notes:["默认值为50m", "单次地形分析进行时不允许操作"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Interval', 'Float', '必填', '等高距，单位cm']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetInterval",\n  "Params": {\n    "Interval": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetInterval",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/SetWidth": {
+    t:"sync",
+    title:"设置高程分析等高线宽",
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Width', 'Float', '必填', '等高线宽，单位像素']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetWidth",\n  "Params": {\n    "Width": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetWidth",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/SetStep": {
+    t:"sync",
+    title:"设置坡度分析的坡向步长",
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Step', 'Float', '必填', '坡向步长']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetStep",\n  "Params": {\n    "Step": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetStep",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/ClearOnce": {
+    t:"sync",
+    title:"清除单次地形分析",
+    notes:["单次地形分析进行时不允许操作"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['ID', 'Int', '必填', '所要清除的地形分析ID']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/ClearOnce",\n  "Params": {\n    "ID": 0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/ClearOnce",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/CancelTerrain": {
+    t:"sync",
+    title:"取消地形分析",
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/CancelTerrain",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/CancelTerrain",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   }
 };
 

@@ -26,11 +26,11 @@ document.getElementById('navbar-container').innerHTML =
       <span class="logo-text">UCFPlugin</span>
     </a>
     <ul class="nav-links" id="navLinks" role="menubar">
-      <li role="none"><a class="nav-item" data-page="配置插件" data-href="${prefix}pages/配置插件.html">配置插件</a></li>
-      <li role="none"><a class="nav-item" data-page="接口文档" data-href="${prefix}pages/接口文档.html">接口文档</a></li>
-      <li role="none"><a class="nav-item" data-page="智能体" data-href="${prefix}pages/智能体.html">智能体</a></li>
-      <li role="none"><a class="nav-item" data-page="技术思考" data-href="${prefix}pages/技术思考.html">技术思考</a></li>
-    </ul>
+        <li role="none"><a class="nav-item" data-page="配置插件" data-href="${prefix}pages/配置插件.html">配置插件</a></li>
+        <li role="none"><a class="nav-item" data-page="接口文档" data-href="${prefix}pages/接口文档.html">接口文档</a></li>
+        <li role="none"><a class="nav-item" data-page="智能体" data-href="${prefix}pages/智能体.html">智能体</a></li>
+        <li role="none"><a class="nav-item" data-page="技术思考" data-href="${prefix}pages/技术思考.html">技术思考</a></li>
+      </ul>
     <button class="mobile-toggle" id="mobileToggle" aria-label="切换菜单" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
@@ -82,33 +82,21 @@ document.addEventListener('click', function(e){
   }
 });
 
-// ── Footer year ──
-const yearEl = document.getElementById('year');
-if (yearEl) yearEl.textContent = new Date().getFullYear();
-
 // ── Navbar scroll effect (IO-based, no scroll listener) ──
 (function(){
   const nav = document.getElementById('navbar');
   if (!nav || !('IntersectionObserver' in window)) return;
-  const sentinel = document.createElement('div');
-  sentinel.style.cssText = 'position:absolute;top:32px;left:0;width:1px;height:1px;pointer-events:none;';
-  document.body.appendChild(sentinel);
+  // Sentinel dedup: don't append another one if common.js runs twice on the same page
+  let sentinel = document.getElementById('__nav-sentinel');
+  if (!sentinel) {
+    sentinel = document.createElement('div');
+    sentinel.id = '__nav-sentinel';
+    sentinel.style.cssText = 'position:absolute;top:32px;left:0;width:1px;height:1px;pointer-events:none;';
+    document.body.appendChild(sentinel);
+  }
   new IntersectionObserver(function(entries){
     nav.classList.toggle('scrolled', !entries[0].isIntersecting);
-  }, { rootMargin: '0px 0px 0px 0px', threshold: 0 }).observe(sentinel);
-})();
-
-// ── Pause hero/page-header gradient animations when offscreen ──
-(function(){
-  if (!('IntersectionObserver' in window)) return;
-  const targets = document.querySelectorAll('.hero, .page-header');
-  if (!targets.length) return;
-  const io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      entry.target.classList.toggle('paused-bg', !entry.isIntersecting);
-    });
-  }, { threshold: 0 });
-  targets.forEach(function(el){ io.observe(el); });
+  }, { threshold: 0 }).observe(sentinel);
 })();
 
 })();
