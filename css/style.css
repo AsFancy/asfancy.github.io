@@ -545,14 +545,8 @@ body{
 .stat-card{
   padding:var(--sp-3) var(--sp-4);
   border-radius:var(--radius-md);
-  background:var(--bg-glass);
-  border:1px solid var(--border-glass);
+  border:1px solid rgba(255,255,255,0.08);
   text-align:center;min-width:88px;
-  transition:border-color var(--d-base) var(--ease-out),background var(--d-base) var(--ease-out);
-}
-.stat-card:hover{
-  border-color:rgba(74,222,128,0.25);
-  background:rgba(255,255,255,0.06);
 }
 .stat-card .num{
   font-family:'Orbitron',sans-serif;
@@ -560,7 +554,7 @@ body{
   color:var(--green);line-height:1;letter-spacing:-0.02em;
 }
 .stat-card .label{
-  font-size:11px;color:var(--text-dim);
+  font-size:11px;color:var(--text-muted);
   margin-top:6px;letter-spacing:0.04em;
 }
 
@@ -605,10 +599,10 @@ body{
   border:1px solid rgba(74,222,128,0.18);
 }
 
-/* ── Module row (1.4:1:1:1 emphasis on CORE) ── */
+/* ── Module row ── */
 .module-row{
   display:grid;
-  grid-template-columns:1.4fr 1fr 1fr 1fr;
+  grid-template-columns:repeat(4,1fr);
   gap:var(--sp-4);
 }
 .module-card{
