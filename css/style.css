@@ -468,8 +468,9 @@ body{
   border:1px solid transparent;
 }
 .intro-card p{
-  text-indent:2em;
   line-height:2;
+  text-align:justify;
+  text-justify:inter-ideograph;
 }
 .feedback-motto{
   text-align:center;
@@ -500,7 +501,31 @@ body{
 .giscus-placeholder p{font-size:14px}
 
 /* ── Footer ── */
-.footer{padding:var(--sp-8) var(--sp-6) var(--sp-6);text-align:center;border-top:1px solid var(--border)}
+.footer{
+  width:100%;
+  max-width:var(--max-w);
+  margin-left:auto;
+  margin-right:auto;
+  padding:var(--sp-12) var(--sp-6) var(--sp-6);
+  border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:8px;
+  box-sizing:border-box;
+}
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--sp-4);flex-wrap:wrap;
+}
+.footer-note{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--text-muted);
+}
+.footer-note svg{opacity:.7;flex-shrink:0}
+.footer-copyright{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--text-muted);
+}
+.footer-copyright svg{opacity:.7;flex-shrink:0}
+.footer-copyright-at{font-size:16px;line-height:1}
 .footer-visitor{
   display:inline-flex;align-items:center;gap:6px;
   font-size:12px;color:var(--text-dim);

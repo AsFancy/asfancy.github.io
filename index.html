@@ -50,13 +50,13 @@
             <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
             <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
           </svg>
-          <span>用起来</span>
+          <span>快速开始</span>
         </a>
-        <a class="btn btn-secondary" href="pages/反馈建议.html">
+        <a class="btn btn-secondary" href="pages/问题反馈.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
           </svg>
-          <span>说点什么</span>
+          <span>问题反馈</span>
         </a>
       </div>
     </div>
@@ -123,9 +123,9 @@
     <div class="section-inner">
       <div class="intro-billboard fade-in">
         <div class="intro-billboard-text">
-          <h3>三维可视化平台搭建，变得更方便</h3>
+          <h3>三维可视化平台开发，变得更方便</h3>
           <p>
-            <strong>UCFPlugin</strong> 基于 UE 反射机制对三维可视化平台中的常用功能实现了接口化封装，开箱即用，接口封装足够原子化，可自由组合调用。严格区分同步调用、异步调用，触发回调，接口传参与回调均为 JSON Object 格式。
+            <strong>UCFPlugin</strong> 基于 UE 反射机制对三维可视化平台中的常用功能进行了统一的接口化封装，开箱即用，接口封装尽可能原子化，可自由组合调用。严格区分同步调用、异步调用，触发回调，接口传参与回调均为 JSON Object 格式。
           </p>
         </div>
         <div class="intro-billboard-stats">
@@ -135,7 +135,7 @@
           </div>
           <a class="stat-card stat-card--link" href="pages/接口文档.html" aria-label="查看接口功能分类文档">
             <div class="num">10+</div>
-            <div class="label">接口功能分类</div>
+            <div class="label">接口分类</div>
           </a>
           <a class="stat-card stat-card--link" href="#modules" aria-label="查看插件模块">
             <div class="num">4</div>
@@ -164,7 +164,7 @@
             </svg>
             多端调用
           </h3>
-          <p>支持纯蓝图工程、像素流部署工程，WebSocket协议客户端方式使用</p>
+          <p>支持纯蓝图工程、像素流部署工程，WebSocket协议客户端方式使用。</p>
           <div class="capability-chips">
             <span class="chip">Blueprint</span>
             <span class="chip">Pixel Stream</span>
@@ -176,9 +176,9 @@
             <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
               <circle cx="12" cy="12" r="4"/>
             </svg>
-            功能完备
+            功能封装
           </h3>
-          <p>内置丰富的业务接口，开箱即用，可直接用于三维可视化平台搭建。</p>
+          <p>按常用功能分类封装，可直接用于三维可视化平台开发。</p>
           <div class="capability-chips">
             <span class="chip">视点管理</span>     
             <span class="chip">测量</span>
@@ -192,7 +192,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
               <circle cx="12" cy="12" r="4"/>
             </svg>
-            可扩展架构
+            灵活扩展
           </h3>
           <p>详细的接口封装、接口文档编写Skill，可结合 Agent 灵活扩展定制化接口。</p>
           <div class="capability-chips">
@@ -247,9 +247,8 @@
           <span class="module-card-role">编辑器</span>
           <h4>UCFEnhanceEditor</h4>
           <ul class="module-card-list">
-            <li>可视化界面</li>
+            <li>可视化操作</li>
             <li>Python 脚本封装</li>
-            <li>一键式快捷操作</li>
           </ul>
         </div>
       </div>
@@ -322,14 +321,31 @@
 
   <!-- ─── Footer ─── -->
   <footer class="footer">
-    <div class="footer-visitor">
+    <div class="footer-note">
       <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
       </svg>
-      <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
+      <span>UCFPlugin 为个人持续开发，不保证更新频率与稳定性</span>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M14.5 9a3.5 3.5 0 1 0 0 5.5"/>
+        </svg>
+        <span><span class="footer-copyright-at">@</span> 2026 UCFPlugin</span>
+      </div>
+      <div class="footer-visitor">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
+      </div>
     </div>
   </footer>
 
