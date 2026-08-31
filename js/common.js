@@ -7,9 +7,11 @@ const isPages = !isApipages && path.includes('/pages/');
 const prefix = isApipages ? '../../' : isPages ? '../' : '';
 
 const pageName = (function(){
-  const f = path.substring(path.lastIndexOf('/') + 1);
+  let f = path.substring(path.lastIndexOf('/') + 1);
   if (!f || f === 'index.html') return '';
-  return f.replace('.html','');
+  f = f.replace('.html','');
+  try { f = decodeURIComponent(f); } catch (e) {}
+  return f;
 })();
 
 // ── Navbar ──
@@ -30,6 +32,7 @@ document.getElementById('navbar-container').innerHTML =
         <li role="none"><a class="nav-item" data-page="接口文档" data-href="${prefix}pages/接口文档.html">接口文档</a></li>
         <li role="none"><a class="nav-item" data-page="智能体" data-href="${prefix}pages/智能体.html">智能体</a></li>
         <li role="none"><a class="nav-item" data-page="技术思考" data-href="${prefix}pages/技术思考.html">技术思考</a></li>
+        <li role="none"><a class="nav-item" data-page="授权申请" data-href="${prefix}pages/授权申请.html">授权申请</a></li>
       </ul>
     <button class="mobile-toggle" id="mobileToggle" aria-label="切换菜单" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>

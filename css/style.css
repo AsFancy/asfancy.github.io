@@ -133,7 +133,7 @@ body{
   background:none;border:none;font-family:inherit;
 }
 .nav-links .nav-item:hover{color:var(--text-main)}
-.nav-links .nav-item.active{color:var(--green);background:var(--green-glow)}
+.nav-links .nav-item.active{color:var(--text-main)}
 
 
 /* Mobile menu */
@@ -1211,4 +1211,70 @@ body{
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}
   html{scroll-behavior:auto}
+}
+
+/* ── License Apply (授权申请) ── */
+.license-head{padding:8px 0 32px}
+.license-head p{
+  font-size:15px;color:var(--text-muted);line-height:1.8;
+  position:relative;padding-bottom:24px;
+}
+.license-head p::after{
+  content:'';
+  position:absolute;left:0;right:0;bottom:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--green) 50%,transparent);
+  opacity:0.55;
+}
+
+.license-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);
+  gap:32px;
+  align-items:stretch;
+}
+.license-layout .steps{gap:24px}
+.license-layout .step-card{flex:1}
+.license-form-wrap{
+  border-radius:var(--radius-lg);
+  padding:36px 40px;
+  background:var(--bg-glass);
+  border:1px solid rgba(255,255,255,0.05);
+  backdrop-filter:blur(12px);
+}
+.license-form{display:flex;flex-direction:column;gap:18px}
+.form-field{display:flex;flex-direction:column;gap:8px}
+.form-label{font-size:13px;font-weight:600;color:var(--text-main);display:flex;align-items:center;gap:6px}
+.form-label .req{color:var(--green)}
+.form-hint{font-size:12px;color:var(--text-dim);line-height:1.5}
+.form-input,.form-textarea{
+  width:100%;
+  background:rgba(0,0,0,0.32);
+  border:1px solid var(--border-glass);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  font-size:14px;
+  font-family:'Exo 2',system-ui,sans-serif;
+  color:var(--text-main);
+  transition:border-color .2s,box-shadow .2s;
+}
+.form-textarea{resize:vertical;min-height:80px}
+.form-input:focus,.form-textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text-dim)}
+.form-input.monospace{font-family:'JetBrains Mono','Fira Code',Consolas,monospace;letter-spacing:0.04em}
+.form-input.invalid,.form-textarea.invalid{border-color:#ef4444}
+.btn[disabled]{opacity:0.55;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+
+.form-status{display:none;margin-top:18px;padding:14px 16px;border-radius:var(--radius-sm);font-size:14px;line-height:1.6}
+.form-status.show{display:block}
+.form-status.success{background:var(--green-glow);border-left:3px solid var(--green);color:var(--text-muted)}
+.form-status.error{background:rgba(239,68,68,0.1);border-left:3px solid #ef4444;color:#fca5a5}
+.form-status .status-title{font-weight:700;color:var(--text-main);margin-bottom:4px}
+.form-status.error .status-title{color:#fecaca}
+
+@media(max-width:900px){
+  .license-layout{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .license-form-wrap{padding:24px 20px}
 }
