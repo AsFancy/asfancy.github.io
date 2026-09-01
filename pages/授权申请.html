@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>授权申请 - UCFPlugin</title>
-<meta name="description" content="UCFPlugin 授权申请：提交机器码，审核通过后获取 UCFKEY">
+<meta name="description" content="UCFPlugin授权申请">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap">
@@ -21,64 +21,116 @@
 
   <div style="padding-top:calc(var(--nav-h) + 24px)"></div>
 
-  <!-- ─── 授权申请 ─── -->
+  <!-- ─── Page Head ─── -->
+  <section class="content-section">
+    <div class="section-inner">
+      <div class="intro-card">
+        <p>UCFPlugin 在 UE 编辑器模式下需要正确授权码方可使用,采用一机一码机制,当前设备激活后长期有效。请在编辑器中打开 Project Settings &gt; Plugins &gt; UCFPlugin 复制你的机器码(UCFID),并准备好接收 UCFKEY 的邮箱地址,审核通过后授权码将通过邮件发送。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── License Apply ─── -->
   <section class="content-section">
     <div class="section-inner">
 
-      <div class="license-head">
-        <p>UCFPlugin 采用机器绑定授权。提交你的机器码，管理员审核通过后，UCFKEY 将发送到你的邮箱，粘贴回插件即可使用。</p>
+      <!-- ─── Steps Timeline ─── -->
+      <div class="license-steps-col">
+        <h2 class="steps-heading">
+          <span class="steps-heading-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="4" cy="6" r="1.5" fill="currentColor"/>
+              <circle cx="4" cy="12" r="1.5" fill="currentColor"/>
+              <circle cx="4" cy="18" r="1.5" fill="currentColor"/>
+              <line x1="10" y1="6" x2="20" y2="6"/>
+              <line x1="10" y1="12" x2="20" y2="12"/>
+              <line x1="10" y1="18" x2="20" y2="18"/>
+            </svg>
+          </span>
+          <span>申请流程</span>
+        </h2>
+        <div class="steps">
+
+          <div class="step-card">
+            <div class="step-num" aria-hidden="true">1</div>
+            <div class="step-body">
+              <h3>复制机器码</h3>
+              <p>在 UE 编辑器中打开 <code>Project Settings &gt; Plugins &gt; UCFPlugin</code>,复制你的机器码(UCFID)。</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num" aria-hidden="true">2</div>
+            <div class="step-body">
+              <h3>填写并提交</h3>
+              <p>填入机器码、接收邮箱和用途说明,提交后进入审核队列。</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num" aria-hidden="true">3</div>
+            <div class="step-body">
+              <h3>查收邮件</h3>
+              <p>审核通过后,UCFKEY 会发送到你的邮箱,粘贴回插件的授权字段即可完成激活。</p>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <div class="license-layout">
-        <div class="steps">
-          <div class="step-card">
-            <div class="step-body">
-              <h3>① 复制机器码</h3>
-              <p>在 UE 编辑器中打开 <code>Project Settings &gt; Plugins &gt; UCFPlugin</code>，复制你的机器码（UCFID）。</p>
+      <!-- ─── Form Card ─── -->
+      <div class="license-form-wrap">
+          <div class="form-card-head">
+            <div class="form-card-head-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L3 7v6c0 5 4 9 9 10 5-1 9-5 9-10V7l-9-5z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <div class="form-card-head-text">
+              <h2>授权申请</h2>
             </div>
           </div>
-          <div class="step-card">
-            <div class="step-body">
-              <h3>② 填写并提交</h3>
-              <p>填入机器码、接收邮箱和用途说明，提交后进入审核队列。</p>
-            </div>
-          </div>
-          <div class="step-card">
-            <div class="step-body">
-              <h3>③ 查收邮件</h3>
-              <p>审核通过后，UCFKEY 会发送到你的邮箱，粘贴回插件的授权字段即可完成激活。</p>
-            </div>
-          </div>
-        </div>
 
-        <div class="license-form-wrap">
           <form id="licenseForm" class="license-form" novalidate>
             <div class="form-field">
-              <label class="form-label" for="ucfId">机器码（UCFID）<span class="req">*</span></label>
-              <input class="form-input monospace" id="ucfId" name="ucf_id" type="text" autocomplete="off" spellcheck="false" placeholder="K7QM2-X9P3B-V4NBY-8TR3W-6YAHF">
-              <div class="form-hint">格式为 5 组大写字母/数字，用连字符分隔，共 29 位。</div>
+              <label class="form-label" for="ucfId">UCFID<span class="req">*</span></label>
+              <div class="form-input-wrap">
+                <input class="form-input monospace" id="ucfId" name="ucf_id" type="text" autocomplete="off" spellcheck="false">
+              </div>
             </div>
 
             <div class="form-field">
               <label class="form-label" for="email">接收邮箱<span class="req">*</span></label>
-              <input class="form-input" id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
-              <div class="form-hint">UCFKEY 将发送到此邮箱，请确保填写正确。</div>
+              <div class="form-input-wrap">
+                <input class="form-input" id="email" name="email" type="email" autocomplete="email">
+              </div>
+              <div class="form-hint-row" id="emailHint">
+                <span>UCFKEY 将发送到此邮箱,请确保填写正确</span>
+              </div>
             </div>
 
             <div class="form-field">
               <label class="form-label" for="purpose">用途说明<span class="req">*</span></label>
-              <textarea class="form-textarea" id="purpose" name="purpose" placeholder="如：客户A的项目授权" maxlength="500"></textarea>
-              <div class="form-hint">简要说明使用场景，便于管理员审核。</div>
+              <div class="form-input-wrap">
+                <textarea class="form-textarea" id="purpose" name="purpose" maxlength="500"></textarea>
+              </div>
             </div>
 
-            <div>
-              <button type="submit" class="btn btn-primary" id="submitBtn">提交申请</button>
+            <div class="submit-row">
+              <button type="submit" class="btn-submit" id="submitBtn">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+                <span class="spinner" aria-hidden="true"></span>
+                <span class="btn-label">提交</span>
+              </button>
             </div>
           </form>
 
           <div class="form-status" id="licenseStatus" role="status" aria-live="polite"></div>
         </div>
-      </div>
 
     </div>
   </section>
@@ -91,7 +143,7 @@
         <line x1="12" y1="16" x2="12" y2="12"/>
         <line x1="12" y1="8" x2="12.01" y2="8"/>
       </svg>
-      <span>UCFPlugin 为个人持续开发，不保证更新频率与稳定性</span>
+      <span>UCFPlugin 为个人持续开发,不保证更新频率与稳定性</span>
     </div>
     <div class="footer-bottom">
       <div class="footer-copyright">
@@ -121,7 +173,7 @@
 (function(){
   'use strict';
 
-  // TODO: 部署后端后，改为 Vercel 地址，例如 https://ucfplugin-license-server.vercel.app
+  // TODO: 部署后端后,改为 Vercel 地址,例如 https://ucfplugin-license-server.vercel.app
   const API_BASE = 'http://localhost:3000';
 
   const UCFID_RE = /^[0-9A-Z]{5}(-[0-9A-Z]{5}){4}$/;
@@ -131,16 +183,32 @@
   const ucfInput = document.getElementById('ucfId');
   const emailInput = document.getElementById('email');
   const purposeInput = document.getElementById('purpose');
+  const purposeCount = document.getElementById('purposeCount');
   const statusBox = document.getElementById('licenseStatus');
   const submitBtn = document.getElementById('submitBtn');
+  const submitLabel = submitBtn.querySelector('.btn-label');
+
+  const ORIG_LABEL = submitLabel.textContent;
 
   function escapeHtml(s){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
+  function statusIcon(type){
+    if (type === 'success'){
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+    }
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+  }
+
   function showStatus(type, title, msg){
     statusBox.className = 'form-status show ' + type;
-    statusBox.innerHTML = '<div class="status-title">' + escapeHtml(title) + '</div>' + escapeHtml(msg);
+    statusBox.innerHTML =
+      '<span class="status-icon">' + statusIcon(type) + '</span>' +
+      '<div class="status-body">' +
+        '<div class="status-title">' + escapeHtml(title) + '</div>' +
+        escapeHtml(msg) +
+      '</div>';
   }
 
   function hideStatus(){
@@ -151,6 +219,15 @@
   function setInvalid(el, invalid){
     el.classList.toggle('invalid', invalid);
   }
+
+  function updateCount(){
+    const len = purposeInput.value.length;
+    purposeCount.textContent = len + ' / 500';
+    purposeCount.classList.toggle('warn', len > 450);
+  }
+
+  purposeInput.addEventListener('input', updateCount);
+  updateCount();
 
   function validate(){
     let ok = true;
@@ -174,10 +251,10 @@
   }
 
   function mapError(data, status){
-    if (status === 409) return '该机器码已在有效期内申请过授权，无法重复申请。';
-    if (status === 429) return data && data.message ? data.message : '今日申请次数已达上限，请明天再试。';
+    if (status === 409) return '该机器码已在有效期内申请过授权,无法重复申请。';
+    if (status === 429) return data && data.message ? data.message : '今日申请次数已达上限,请明天再试。';
     if (data && data.message) return data.message;
-    return '提交失败，请稍后重试。';
+    return '提交失败,请稍后重试。';
   }
 
   form.addEventListener('submit', async function(e){
@@ -185,12 +262,13 @@
     hideStatus();
 
     if (!validate()){
-      showStatus('error', '请检查填写内容', '机器码或邮箱格式不正确，或用途说明为空。');
+      showStatus('error', '请检查填写内容', '机器码或邮箱格式不正确,或用途说明为空。');
       return;
     }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = '提交中…';
+    submitBtn.classList.add('is-loading');
+    submitLabel.textContent = '提交中…';
 
     try{
       const res = await fetch(API_BASE + '/api/apply', {
@@ -205,16 +283,18 @@
       const data = await res.json().catch(function(){ return {}; });
 
       if (res.ok){
-        showStatus('success', '申请已提交', '已进入审核队列，管理员审核后，UCFKEY 将发送到 ' + escapeHtml(emailInput.value.trim()) + '，请留意查收。');
+        showStatus('success', '申请已提交', '已进入审核队列,管理员审核后,UCFKEY 将发送到 ' + escapeHtml(emailInput.value.trim()) + ',请留意查收。');
         form.reset();
+        updateCount();
       } else {
         showStatus('error', '提交失败', mapError(data, res.status));
       }
     } catch(err){
-      showStatus('error', '网络错误', '无法连接到授权服务，请稍后重试。');
+      showStatus('error', '网络错误', '无法连接到授权服务,请稍后重试。');
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = '提交申请';
+      submitBtn.classList.remove('is-loading');
+      submitLabel.textContent = ORIG_LABEL;
     }
   });
 })();
