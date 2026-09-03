@@ -25,7 +25,7 @@
   <section class="content-section">
     <div class="section-inner">
       <div class="intro-card">
-        <p>UCFPlugin 在 UE 编辑器模式下需要正确授权码方可使用,采用一机一码机制,当前设备激活后长期有效。请在编辑器中打开 Project Settings &gt; Plugins &gt; UCFPlugin 复制你的机器码(UCFID),并准备好接收 UCFKEY 的邮箱地址,审核通过后授权码将通过邮件发送。</p>
+        <p>UCFPlugin 采用设备关联的授权机制：编辑器模式下，每台设备需单独配置 UCFKEY 激活，更换设备需要重新激活。密钥默认一年有效，支持到期重新申请续期。项目打包后无需 UCFKEY 校验，可无障碍部署到任何可运行环境。</p>
       </div>
     </div>
   </section>
@@ -39,12 +39,8 @@
         <h2 class="steps-heading">
           <span class="steps-heading-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="4" cy="6" r="1.5" fill="currentColor"/>
-              <circle cx="4" cy="12" r="1.5" fill="currentColor"/>
-              <circle cx="4" cy="18" r="1.5" fill="currentColor"/>
-              <line x1="10" y1="6" x2="20" y2="6"/>
-              <line x1="10" y1="12" x2="20" y2="12"/>
-              <line x1="10" y1="18" x2="20" y2="18"/>
+              <path d="M12 2L3 7v6c0 5 4 9 9 10 5-1 9-5 9-10V7l-9-5z"/>
+              <path d="M9 12l2 2 4-4"/>
             </svg>
           </span>
           <span>申请流程</span>
@@ -54,24 +50,16 @@
           <div class="step-card">
             <div class="step-num" aria-hidden="true">1</div>
             <div class="step-body">
-              <h3>复制机器码</h3>
-              <p>在 UE 编辑器中打开 <code>Project Settings &gt; Plugins &gt; UCFPlugin</code>,复制你的机器码(UCFID)。</p>
+              <h3>复制 UCFID</h3>
+              <p>在 UE 编辑器中打开 <code>Project Settings &gt; Plugins &gt; UCFPlugin</code>设置，复制 UCFID 值</p>
             </div>
           </div>
 
           <div class="step-card">
             <div class="step-num" aria-hidden="true">2</div>
             <div class="step-body">
-              <h3>填写并提交</h3>
-              <p>填入机器码、接收邮箱和用途说明,提交后进入审核队列。</p>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <div class="step-num" aria-hidden="true">3</div>
-            <div class="step-body">
-              <h3>查收邮件</h3>
-              <p>审核通过后,UCFKEY 会发送到你的邮箱,粘贴回插件的授权字段即可完成激活。</p>
+              <h3>获取 UCFKEY</h3>
+              <p>填入 UCFID 提交申请，服务端校验后立即返回 UCFKEY。将 UCFKEY 填写到<code>Project Settings &gt; Plugins &gt; UCFPlugin</code>设置的 UCFKEY 字段后自动激活</p>
             </div>
           </div>
 
@@ -80,40 +68,11 @@
 
       <!-- ─── Form Card ─── -->
       <div class="license-form-wrap">
-          <div class="form-card-head">
-            <div class="form-card-head-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2L3 7v6c0 5 4 9 9 10 5-1 9-5 9-10V7l-9-5z"/>
-                <path d="M9 12l2 2 4-4"/>
-              </svg>
-            </div>
-            <div class="form-card-head-text">
-              <h2>授权申请</h2>
-            </div>
-          </div>
-
           <form id="licenseForm" class="license-form" novalidate>
             <div class="form-field">
               <label class="form-label" for="ucfId">UCFID<span class="req">*</span></label>
               <div class="form-input-wrap">
-                <input class="form-input monospace" id="ucfId" name="ucf_id" type="text" autocomplete="off" spellcheck="false">
-              </div>
-            </div>
-
-            <div class="form-field">
-              <label class="form-label" for="email">接收邮箱<span class="req">*</span></label>
-              <div class="form-input-wrap">
-                <input class="form-input" id="email" name="email" type="email" autocomplete="email">
-              </div>
-              <div class="form-hint-row" id="emailHint">
-                <span>UCFKEY 将发送到此邮箱,请确保填写正确</span>
-              </div>
-            </div>
-
-            <div class="form-field">
-              <label class="form-label" for="purpose">用途说明<span class="req">*</span></label>
-              <div class="form-input-wrap">
-                <textarea class="form-textarea" id="purpose" name="purpose" maxlength="500"></textarea>
+                <input class="form-input monospace" id="ucfId" name="ucf_id" type="text" autocomplete="off" spellcheck="false" placeholder="N2VA8W1TPDJ365GTR6G17AZFS1GKQ2">
               </div>
             </div>
 
@@ -124,7 +83,7 @@
                   <polygon points="22 2 15 22 11 13 2 9 22 2"/>
                 </svg>
                 <span class="spinner" aria-hidden="true"></span>
-                <span class="btn-label">提交</span>
+                <span class="btn-label">获取 UCFKEY</span>
               </button>
             </div>
           </form>
@@ -174,128 +133,139 @@
   'use strict';
 
   // TODO: 部署后端后,改为 Vercel 地址,例如 https://ucfplugin-license-server.vercel.app
-  const API_BASE = 'http://localhost:3000';
+  const API_BASE = 'https://ucf-key.vercel.app';
 
-  const UCFID_RE = /^[0-9A-Z]{5}(-[0-9A-Z]{5}){4}$/;
-  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const UCFID_RE = /^[0-9A-HJKMNP-TV-Z]{30}$|^(?:[0-9A-HJKMNP-TV-Z]{5}-){5}[0-9A-HJKMNP-TV-Z]{5}$/;
 
   const form = document.getElementById('licenseForm');
   const ucfInput = document.getElementById('ucfId');
-  const emailInput = document.getElementById('email');
-  const purposeInput = document.getElementById('purpose');
-  const purposeCount = document.getElementById('purposeCount');
   const statusBox = document.getElementById('licenseStatus');
   const submitBtn = document.getElementById('submitBtn');
-  const submitLabel = submitBtn.querySelector('.btn-label');
 
-  const ORIG_LABEL = submitLabel.textContent;
+  // 防御性检查：所有关键元素必须存在，否则脚本静默退出
+  if (!form || !ucfInput || !statusBox || !submitBtn) {
+    console.error('[授权申请] 关键表单元素缺失，脚本中止');
+    if (statusBox) {
+      statusBox.className = 'form-status show error';
+      statusBox.innerHTML = '<div class="status-body"><div class="status-title">服务器出错</div>服务器出错，请稍后重试</div>';
+    }
+    return;
+  }
+
+  const submitLabel = submitBtn.querySelector('.btn-label');
+  const ORIG_LABEL = submitLabel ? submitLabel.textContent : '获取 UCFKEY';
 
   function escapeHtml(s){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-  }
-
-  function statusIcon(type){
-    if (type === 'success'){
-      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
-    }
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
-  }
-
-  function showStatus(type, title, msg){
-    statusBox.className = 'form-status show ' + type;
-    statusBox.innerHTML =
-      '<span class="status-icon">' + statusIcon(type) + '</span>' +
-      '<div class="status-body">' +
-        '<div class="status-title">' + escapeHtml(title) + '</div>' +
-        escapeHtml(msg) +
-      '</div>';
-  }
-
-  function hideStatus(){
-    statusBox.className = 'form-status';
-    statusBox.innerHTML = '';
   }
 
   function setInvalid(el, invalid){
     el.classList.toggle('invalid', invalid);
   }
 
-  function updateCount(){
-    const len = purposeInput.value.length;
-    purposeCount.textContent = len + ' / 500';
-    purposeCount.classList.toggle('warn', len > 450);
-  }
-
-  purposeInput.addEventListener('input', updateCount);
-  updateCount();
-
   function validate(){
-    let ok = true;
-
-    const ucf = ucfInput.value.trim();
-    const ucfOk = UCFID_RE.test(ucf);
-    setInvalid(ucfInput, !ucfOk);
-    ok = ok && ucfOk;
-
-    const email = emailInput.value.trim();
-    const emailOk = EMAIL_RE.test(email);
-    setInvalid(emailInput, !emailOk);
-    ok = ok && emailOk;
-
-    const purpose = purposeInput.value.trim();
-    const purposeOk = purpose.length > 0 && purpose.length <= 500;
-    setInvalid(purposeInput, !purposeOk);
-    ok = ok && purposeOk;
-
+    const v = ucfInput.value.trim();
+    const ok = UCFID_RE.test(v);
+    setInvalid(ucfInput, !ok);
     return ok;
   }
 
+  function showError(title, msg){
+    statusBox.className = 'form-status show error';
+    statusBox.innerHTML =
+      '<span class="status-icon">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' +
+        '</svg>' +
+      '</span>' +
+      '<div class="status-body">' +
+        '<div class="status-title">' + escapeHtml(title) + '</div>' +
+        escapeHtml(msg) +
+      '</div>';
+  }
+
+  function showSuccess(ucfKey, validity, title){
+    statusBox.className = 'form-status show success';
+    statusBox.innerHTML =
+      '<span class="status-icon">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' +
+        '</svg>' +
+      '</span>' +
+      '<div class="status-body">' +
+        '<div class="status-title">' + escapeHtml(title || '授权成功') + '</div>' +
+        '<div class="ucfkey-display" id="ucfKeyDisplay">' + escapeHtml(ucfKey) + '</div>' +
+        '<div class="ucfkey-validity">' + escapeHtml(validity) + '</div>' +
+      '</div>';
+  }
+
   function mapError(data, status){
-    if (status === 409) return '该机器码已在有效期内申请过授权,无法重复申请。';
-    if (status === 429) return data && data.message ? data.message : '今日申请次数已达上限,请明天再试。';
+    if (status === 400) return (data && data.message) ? data.message : '服务器出错，请稍后重试';
+    if (status === 409) return '服务器出错，请稍后重试';
+    if (status === 429) return (data && data.message) ? data.message : '今日申请次数已达上限，请明天再试';
+    if (status === 403) return '无法访问授权服务';
+    if (status === 503) return '服务器出错，请稍后重试';
     if (data && data.message) return data.message;
-    return '提交失败,请稍后重试。';
+    return '服务器出错，请稍后重试';
   }
 
   form.addEventListener('submit', async function(e){
     e.preventDefault();
-    hideStatus();
+    statusBox.className = 'form-status';
+    statusBox.innerHTML = '';
 
     if (!validate()){
-      showStatus('error', '请检查填写内容', '机器码或邮箱格式不正确,或用途说明为空。');
+      ucfInput.focus({ preventScroll: true });
+      showError('请检查填写内容', 'UCFID格式错误');
       return;
     }
 
     submitBtn.disabled = true;
     submitBtn.classList.add('is-loading');
-    submitLabel.textContent = '提交中…';
+    if (submitLabel) submitLabel.textContent = '签发中…';
 
-    try{
-      const res = await fetch(API_BASE + '/api/apply', {
+    let res = null, networkErr = false, timeoutErr = false;
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(function(){ controller.abort(); }, 30000);
+      res = await fetch(API_BASE + '/api/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ucf_id: ucfInput.value.trim(),
-          email: emailInput.value.trim(),
-          purpose: purposeInput.value.trim()
-        })
+        body: JSON.stringify({ ucf_id: ucfInput.value.trim() }),
+        signal: controller.signal,
       });
-      const data = await res.json().catch(function(){ return {}; });
-
-      if (res.ok){
-        showStatus('success', '申请已提交', '已进入审核队列,管理员审核后,UCFKEY 将发送到 ' + escapeHtml(emailInput.value.trim()) + ',请留意查收。');
-        form.reset();
-        updateCount();
-      } else {
-        showStatus('error', '提交失败', mapError(data, res.status));
-      }
-    } catch(err){
-      showStatus('error', '网络错误', '无法连接到授权服务,请稍后重试。');
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.classList.remove('is-loading');
-      submitLabel.textContent = ORIG_LABEL;
+      clearTimeout(timer);
+    } catch (err) {
+      if (err && err.name === 'AbortError') timeoutErr = true;
+      else networkErr = true;
     }
+
+    let data = null;
+    if (res && !networkErr) {
+      try { data = await res.json(); } catch (_) { /* 非 JSON */ }
+    }
+
+    if (networkErr) {
+      showError('服务器出错', '服务器出错，请稍后重试');
+    } else if (timeoutErr) {
+      showError('服务器出错', '服务器出错，请稍后重试');
+    } else if (res.ok && data && data.ucf_key) {
+      const titleByStatus = {
+        already_issued: '重复申请',
+        renewed: '续期成功',
+        issued: '授权成功',
+      };
+      const title = titleByStatus[data.status] || '授权成功';
+      showSuccess(data.ucf_key, data.validity || '—', title);
+      form.reset();
+      ucfInput.classList.remove('invalid');
+    } else {
+      showError('授权失败', mapError(data, res ? res.status : 0));
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('is-loading');
+    if (submitLabel) submitLabel.textContent = ORIG_LABEL;
   });
 })();
 </script>

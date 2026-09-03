@@ -412,7 +412,7 @@ body{
 /* ── Content section (for sub-pages) ── */
 .page-loaded{display:flex;flex-direction:column;min-height:100vh}
 .page-loaded > .content-section{flex:1}
-.content-section{padding:0 24px 80px}
+.content-section{padding:0 24px 120px}
 .content-section .section-inner{max-width:var(--max-w);margin:0 auto}
 .content-card{
   border-radius:var(--radius-lg);padding:18px 24px;
@@ -511,7 +511,7 @@ body{
   max-width:var(--max-w);
   margin-left:auto;
   margin-right:auto;
-  padding:var(--sp-12) var(--sp-6) var(--sp-6);
+  padding:var(--sp-6) var(--sp-6) var(--sp-6);
   border-top:1px solid var(--border);
   display:flex;flex-direction:column;gap:8px;
   box-sizing:border-box;
@@ -1263,7 +1263,7 @@ body{
   color:var(--text-main);
   transition:border-color .2s,box-shadow .2s;
 }
-.form-textarea{resize:vertical;min-height:80px;max-height:240px}
+.form-textarea{resize:none;height:96px}
 .form-input:focus,.form-textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px var(--green-glow)}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--text-dim)}
 .form-input.monospace{font-family:'JetBrains Mono','Fira Code',Consolas,monospace;letter-spacing:0.04em}
@@ -1512,7 +1512,7 @@ body{
   transition:border-color .2s,box-shadow .2s,background .2s;
 }
 .form-input-wrap .form-input{padding-left:14px}
-.form-textarea{resize:vertical;min-height:96px;max-height:240px;line-height:1.6}
+.form-textarea{resize:none;height:96px;line-height:1.6}
 .form-input:focus,.form-textarea:focus{
   outline:none;border-color:var(--green);
   box-shadow:0 0 0 2px var(--green-glow);
@@ -1612,6 +1612,26 @@ body{
   font-size:14px;
 }
 .form-status.error .status-title{color:#fecaca}
+
+/* UCFKEY 显示块（自助模式下签发成功后展示） */
+.ucfkey-display{
+  font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
+  font-size:13px;
+  letter-spacing:.5px;
+  word-break:break-all;
+  background:rgba(0,0,0,0.42);
+  border:1px solid var(--border-glass);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  color:#ffffff;
+  margin-top:8px;
+}
+.ucfkey-validity{
+  margin-top:8px;
+  font-size:12px;
+  color:#ffffff;
+  opacity:.75;
+}
 
 /* Footer notice under form */
 .form-footnote{
