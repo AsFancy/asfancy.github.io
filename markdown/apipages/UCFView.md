@@ -17,10 +17,12 @@
 | [UCFView/FocusActor](#ucfviewfocusactor) | 设置视点聚焦对象 |
 | [UCFView/FocusArea](#ucfviewfocusarea) | 设置视点聚焦圆柱体区域 |
 | [UCFView/FocusAreaGeo](#ucfviewfocusareageo) | 设置视点聚焦圆柱体区域（WGS84坐标系） |
-| [UCFView/SetDPInput](#ucfviewsetdpinput) | 设置视点操作的物理输入 |
-| [UCFView/ResetDPInput](#ucfviewresetdpinput) | 重置视点操作的物理输入 |
 | [UCFView/SwitchDPInput](#ucfviewswitchdpinput) | 开启或关闭视点的特定操作 |
 | [UCFView/SetDPInputParams](#ucfviewsetdpinputparams) | 配置视点操作的参数 |
+| [UCFView/SetDPHMoveInput](#ucfviewsetdphmoveinput) | 设置定点平移的输入动作 |
+| [UCFView/SetDPRotateWithAnchorInput](#ucfviewsetdprotatewithanchorinput) | 设置定点旋转的输入动作 |
+| [UCFView/SetDPRotateWithSelfInput](#ucfviewsetdprotatewithselfinput) | 设置自旋转的输入动作 |
+| [UCFView/SetDPFastFocusInput](#ucfviewsetdpfastfocusinput) | 设置快速聚焦的输入动作 |
 | [UCFView/SwitchViewType](#ucfviewswitchviewtype) | 切换视点类型 |
 
 ### 漫游操作
@@ -730,132 +732,6 @@
 }
 ```
 
-<a id="ucfviewsetdpinput"></a>
-
-[← 返回接口一览](#接口一览)
-
-## 设置视点操作的物理输入
-
-**类型:** Sync
-
-**Tips:**
-
-- 仅支持UCFDefaultPawn
-- 所有操作对应的物理输入必须唯一
-
-#### 调用参数说明
-
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
-| ExecutionID | String | 必填 | 执行ID |
-| Interface | String | 必填 | 接口名称 |
-| Params | Object | 必填 | 参数对象 |
-
-#### Params内参数
-
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
-| HMoveInput | String | 必填 | 水平移动输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown" |
-| VUPInput | String | 必填 | 垂直向上移动输入，可选值："UCFInputTagDefaultPawn.QDown", "UCFInputTagDefaultPawn.EDown" |
-| VDownInput | String | 必填 | 垂直向下移动输入，可选值："UCFInputTagDefaultPawn.QDown", "UCFInputTagDefaultPawn.EDown" |
-| RotateAnchorInput | String | 必填 | 固定锚点旋转输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown" |
-| RotateSelfInput | String | 必填 | 绕自身旋转输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown" |
-| ZoomInput | String | 必填 | 缩放输入，可选值："UCFInputTagBase.MiddleMouseRoll", "UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown" |
-| FocusInput | String | 必填 | 快速聚焦输入，可选值："LeftMouseDoubleTap", "RightMouseDoubleTap", "MiddleMouseDoubleTap" |
-
-#### 调用参数示例
-
-```json
-{
-  "ExecutionID": "测试ID",
-  "Interface": "UCFView/SetDPInput",
-  "Params": {
-    "HMoveInput": "xxx",
-    "VUPInput": "xxx",
-    "VDownInput": "xxx",
-    "RotateAnchorInput": "xxx",
-    "RotateSelfInput": "xxx",
-    "ZoomInput": "xxx",
-    "FocusInput": "xxx"
-  }
-}
-```
-
-#### 回调参数说明
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| ExecutionID | String | 执行ID |
-| Interface | String | 接口名称 |
-| Status | Boolean | 操作是否成功 |
-| DebugInfo | String | 调试信息 |
-| Params | Object | 参数对象 |
-
-#### 回调参数示例
-
-```json
-{
-  "ExecutionID": "测试ID",
-  "Interface": "UCFView/SetDPInput",
-  "Status": true,
-  "DebugInfo": "成功",
-  "Params": {}
-}
-```
-
-<a id="ucfviewresetdpinput"></a>
-
-[← 返回接口一览](#接口一览)
-
-## 重置视点操作的物理输入
-
-**类型:** Sync
-
-**Tips:**
-
-- 仅支持UCFDefaultPawn
-- 所有操作对应的物理输入重置为默认值
-
-#### 调用参数说明
-
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
-| ExecutionID | String | 必填 | 执行ID |
-| Interface | String | 必填 | 接口名称 |
-| Params | Object | 必填 | 参数对象 |
-
-#### 调用参数示例
-
-```json
-{
-  "ExecutionID": "测试ID",
-  "Interface": "UCFView/ResetDPInput",
-  "Params": {}
-}
-```
-
-#### 回调参数说明
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| ExecutionID | String | 执行ID |
-| Interface | String | 接口名称 |
-| Status | Boolean | 操作是否成功 |
-| DebugInfo | String | 调试信息 |
-| Params | Object | 参数对象 |
-
-#### 回调参数示例
-
-```json
-{
-  "ExecutionID": "测试ID",
-  "Interface": "UCFView/ResetDPInput",
-  "Status": true,
-  "DebugInfo": "成功",
-  "Params": {}
-}
-```
-
 <a id="ucfviewswitchdpinput"></a>
 
 [← 返回接口一览](#接口一览)
@@ -990,6 +866,249 @@
 {
   "ExecutionID": "测试ID",
   "Interface": "UCFView/SetDPInputParams",
+  "Status": true,
+  "DebugInfo": "成功",
+  "Params": {}
+}
+```
+
+<a id="ucfviewsetdphmoveinput"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 设置定点平移的输入动作
+
+**类型:** Sync
+
+**Tips:**
+
+- 仅支持UCFDefaultPawn
+- 设置成功后,使用该输入动作的其他行为会被置空动作
+
+#### 调用参数说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| ExecutionID | String | 必填 | 执行ID |
+| Interface | String | 必填 | 接口名称 |
+| Params | Object | 必填 | 参数对象 |
+
+#### Params内参数
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| Input | String | 必填 | 输入动作,可选值:"LeftMouseDown"、"RightMouseDown"、"MiddleMouseDown" |
+
+#### 调用参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPHMoveInput",
+  "Params": {
+    "Input": "xxx"
+  }
+}
+```
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 执行ID |
+| Interface | String | 接口名称 |
+| Status | Boolean | 操作是否成功 |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPHMoveInput",
+  "Status": true,
+  "DebugInfo": "成功",
+  "Params": {}
+}
+```
+
+<a id="ucfviewsetdprotatewithanchorinput"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 设置定点旋转的输入动作
+
+**类型:** Sync
+
+**Tips:**
+
+- 仅支持UCFDefaultPawn
+- 设置成功后,使用该输入动作的其他行为会被置空动作
+
+#### 调用参数说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| ExecutionID | String | 必填 | 执行ID |
+| Interface | String | 必填 | 接口名称 |
+| Params | Object | 必填 | 参数对象 |
+
+#### Params内参数
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| Input | String | 必填 | 输入动作,可选值:"LeftMouseDown"、"RightMouseDown"、"MiddleMouseDown" |
+
+#### 调用参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPRotateWithAnchorInput",
+  "Params": {
+    "Input": "xxx"
+  }
+}
+```
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 执行ID |
+| Interface | String | 接口名称 |
+| Status | Boolean | 操作是否成功 |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPRotateWithAnchorInput",
+  "Status": true,
+  "DebugInfo": "成功",
+  "Params": {}
+}
+```
+
+<a id="ucfviewsetdprotatewithselfinput"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 设置自旋转的输入动作
+
+**类型:** Sync
+
+**Tips:**
+
+- 仅支持UCFDefaultPawn
+- 设置成功后,使用该输入动作的其他行为会被置空动作
+
+#### 调用参数说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| ExecutionID | String | 必填 | 执行ID |
+| Interface | String | 必填 | 接口名称 |
+| Params | Object | 必填 | 参数对象 |
+
+#### Params内参数
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| Input | String | 必填 | 输入动作,可选值:"LeftMouseDown"、"RightMouseDown"、"MiddleMouseDown" |
+
+#### 调用参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPRotateWithSelfInput",
+  "Params": {
+    "Input": "xxx"
+  }
+}
+```
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 执行ID |
+| Interface | String | 接口名称 |
+| Status | Boolean | 操作是否成功 |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPRotateWithSelfInput",
+  "Status": true,
+  "DebugInfo": "成功",
+  "Params": {}
+}
+```
+
+<a id="ucfviewsetdpfastfocusinput"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 设置快速聚焦的输入动作
+
+**类型:** Sync
+
+**Tips:**
+
+- 仅支持UCFDefaultPawn
+
+#### 调用参数说明
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| ExecutionID | String | 必填 | 执行ID |
+| Interface | String | 必填 | 接口名称 |
+| Params | Object | 必填 | 参数对象 |
+
+#### Params内参数
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|:----:|------|
+| Input | String | 必填 | 输入动作,可选值:"LeftMouseDoubleTap"、"MiddleMouseDoubleTap"、"RightMouseDoubleTap" |
+
+#### 调用参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPFastFocusInput",
+  "Params": {
+    "Input": "xxx"
+  }
+}
+```
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 执行ID |
+| Interface | String | 接口名称 |
+| Status | Boolean | 操作是否成功 |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "测试ID",
+  "Interface": "UCFView/SetDPFastFocusInput",
   "Status": true,
   "DebugInfo": "成功",
   "Params": {}

@@ -6,32 +6,31 @@
 
 | 接口名称 | 功能描述 |
 | :--- | :--- |
-| [UCFTerrain/EnableTerrain](#ucfterrainenableterrain) | 启用地形分析 |
-| [UCFTerrain/OnDoPoint](#ucfterrainondopoint) | 添加关键点操作通知 |
-| [UCFTerrain/OnUndoPoint](#ucfterrainonundopoint) | 撤销关键点操作通知 |
-| [UCFTerrain/OnFinishOnce](#ucfterrainonfinishonce) | 完成单次地形分析通知 |
-| [UCFTerrain/SwitchType](#ucfterrainswitchtype) | 切换地形分析类别 |
+| [UCFTerrain/Elevation](#ucfterrainelevation) | 启用高程分析 |
+| [UCFTerrain/Slope](#ucfterrainslope) | 启用坡度分析 |
 | [UCFTerrain/SetShowMark](#ucfterrainsetshowmark) | 设置地形分析标识的可视性 |
 | [UCFTerrain/SetOpacity](#ucfterrainsetopacity) | 设置地形分析效果透明度 |
 | [UCFTerrain/SetInterval](#ucfterrainsetinterval) | 设置高程分析等高距 |
 | [UCFTerrain/SetWidth](#ucfterrainsetwidth) | 设置高程分析等高线宽 |
 | [UCFTerrain/SetStep](#ucfterrainsetstep) | 设置坡度分析的坡向步长 |
-| [UCFTerrain/ClearOnce](#ucfterrainclearonce) | 清除单次地形分析 |
-| [UCFTerrain/CancelTerrain](#ucfterraincancelterrain) | 取消地形分析 |
+| [UCFTerrain/Clear](#ucfterrainclear) | 清除所有地形分析内容 |
+| [UCFTerrain/Cancel](#ucfterraincancel) | 取消地形分析 |
+| [UCFTerrain/OnFinishOnce](#ucfterrainonfinishonce) | 完成单次地形分析通知 |
 
-<a id="ucfterrainenableterrain"></a>
+<a id="ucfterrainelevation"></a>
 
 [← 返回接口一览](#接口一览)
 
-## 启用地形分析
+## 启用高程分析
 
 **类型:** Sync
 
 **Tips:**
 
-- 默认为高程分析
-- 进行地形分析的区域必须接受贴花效果
-- cesiumforunreal的3D Tiles加载策略限制，暂不支持cesium地形 
+- 重复激活无效，非重复激活时会清除之前的所有分析结果
+- 交互逻辑：左键单击确定关键点，右键单击撤销最后一个关键点，中键单击完成单次分析(单击时的位置作为最后一个关键点)
+- 进行高程分析的区域必须接受贴花效果
+- 垂直面、反斜面等不适用，因为正交俯视深度采样，这些区域的深度值退化为阶跃函数
 
 #### 调用参数说明
 
@@ -52,7 +51,7 @@
 ```json
 {
   "ExecutionID": "测试ID",
-  "Interface": "UCFTerrain/EnableTerrain",
+  "Interface": "UCFTerrain/Elevation",
   "Params": {
     "Offset": 0.0
   }
@@ -74,127 +73,27 @@
 ```json
 {
   "ExecutionID": "测试ID",
-  "Interface": "UCFTerrain/EnableTerrain",
+  "Interface": "UCFTerrain/Elevation",
   "Status": true,
   "DebugInfo": "成功",
   "Params": {}
 }
 ```
 
-<a id="ucfterrainondopoint"></a>
+<a id="ucfterrainslope"></a>
 
 [← 返回接口一览](#接口一览)
 
-## 添加关键点操作通知
-
-**类型:** Trigger
-
-#### 回调参数说明
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| ExecutionID | String | 触发接口无执行ID，固定为 `"Null"` |
-| Interface | String | 接口名称，固定为 `"UCFTerrain/OnDoPoint"` |
-| Status | Boolean | 固定为 `true` |
-| DebugInfo | String | 调试信息 |
-| Params | Object | 参数对象 |
-
-#### 回调参数示例
-
-```json
-{
-  "ExecutionID": "Null",
-  "Interface": "UCFTerrain/OnDoPoint",
-  "Status": true,
-  "DebugInfo": "调试信息",
-  "Params": {}
-}
-```
-
-<a id="ucfterrainonundopoint"></a>
-
-[← 返回接口一览](#接口一览)
-
-## 撤销关键点操作通知
-
-**类型:** Trigger
-
-#### 回调参数说明
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| ExecutionID | String | 触发接口无执行ID，固定为 `"Null"` |
-| Interface | String | 接口名称，固定为 `"UCFTerrain/OnUndoPoint"` |
-| Status | Boolean | 固定为 `true` |
-| DebugInfo | String | 调试信息 |
-| Params | Object | 参数对象 |
-
-#### 回调参数示例
-
-```json
-{
-  "ExecutionID": "Null",
-  "Interface": "UCFTerrain/OnUndoPoint",
-  "Status": true,
-  "DebugInfo": "调试信息",
-  "Params": {}
-}
-```
-
-<a id="ucfterrainonfinishonce"></a>
-
-[← 返回接口一览](#接口一览)
-
-## 完成单次地形分析通知
-
-**类型:** Trigger
-
-#### 回调参数说明
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| ExecutionID | String | 触发接口无执行ID，固定为 `"Null"` |
-| Interface | String | 接口名称，固定为 `"UCFTerrain/OnFinishOnce"` |
-| Status | Boolean | 固定为 `true` |
-| DebugInfo | String | 调试信息 |
-| Params | Object | 参数对象 |
-
-#### Params内参数
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| ID | Int | 本次地形分析对应的ID值 |
-| MinHeight | Float | 本次地形分析得到的高程极小值，单位m，保留两位小数(仅高程分析时返回) |
-| MaxHeight | Float | 本次地形分析得到的高程极大值，单位m，保留两位小数(仅高程分析时返回) |
-
-#### 回调参数示例
-
-```json
-{
-  "ExecutionID": "Null",
-  "Interface": "UCFTerrain/OnFinishOnce",
-  "Status": true,
-  "DebugInfo": "调试信息",
-  "Params": {
-    "ID": 0,
-    "MinHeight": 0.0,
-    "MaxHeight": 0.0
-  }
-}
-```
-
-<a id="ucfterrainswitchtype"></a>
-
-[← 返回接口一览](#接口一览)
-
-## 切换地形分析类别
+## 启用坡度分析
 
 **类型:** Sync
 
 **Tips:**
 
-- 默认为高程分析
-- 单次地形分析进行时不允许操作
+- 重复激活无效，非重复激活时会清除之前的所有分析结果
+- 交互逻辑：左键单击确定关键点，右键单击撤销最后一个关键点，中键单击完成单次分析(单击时的位置作为最后一个关键点)
+- 进行地形分析的区域必须接受贴花效果
+- 垂直面、反斜面等不适用
 
 #### 调用参数说明
 
@@ -204,21 +103,13 @@
 | Interface | String | 必填 | 接口名称 |
 | Params | Object | 必填 | 参数对象 |
 
-#### Params内参数
-
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
-| Type | Int | 必填 | 地形分析类别，0为高程分析，1为坡度分析 |
-
 #### 调用参数示例
 
 ```json
 {
   "ExecutionID": "测试ID",
-  "Interface": "UCFTerrain/SwitchType",
-  "Params": {
-    "Type": 0
-  }
+  "Interface": "UCFTerrain/Slope",
+  "Params": {}
 }
 ```
 
@@ -237,7 +128,7 @@
 ```json
 {
   "ExecutionID": "测试ID",
-  "Interface": "UCFTerrain/SwitchType",
+  "Interface": "UCFTerrain/Slope",
   "Status": true,
   "DebugInfo": "成功",
   "Params": {}
@@ -252,6 +143,13 @@
 
 **类型:** Sync
 
+**Tips:**
+
+- 默认显示地形分析标识
+- 高程分析时的标识即等高线与标高
+- 坡度分析时的标识即坡向
+- 单次地形分析进行时不允许操作
+
 #### 调用参数说明
 
 | 字段 | 类型 | 必填 | 说明 |
@@ -264,7 +162,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:----:|------|
-| Status | Boolean | 必填 | 可视性，true即显示 |
+| ShowMark | Boolean | 必填 | 地形分析标识的可视性，true即显示 |
 
 #### 调用参数示例
 
@@ -273,7 +171,7 @@
   "ExecutionID": "测试ID",
   "Interface": "UCFTerrain/SetShowMark",
   "Params": {
-    "Status": false
+    "ShowMark": false
   }
 }
 ```
@@ -430,6 +328,13 @@
 
 **类型:** Sync
 
+**Tips:**
+
+- 默认值为1像素
+- 首曲线宽即设定的等高线宽，计曲线宽是首曲线宽的2倍
+- 计曲线表现为自发光效果
+- 单次地形分析进行时不允许操作
+
 #### 调用参数说明
 
 | 字段 | 类型 | 必填 | 说明 |
@@ -486,6 +391,12 @@
 
 **类型:** Sync
 
+**Tips:**
+
+- 默认值为2000
+- 步长越大,坡向越稀疏
+- 单次地形分析进行时不允许操作
+
 #### 调用参数说明
 
 | 字段 | 类型 | 必填 | 说明 |
@@ -534,17 +445,20 @@
 }
 ```
 
-<a id="ucfterrainclearonce"></a>
+<a id="ucfterrainclear"></a>
 
 [← 返回接口一览](#接口一览)
 
-## 清除单次地形分析
+## 清除所有地形分析内容
 
 **类型:** Sync
 
 **Tips:**
 
-- 单次地形分析进行时不允许操作
+- 仅清除当前已完成的分析内容(贴花、遮罩纹理、计曲线标高等)
+- 之前进行的相关属性设置会被保留
+- 跟随鼠标的提示点继续显示
+- 未启用地形分析时该接口无效
 
 #### 调用参数说明
 
@@ -554,21 +468,13 @@
 | Interface | String | 必填 | 接口名称 |
 | Params | Object | 必填 | 参数对象 |
 
-#### Params内参数
-
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
-| ID | Int | 必填 | 所要清除的地形分析ID |
-
 #### 调用参数示例
 
 ```json
 {
   "ExecutionID": "测试ID",
-  "Interface": "UCFTerrain/ClearOnce",
-  "Params": {
-    "ID": 0
-  }
+  "Interface": "UCFTerrain/Clear",
+  "Params": {}
 }
 ```
 
@@ -587,14 +493,14 @@
 ```json
 {
   "ExecutionID": "测试ID",
-  "Interface": "UCFTerrain/ClearOnce",
+  "Interface": "UCFTerrain/Clear",
   "Status": true,
   "DebugInfo": "成功",
   "Params": {}
 }
 ```
 
-<a id="ucfterraincancelterrain"></a>
+<a id="ucfterraincancel"></a>
 
 [← 返回接口一览](#接口一览)
 
@@ -602,6 +508,12 @@
 
 **类型:** Sync
 
+**Tips:**
+
+- 取消后跟随鼠标的提示点会清除
+- 所有与地形分析相关的资源(贴花、遮罩纹理、Widget、深度RT等)都会清除
+- 之前设置的属性会重置为默认值
+
 #### 调用参数说明
 
 | 字段 | 类型 | 必填 | 说明 |
@@ -615,7 +527,7 @@
 ```json
 {
   "ExecutionID": "测试ID",
-  "Interface": "UCFTerrain/CancelTerrain",
+  "Interface": "UCFTerrain/Cancel",
   "Params": {}
 }
 ```
@@ -635,9 +547,49 @@
 ```json
 {
   "ExecutionID": "测试ID",
-  "Interface": "UCFTerrain/CancelTerrain",
+  "Interface": "UCFTerrain/Cancel",
   "Status": true,
   "DebugInfo": "成功",
   "Params": {}
+}
+```
+
+<a id="ucfterrainonfinishonce"></a>
+
+[← 返回接口一览](#接口一览)
+
+## 完成单次地形分析通知
+
+**类型:** Trigger
+
+#### 回调参数说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| ExecutionID | String | 触发接口无执行ID，固定为 `"Null"` |
+| Interface | String | 接口名称，固定为 `"UCFTerrain/OnFinishOnce"` |
+| Status | Boolean | 固定为 `true` |
+| DebugInfo | String | 调试信息 |
+| Params | Object | 参数对象 |
+
+#### Params内参数
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| MinHeight | Float | 本次地形分析得到的高程极小值，单位m，保留两位小数(仅高程分析时返回) |
+| MaxHeight | Float | 本次地形分析得到的高程极大值，单位m，保留两位小数(仅高程分析时返回) |
+
+#### 回调参数示例
+
+```json
+{
+  "ExecutionID": "Null",
+  "Interface": "UCFTerrain/OnFinishOnce",
+  "Status": true,
+  "DebugInfo": "调试信息",
+  "Params": {
+    "MinHeight": 0.0,
+    "MaxHeight": 0.0
+  }
 }
 ```

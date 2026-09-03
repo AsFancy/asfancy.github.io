@@ -257,33 +257,16 @@
 </div>
 
 <footer class="footer">
-    <div class="footer-note">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="12" y1="16" x2="12" y2="12"/>
-        <line x1="12" y1="8" x2="12.01" y2="8"/>
-      </svg>
-      <span>UCFPlugin 为个人持续开发，不保证更新频率与稳定性</span>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copyright">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M14.5 9a3.5 3.5 0 1 0 0 5.5"/>
-        </svg>
-        <span><span class="footer-copyright-at">@</span> 2026 UCFPlugin</span>
-      </div>
-      <div class="footer-visitor">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
-      </div>
-    </div>
-  </footer>
+  <div class="footer-visitor">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
+  </div>
+</footer>
 
 </div>
 
@@ -296,14 +279,14 @@
 // ===================== DATA =====================
 window.GRP = [
   { id:"g0", label:"", dot:"#34d399",
-    apis:["UCFTerrain/EnableTerrain", "UCFTerrain/OnDoPoint", "UCFTerrain/OnUndoPoint", "UCFTerrain/OnFinishOnce", "UCFTerrain/SwitchType", "UCFTerrain/SetShowMark", "UCFTerrain/SetOpacity", "UCFTerrain/SetInterval", "UCFTerrain/SetWidth", "UCFTerrain/SetStep", "UCFTerrain/ClearOnce", "UCFTerrain/CancelTerrain"] }
+    apis:["UCFTerrain/Elevation", "UCFTerrain/Slope", "UCFTerrain/SetShowMark", "UCFTerrain/SetOpacity", "UCFTerrain/SetInterval", "UCFTerrain/SetWidth", "UCFTerrain/SetStep", "UCFTerrain/Clear", "UCFTerrain/Cancel", "UCFTerrain/OnFinishOnce"] }
 ];
 
 window.API = {
-  "UCFTerrain/EnableTerrain": {
+  "UCFTerrain/Elevation": {
     t:"sync",
-    title:"启用地形分析",
-    notes:["默认为高程分析", "进行地形分析的区域必须接受贴花效果", "cesiumforunreal的3D Tiles加载策略限制，暂不支持cesium地形"],
+    title:"启用高程分析",
+    notes:["重复激活无效，非重复激活时会清除之前的所有分析结果", "交互逻辑：左键单击确定关键点，右键单击撤销最后一个关键点，中键单击完成单次分析(单击时的位置作为最后一个关键点)", "进行高程分析的区域必须接受贴花效果", "垂直面、反斜面等不适用，因为正交俯视深度采样，这些区域的深度值退化为阶跃函数"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
@@ -312,80 +295,34 @@ window.API = {
     pi:[
   ['Offset', 'Float', '选填', '高程基准偏移值，单位cm，默认0，等于基准海平面']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/EnableTerrain",\n  "Params": {\n    "Offset": 0.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/EnableTerrain",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Elevation",\n  "Params": {\n    "Offset": 0.0\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Elevation",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFTerrain/OnDoPoint": {
-    t:"trigger",
-    title:"添加关键点操作通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFTerrain/OnDoPoint"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
-  ['Params', 'Object', '参数对象']
-],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFTerrain/OnDoPoint",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {}\n}'
-  },
-  "UCFTerrain/OnUndoPoint": {
-    t:"trigger",
-    title:"撤销关键点操作通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFTerrain/OnUndoPoint"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
-  ['Params', 'Object', '参数对象']
-],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFTerrain/OnUndoPoint",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {}\n}'
-  },
-  "UCFTerrain/OnFinishOnce": {
-    t:"trigger",
-    title:"完成单次地形分析通知",
-    cf:[
-  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFTerrain/OnFinishOnce"</code>'],
-  ['Status', 'Boolean', '固定为 <code>true</code>'],
-  ['DebugInfo', 'String', '调试信息'],
-  ['Params', 'Object', '参数对象']
-],
-    cbi:[
-  ['ID', 'Int', '-', '本次地形分析对应的ID值'],
-  ['MinHeight', 'Float', '-', '本次地形分析得到的高程极小值，单位m，保留两位小数(仅高程分析时返回)'],
-  ['MaxHeight', 'Float', '-', '本次地形分析得到的高程极大值，单位m，保留两位小数(仅高程分析时返回)']
-],
-    noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFTerrain/OnFinishOnce",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "ID": 0,\n    "MinHeight": 0.0,\n    "MaxHeight": 0.0\n  }\n}'
-  },
-  "UCFTerrain/SwitchType": {
+  "UCFTerrain/Slope": {
     t:"sync",
-    title:"切换地形分析类别",
-    notes:["默认为高程分析", "单次地形分析进行时不允许操作"],
+    title:"启用坡度分析",
+    notes:["重复激活无效，非重复激活时会清除之前的所有分析结果", "交互逻辑：左键单击确定关键点，右键单击撤销最后一个关键点，中键单击完成单次分析(单击时的位置作为最后一个关键点)", "进行地形分析的区域必须接受贴花效果", "垂直面、反斜面等不适用"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    pi:[
-  ['Type', 'Int', '必填', '地形分析类别，0为高程分析，1为坡度分析']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SwitchType",\n  "Params": {\n    "Type": 0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SwitchType",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Slope",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Slope",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFTerrain/SetShowMark": {
     t:"sync",
     title:"设置地形分析标识的可视性",
+    notes:["默认显示地形分析标识", "高程分析时的标识即等高线与标高", "坡度分析时的标识即坡向", "单次地形分析进行时不允许操作"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
     pi:[
-  ['Status', 'Boolean', '必填', '可视性，true即显示']
+  ['ShowMark', 'Boolean', '必填', '地形分析标识的可视性，true即显示']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetShowMark",\n  "Params": {\n    "Status": false\n  }\n}',
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetShowMark",\n  "Params": {\n    "ShowMark": false\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetShowMark",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFTerrain/SetOpacity": {
@@ -421,6 +358,7 @@ window.API = {
   "UCFTerrain/SetWidth": {
     t:"sync",
     title:"设置高程分析等高线宽",
+    notes:["默认值为1像素", "首曲线宽即设定的等高线宽，计曲线宽是首曲线宽的2倍", "计曲线表现为自发光效果", "单次地形分析进行时不允许操作"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
@@ -435,6 +373,7 @@ window.API = {
   "UCFTerrain/SetStep": {
     t:"sync",
     title:"设置坡度分析的坡向步长",
+    notes:["默认值为2000", "步长越大,坡向越稀疏", "单次地形分析进行时不允许操作"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
@@ -446,31 +385,46 @@ window.API = {
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetStep",\n  "Params": {\n    "Step": 0.0\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetStep",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFTerrain/ClearOnce": {
+  "UCFTerrain/Clear": {
     t:"sync",
-    title:"清除单次地形分析",
-    notes:["单次地形分析进行时不允许操作"],
+    title:"清除所有地形分析内容",
+    notes:["仅清除当前已完成的分析内容(贴花、遮罩纹理、计曲线标高等)", "之前进行的相关属性设置会被保留", "跟随鼠标的提示点继续显示", "未启用地形分析时该接口无效"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    pi:[
-  ['ID', 'Int', '必填', '所要清除的地形分析ID']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/ClearOnce",\n  "Params": {\n    "ID": 0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/ClearOnce",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Clear",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Clear",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFTerrain/CancelTerrain": {
+  "UCFTerrain/Cancel": {
     t:"sync",
     title:"取消地形分析",
+    notes:["取消后跟随鼠标的提示点会清除", "所有与地形分析相关的资源(贴花、遮罩纹理、Widget、深度RT等)都会清除", "之前设置的属性会重置为默认值"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/CancelTerrain",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/CancelTerrain",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Cancel",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Cancel",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFTerrain/OnFinishOnce": {
+    t:"trigger",
+    title:"完成单次地形分析通知",
+    cf:[
+  ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
+  ['Interface', 'String', '接口名称，固定为 <code>"UCFTerrain/OnFinishOnce"</code>'],
+  ['Status', 'Boolean', '固定为 <code>true</code>'],
+  ['DebugInfo', 'String', '调试信息'],
+  ['Params', 'Object', '参数对象']
+],
+    cbi:[
+  ['MinHeight', 'Float', '-', '本次地形分析得到的高程极小值，单位m，保留两位小数(仅高程分析时返回)'],
+  ['MaxHeight', 'Float', '-', '本次地形分析得到的高程极大值，单位m，保留两位小数(仅高程分析时返回)']
+],
+    noReq:true,
+    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFTerrain/OnFinishOnce",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "MinHeight": 0.0,\n    "MaxHeight": 0.0\n  }\n}'
   }
 };
 
