@@ -1437,7 +1437,7 @@ body{
 
 /* ── License Form Card — Enhanced ── */
 .license-form-wrap{
-  max-width:880px;margin:0 auto;
+  max-width:960px;margin:0 auto;
   border-radius:var(--radius-lg);
   padding:32px 36px;
   background:var(--bg-glass);
@@ -1616,15 +1616,17 @@ body{
 /* UCFKEY 显示块（自助模式下签发成功后展示） */
 .ucfkey-display{
   font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
-  font-size:13px;
-  letter-spacing:.5px;
+  font-size:12px;
+  letter-spacing:0;
   word-break:break-all;
+  overflow-wrap:anywhere;
   background:rgba(0,0,0,0.42);
   border:1px solid var(--border-glass);
   border-radius:var(--radius-sm);
-  padding:12px 14px;
+  padding:14px 16px;
   color:#ffffff;
   margin-top:8px;
+  line-height:1.7;
 }
 .ucfkey-validity{
   margin-top:8px;
