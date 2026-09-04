@@ -227,7 +227,7 @@
     let res = null, networkErr = false, timeoutErr = false;
     try {
       const controller = new AbortController();
-      const timer = setTimeout(function(){ controller.abort(); }, 30000);
+      const timer = setTimeout(function(){ controller.abort(); }, 10000);
       res = await fetch(API_BASE + '/api/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -246,9 +246,9 @@
     }
 
     if (networkErr) {
-      showError('服务器出错', '服务器出错，请稍后重试');
+      showError('连接服务器失败', '连接服务器失败，请检查网络环境');
     } else if (timeoutErr) {
-      showError('服务器出错', '服务器出错，请稍后重试');
+      showError('连接服务器失败', '连接服务器失败，请检查网络环境');
     } else if (res.ok && data && data.ucf_key) {
       const titleByStatus = {
         already_issued: '重复申请',

@@ -78,7 +78,7 @@ body{
   background:var(--bg-glass);border:1px solid var(--border-glass);
   color:var(--text-main);font-family:'Exo 2',sans-serif;
   font-size:12px;font-weight:600;cursor:pointer;
-  transition:background-color .2s,color .2s,border-color .2s;
+  transition:all .2s;
 }
 .ep-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(74,222,128,0.2)}
 .ep-btn.primary{background:linear-gradient(135deg,var(--green-dark),var(--green));color:#0a0a0f;border:none;box-shadow:0 0 16px var(--green-glow)}
@@ -161,6 +161,7 @@ body{
   margin-bottom:calc(6px * var(--k));
 }
 .cover-brand-text .tag{
+  background:transparent;padding:0;border:none;border-radius:0;
   font-size:calc(14px * var(--k));color:var(--green);font-weight:600;letter-spacing:0.06em;
   display:flex;align-items:center;gap:calc(8px * var(--k));
 }
