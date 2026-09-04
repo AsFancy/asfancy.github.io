@@ -257,33 +257,16 @@
 </div>
 
 <footer class="footer">
-    <div class="footer-note">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="12" y1="16" x2="12" y2="12"/>
-        <line x1="12" y1="8" x2="12.01" y2="8"/>
-      </svg>
-      <span>UCFPlugin 为个人持续开发，不保证更新频率与稳定性</span>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copyright">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M14.5 9a3.5 3.5 0 1 0 0 5.5"/>
-        </svg>
-        <span><span class="footer-copyright-at">@</span> 2026 UCFPlugin</span>
-      </div>
-      <div class="footer-visitor">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
-      </div>
-    </div>
-  </footer>
+  <div class="footer-visitor">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
+  </div>
+</footer>
 
 </div>
 
@@ -296,7 +279,7 @@
 // ===================== DATA =====================
 window.GRP = [
   { id:"g0", label:"视点操作", dot:"#34d399",
-    apis:["UCFView/SetDPPosition", "UCFView/SetDPPositionGeo", "UCFView/SetDPLocation", "UCFView/SetDPRotation", "UCFView/GetDPPosition", "UCFView/GetDPPositionGeo", "UCFView/FocusActor", "UCFView/FocusArea", "UCFView/FocusAreaGeo", "UCFView/SetDPInput", "UCFView/ResetDPInput", "UCFView/SwitchDPInput", "UCFView/SetDPInputParams", "UCFView/SwitchViewType"] },
+    apis:["UCFView/SetDPPosition", "UCFView/SetDPPositionGeo", "UCFView/SetDPLocation", "UCFView/SetDPRotation", "UCFView/GetDPPosition", "UCFView/GetDPPositionGeo", "UCFView/FocusActor", "UCFView/FocusArea", "UCFView/FocusAreaGeo", "UCFView/SwitchDPInput", "UCFView/SetDPInputParams", "UCFView/SetDPHMoveInput", "UCFView/SetDPRotateWithAnchorInput", "UCFView/SetDPRotateWithSelfInput", "UCFView/SetDPFastFocusInput", "UCFView/SwitchViewType"] },
   { id:"g1", label:"漫游操作", dot:"#60a5fa",
     apis:["UCFView/StartRoamUniformTime", "UCFView/StartRoamUniformSpeed", "UCFView/StartRoamCustomTime", "UCFView/PauseRoam", "UCFView/ResumeRoam", "UCFView/StopRoam", "UCFView/RestartRoam", "UCFView/OnRoamFinished"] }
 ];
@@ -498,39 +481,6 @@ window.API = {
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusAreaGeo",\n  "Params": {\n    "Center": {\n      "X": 1000.0,\n      "Y": 2000.0,\n      "Z": 500.0\n    },\n    "Radius": 0.0,\n    "HalfHeight": 0.0,\n    "Pitch": 0.0,\n    "Margin": 1.1,\n    "bIgnoreLag": false\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/FocusAreaGeo",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFView/SetDPInput": {
-    t:"sync",
-    title:"设置视点操作的物理输入",
-    notes:["仅支持UCFDefaultPawn", "所有操作对应的物理输入必须唯一"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['HMoveInput', 'String', '必填', '水平移动输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown"'],
-  ['VUPInput', 'String', '必填', '垂直向上移动输入，可选值："UCFInputTagDefaultPawn.QDown", "UCFInputTagDefaultPawn.EDown"'],
-  ['VDownInput', 'String', '必填', '垂直向下移动输入，可选值："UCFInputTagDefaultPawn.QDown", "UCFInputTagDefaultPawn.EDown"'],
-  ['RotateAnchorInput', 'String', '必填', '固定锚点旋转输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown"'],
-  ['RotateSelfInput', 'String', '必填', '绕自身旋转输入，可选值："UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown"'],
-  ['ZoomInput', 'String', '必填', '缩放输入，可选值："UCFInputTagBase.MiddleMouseRoll", "UCFInputTagBase.LeftMouseDown", "UCFInputTagBase.RightMouseDown", "UCFInputTagBase.MiddleMouseDown"'],
-  ['FocusInput', 'String', '必填', '快速聚焦输入，可选值："LeftMouseDoubleTap", "RightMouseDoubleTap", "MiddleMouseDoubleTap"']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInput",\n  "Params": {\n    "HMoveInput": "xxx",\n    "VUPInput": "xxx",\n    "VDownInput": "xxx",\n    "RotateAnchorInput": "xxx",\n    "RotateSelfInput": "xxx",\n    "ZoomInput": "xxx",\n    "FocusInput": "xxx"\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInput",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFView/ResetDPInput": {
-    t:"sync",
-    title:"重置视点操作的物理输入",
-    notes:["仅支持UCFDefaultPawn", "所有操作对应的物理输入重置为默认值"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/ResetDPInput",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/ResetDPInput",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
   "UCFView/SwitchDPInput": {
     t:"sync",
     title:"开启或关闭视点的特定操作",
@@ -570,6 +520,66 @@ window.API = {
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInputParams",\n  "Params": {\n    "RotateSpeed": 3.0,\n    "VerticalMoveSpeed": 1000.0,\n    "ZoomPercent": 0.4,\n    "LagSpeed": 5.0,\n    "FocusOffset": 1000.0\n  }\n}',
     cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPInputParams",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFView/SetDPHMoveInput": {
+    t:"sync",
+    title:"设置定点平移的输入动作",
+    notes:["仅支持UCFDefaultPawn", "设置成功后,使用该输入动作的其他行为会被置空动作"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Input', 'String', '必填', '输入动作,可选值:"LeftMouseDown"、"RightMouseDown"、"MiddleMouseDown"']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPHMoveInput",\n  "Params": {\n    "Input": "xxx"\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPHMoveInput",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFView/SetDPRotateWithAnchorInput": {
+    t:"sync",
+    title:"设置定点旋转的输入动作",
+    notes:["仅支持UCFDefaultPawn", "设置成功后,使用该输入动作的其他行为会被置空动作"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Input', 'String', '必填', '输入动作,可选值:"LeftMouseDown"、"RightMouseDown"、"MiddleMouseDown"']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPRotateWithAnchorInput",\n  "Params": {\n    "Input": "xxx"\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPRotateWithAnchorInput",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFView/SetDPRotateWithSelfInput": {
+    t:"sync",
+    title:"设置自旋转的输入动作",
+    notes:["仅支持UCFDefaultPawn", "设置成功后,使用该输入动作的其他行为会被置空动作"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Input', 'String', '必填', '输入动作,可选值:"LeftMouseDown"、"RightMouseDown"、"MiddleMouseDown"']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPRotateWithSelfInput",\n  "Params": {\n    "Input": "xxx"\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPRotateWithSelfInput",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFView/SetDPFastFocusInput": {
+    t:"sync",
+    title:"设置快速聚焦的输入动作",
+    notes:["仅支持UCFDefaultPawn"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    pi:[
+  ['Input', 'String', '必填', '输入动作,可选值:"LeftMouseDoubleTap"、"MiddleMouseDoubleTap"、"RightMouseDoubleTap"']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPFastFocusInput",\n  "Params": {\n    "Input": "xxx"\n  }\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFView/SetDPFastFocusInput",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
   "UCFView/SwitchViewType": {
     t:"sync",

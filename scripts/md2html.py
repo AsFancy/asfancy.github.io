@@ -903,6 +903,9 @@ INDEX_SECTION_RE = re.compile(
 # 已有卡片的 id，用于保持原有排序
 INDEX_CARD_ID_RE = re.compile(r'<div class="content-card[^"]*"\s+id="([^"]+)"')
 
+# 始终排在索引页首位的卡片 id（UCF - 接口管理）
+FIRST_CARD_ID = "UCF"
+
 # 卡片标题中的「接口类 - 中文说明」分隔符，接口类部分会被标为主题色
 CARD_TITLE_SPLIT_RE = re.compile(r'^(\S+)(\s*[-–—·]\s+)(.+)$')
 
@@ -1015,6 +1018,12 @@ def update_index(index_path, cards):
     by_id = {c['id']: c for c in cards}
     ordered = [by_id.pop(cid) for cid in existing_ids if cid in by_id]
     ordered += [c for c in cards if c['id'] in by_id]
+
+    # 将指定卡片固定在首位（例如「UCF - 接口管理」），其余保持原有顺序
+    for i, c in enumerate(ordered):
+        if c['id'] == FIRST_CARD_ID:
+            ordered.insert(0, ordered.pop(i))
+            break
 
     blocks = [_build_index_card(c['id'], c['title'], c['desc'], c['href']) for c in ordered]
     inner = '\n\n' + '\n\n'.join(blocks) + '\n\n  '

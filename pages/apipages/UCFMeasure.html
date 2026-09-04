@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UCFAgent - Agent连接管理 - UCFPlugin</title>
+<title>UCFMeasure - 测量 - UCFPlugin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap">
@@ -236,8 +236,8 @@
 
 <div class="page-header" style="padding:120px 24px 30px;text-align:center">
 
-  <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCFAgent - Agent连接管理</h1>
-  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">提供与Agent端的连接、鉴权、断开等接口</p>
+  <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCFMeasure - 测量</h1>
+  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">支持长度、面积、经纬度、高度测量</p>
 </div>
 
 <div class="api-layout">
@@ -279,82 +279,89 @@
 // ===================== DATA =====================
 window.GRP = [
   { id:"g0", label:"", dot:"#34d399",
-    apis:["UCFAgent/ConnectAgent", "UCFAgent/AuthenticateAgent", "UCFAgent/DisconnectAgent", "UCFAgent/IsConnectAgent", "UCFAgent/OnDisconnected"] }
+    apis:["UCFMeasure/Length", "UCFMeasure/Area", "UCFMeasure/GeoCoord", "UCFMeasure/Height", "UCFMeasure/Cancel", "UCFMeasure/OnFinishOnce"] }
 ];
 
 window.API = {
-  "UCFAgent/ConnectAgent": {
-    t:"async",
-    title:"连接Agent",
-    notes:["不支持WebSocket方式调用", "若传入地址与当前已连接地址相同且处于已连接状态，直接返回成功，与当前已连接地址不同，自动断开旧连接并连接到新地址"],
-    pf:[
-  ['ExecutionID', 'String', '执行ID'],
-  ['Interface', 'String', '接口名称'],
-  ['Params', 'Object', '参数对象']
-],
-    pi:[
-  ['ServerURL', 'String', '必填', 'Agent端地址'],
-  ['TimeOut', 'Float', '选填', '超时时间（秒），默认 <code>5.0</code>']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/ConnectAgent",\n  "Params": {\n    "ServerURL": "xxx",\n    "TimeOut": 5.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/ConnectAgent",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
-  },
-  "UCFAgent/AuthenticateAgent": {
+  "UCFMeasure/Length": {
     t:"sync",
-    title:"Agent鉴权",
-    notes:["不支持WebSocket方式调用", "应在连接Agentc成功之后调用"],
+    title:"长度测量",
+    notes:["支持多段连续测量，支持多次测量", "重复激活无效，非重复激活时会清除之前的所有分析结果", "交互逻辑：左键单击确定关键点，右键单击撤销最后一个关键点，中键单击完成单次测量(单击时的位置作为最后一个关键点)"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    pi:[
-  ['PairId', 'String', '必填', '鉴权配对ID(自行生成)'],
-  ['Token', 'String', '必填', '鉴权令牌(Agent端生成)']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/AuthenticateAgent",\n  "Params": {\n    "PairId": "xxx",\n    "Token": "xxx"\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/AuthenticateAgent",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/Length",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/Length",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFAgent/DisconnectAgent": {
+  "UCFMeasure/Area": {
     t:"sync",
-    title:"断开Agent",
-    notes:["不支持WebSocket方式调用"],
+    title:"面积测量",
+    notes:["支持多次测量", "重复激活无效，非重复激活时会清除之前的所有分析结果", "交互逻辑：左键单击确定关键点，右键单击撤销最后一个关键点，中键单击完成单次测量(单击时的位置作为最后一个关键点)"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/DisconnectAgent",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/DisconnectAgent",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/Area",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/Area",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFAgent/IsConnectAgent": {
+  "UCFMeasure/GeoCoord": {
     t:"sync",
-    title:"查询Agent连接状态",
-    notes:["不支持WebSocket方式调用"],
+    title:"经纬度测量",
+    notes:["支持多次测量", "重复激活无效，非重复激活时会清除之前的所有分析结果", "交互逻辑：左键单击确定关键点，右键单击撤销最后一个关键点"],
     pf:[
   ['ExecutionID', 'String', '执行ID'],
   ['Interface', 'String', '接口名称'],
   ['Params', 'Object', '参数对象']
 ],
-    cbi:[
-  ['bConnected', 'Boolean', '-', '是否连接']
-],
-    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/IsConnectAgent",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFAgent/IsConnectAgent",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {\n    "bConnected": false\n  }\n}'
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/GeoCoord",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/GeoCoord",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
   },
-  "UCFAgent/OnDisconnected": {
+  "UCFMeasure/Height": {
+    t:"sync",
+    title:"高度测量",
+    notes:["支持多次测量", "重复激活无效，非重复激活时会清除之前的所有分析结果", "交互逻辑：首次左键单击确定关键点，第二次左键单击完成单次测量，右键单击撤销首个关键点"],
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/Height",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/Height",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFMeasure/Cancel": {
+    t:"sync",
+    title:"取消测量",
+    pf:[
+  ['ExecutionID', 'String', '执行ID'],
+  ['Interface', 'String', '接口名称'],
+  ['Params', 'Object', '参数对象']
+],
+    req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/Cancel",\n  "Params": {}\n}',
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFMeasure/Cancel",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+  },
+  "UCFMeasure/OnFinishOnce": {
     t:"trigger",
-    title:"Agent被动断开通知",
-    notes:["仅Agent端断开或网络异常导致连接断开时触发，主动断开不会触发"],
+    title:"完成单次测量通知",
     cf:[
   ['ExecutionID', 'String', '触发接口无执行ID，固定为 <code>"Null"</code>'],
-  ['Interface', 'String', '接口名称，固定为 <code>"UCFAgent/OnDisconnected"</code>'],
+  ['Interface', 'String', '接口名称，固定为 <code>"UCFMeasure/OnFinishOnce"</code>'],
   ['Status', 'Boolean', '固定为 <code>true</code>'],
   ['DebugInfo', 'String', '调试信息'],
   ['Params', 'Object', '参数对象']
 ],
+    cbi:[
+  ['Area', 'Float', '-', '仅测量类型为Area时返回, 多边形面积（m²）'],
+  ['TotalLength', 'Float', '-', '仅测量类型为Length时返回, 总长度（m）'],
+  ['VerticalHeight', 'Float', '-', '仅测量类型为Height时返回, 垂直高度（m）'],
+  ['Latitude', 'Float', '-', '仅测量类型为GeoCoord时返回, 纬度（度）'],
+  ['Longitude', 'Float', '-', '仅测量类型为GeoCoord时返回, 经度（度）'],
+  ['Altitude', 'Float', '-', '仅测量类型为GeoCoord时返回, 高程（m）']
+],
     noReq:true,
-    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFAgent/OnDisconnected",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {}\n}'
+    cb:'{\n  "ExecutionID": "Null",\n  "Interface": "UCFMeasure/OnFinishOnce",\n  "Status": true,\n  "DebugInfo": "调试信息",\n  "Params": {\n    "Area": 0.0,\n    "TotalLength": 0.0,\n    "VerticalHeight": 0.0,\n    "Latitude": 0.0,\n    "Longitude": 0.0,\n    "Altitude": 0.0\n  }\n}'
   }
 };
 
