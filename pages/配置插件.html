@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>配置插件 - UCFPlugin</title>
-<meta name="description" content="UCFPlugin 配置指引：快速开始、UCFDefaultPawn 配置、POIStyle 配置等">
+<meta name="description" content="UCFPlugin 配置指引：安装、激活、配置 GamePlay、BP_UCFDefaultPawn 配置、自定义 POI 样式等">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap">
@@ -24,9 +24,13 @@
 <!-- Mobile sidebar -->
 <div class="doc-sidebar-mobile" id="docSidebarMobile">
   <nav class="doc-nav">
-    <a data-href="#quickstart" class="doc-nav-item active">快速开始</a>
-    <a data-href="#ucfdefaultpawn" class="doc-nav-item">配置 UCFDefaultPawn</a>
-    <a data-href="#poistyle" class="doc-nav-item">配置 POIStyle</a>
+    <a data-href="#ucfplugin" class="doc-nav-item active">UCFPlugin</a>
+    <a data-href="#install" class="doc-nav-item">安装 UCFPlugin</a>
+    <a data-href="#activate" class="doc-nav-item">激活 UCFPlugin</a>
+    <a data-href="#gameplay" class="doc-nav-item">配置 GamePlay</a>
+    <a data-href="#poistyle" class="doc-nav-item">自定义 POI 样式</a>
+    <a data-href="#ucfpixel" class="doc-nav-item">UCFPixel</a>
+    <a data-href="#ucfagent" class="doc-nav-item">UCFAgent</a>
   </nav>
 </div>
 
@@ -35,155 +39,312 @@
   <!-- Sidebar -->
   <aside class="doc-sidebar" id="docSidebar">
     <nav class="doc-nav">
-      <a data-href="#quickstart" class="doc-nav-item active">快速开始</a>
-      <a data-href="#ucfdefaultpawn" class="doc-nav-item">配置 UCFDefaultPawn</a>
-      <a data-href="#poistyle" class="doc-nav-item">配置 POIStyle</a>
+      <a data-href="#ucfplugin" class="doc-nav-item active">UCFPlugin</a>
+      <div class="doc-nav-sub">
+        <a data-href="#install" class="doc-nav-item">安装 UCFPlugin</a>
+        <a data-href="#activate" class="doc-nav-item">激活 UCFPlugin</a>
+        <a data-href="#gameplay" class="doc-nav-item">配置 GamePlay</a>
+        <a data-href="#poistyle" class="doc-nav-item">自定义 POI 样式</a>
+      </div>
+      <a data-href="#ucfpixel" class="doc-nav-item">UCFPixel</a>
+      <a data-href="#ucfagent" class="doc-nav-item">UCFAgent</a>
     </nav>
   </aside>
 
   <!-- Content -->
   <div class="doc-content">
 
-    <!-- ─── 快速开始 ─── -->
-    <section id="quickstart" class="doc-section">
+    <!-- ─── UCFPlugin（一级） ─── -->
+    <section id="ucfplugin" class="doc-section">
+      <div class="doc-section-header doc-section-header--h1">
+        <h1>UCFPlugin</h1>
+      </div>
+    </section>
+
+    <!-- ─── 安装 UCFPlugin ─── -->
+    <section id="install" class="doc-section">
       <div class="doc-section-header">
-        <h2>快速开始</h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        <h2>安装 UCFPlugin</h2>
+      </div>
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-body">
+            <p>在公开仓库 <a class="github-link" href="https://github.com/AsFancy/UCFPlugin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> AsFancy/UCFPlugin</a> 获取对应引擎版本的 UCFPlugin，解压缩到 UE 工程的 <code>Plugins</code> 目录下。UCFPlugin 以二进制形式提供，需要严格与所使用的 UE 版本对应，且不要对 UCFPlugin 目录内的文件做删改。安装路径示例：<code>D:\MyProject\Plugins\UCFPlugin</code></p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-body">
+            <h3>配置工程描述文件</h3>
+            <p>使用文本编辑器打开工程描述文件 <code>[xxx.uproject]</code>，配置 UCFPlugin 为 <code>Plugins</code> 数组中的依赖项：</p>
+            <pre class="doc-code">"Plugins": [
+  {
+    "Name": "UCFPlugin",
+    "Enabled": true,
+    "SupportedTargetPlatforms": [
+      "Win64",
+      "Linux"
+    ]
+  }
+]</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 激活 UCFPlugin ─── -->
+    <section id="activate" class="doc-section">
+      <div class="doc-section-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        <h2>激活 UCFPlugin</h2>
+      </div>
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-body">
+            <p>使用前需要先申请授权并完成激活，请点击 <a class="doc-link-cta" href="授权申请.html">授权申请<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a> 进入申请页面获取 UCFKEY。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 配置 GamePlay ─── -->
+    <section id="gameplay" class="doc-section">
+      <div class="doc-section-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1 14h6"/><path d="M9 8h6"/><path d="M17 16h6"/></svg>
+        <h2>配置 GamePlay</h2>
+      </div>
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-body">
+            <p>在 <code>World Settings</code> 面板，<code>GameMode Override</code> 设置为 <code>BP_UCFGameMode</code>，Pawn（默认为 <code>BP_UCFDefaultPawn</code>）与 PlayerController（默认为 <code>BP_UCFPlayerController</code>）会默认匹配为对应的 Class，可以直接运行项目，项目默认视点为启动时编辑器视点的位置或者 <code>PlayerStart</code> 实例的位置。</p>
+            <p>若需要自定义 Pawn 的配置，可以向场景中放置 <code>BP_UCFDefaultPawn</code> 的实例，然后在 Details 面板中配置。</p>
+          </div>
+        </div>
       </div>
 
-      <div class="steps">
-
-        <!-- Step 1 -->
-        <div class="step-card">
-          <div class="step-body">
-            <h3>安装插件</h3>
-            <p>将 <code>UCFPlugin</code> 文件夹放到项目的 <code>Plugins</code> 目录下，并为项目重新编译生成 C++ 工程。</p>
-            <div class="note">确保项目已配置为 C++ 项目。如果是蓝图项目，请先通过"添加 C++ 类"将其转换为 C++ 项目。</div>
-          </div>
+      <!-- BP_UCFDefaultPawn 配置项 -->
+      <div class="doc-subsection" id="pawn-config">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg> BP_UCFDefaultPawn 配置项</h3>
+        <div class="table-wrap">
+          <table class="doc-table param-table">
+            <thead>
+              <tr><th>配置项</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>定点平移</td><td>可选左 / 中 / 右键按住移动</td></tr>
+              <tr><td>定点旋转</td><td>可选左 / 中 / 右键按住移动</td></tr>
+              <tr><td>居中旋转</td><td>可选左 / 中 / 右键按住移动</td></tr>
+              <tr><td>快速聚焦</td><td>可选左 / 中 / 右键双击</td></tr>
+              <tr><td><code>RotateSpeed</code></td><td>旋转角速度</td></tr>
+              <tr><td><code>VerticalMoveSpeed</code></td><td>单帧竖直移动距离，单位 cm</td></tr>
+              <tr><td><code>ZoomPercent</code></td><td>单次缩放距离相对于当前位置与参考锚点距离的百分比</td></tr>
+              <tr><td><code>FocusOffset</code></td><td>快速聚焦时相对目标点的偏移距离，单位 cm</td></tr>
+              <tr><td><code>LagSpeed</code></td><td>滞后平滑速度，值越小滞后效果越明显，值为 0 即关闭</td></tr>
+              <tr><td><code>PolygonUnderside</code></td><td>底面多边形（自相交无效）点集，在高度方向拉伸形成直棱柱，限定了 Pawn 的可达区域，单位 cm</td></tr>
+              <tr><td><code>UndersideElevation</code></td><td>Pawn 的可达区域底面高度值，单位 cm</td></tr>
+              <tr><td><code>TopsideElevation</code></td><td>Pawn 的可达区域顶面高度值，单位 cm</td></tr>
+              <tr><td><code>MinYaw</code></td><td>最小偏航角</td></tr>
+              <tr><td><code>MaxYaw</code></td><td>最大偏航角</td></tr>
+              <tr><td><code>MinPitch</code></td><td>最小俯仰角</td></tr>
+              <tr><td><code>MaxPitch</code></td><td>最大俯仰角</td></tr>
+              <tr><td><code>bFlipZoom</code></td><td>是否反转缩放方向</td></tr>
+              <tr><td><code>bFlipRotate</code></td><td>是否反转旋转方向</td></tr>
+              <tr><td><code>bEnableCollision</code></td><td>是否启用 Pawn 的碰撞</td></tr>
+              <tr><td><code>bEnableHMove</code></td><td>是否允许 Pawn 定点平移</td></tr>
+              <tr><td><code>bEnableVMove</code></td><td>是否允许 Pawn 竖直移动</td></tr>
+              <tr><td><code>bEnableRotateWithAnchor</code></td><td>是否允许 Pawn 定点旋转</td></tr>
+              <tr><td><code>bEnableRotateWithSelf</code></td><td>是否允许 Pawn 居中旋转</td></tr>
+              <tr><td><code>bEnableZoom</code></td><td>是否允许 Pawn 缩放</td></tr>
+              <tr><td><code>bEnableFastFocus</code></td><td>是否允许 Pawn 快速聚焦</td></tr>
+              <tr><td><code>MaxCollisionTraceDistance</code></td><td>沿鼠标空间方向，以该值为最远碰撞追踪距离，获取命中位置作为 Pawn 操作的参考锚点，单位 cm</td></tr>
+              <tr><td><code>MaxBlankCollisionTraceDistance</code></td><td>沿鼠标空间方向，以 <code>MaxCollisionTraceDistance</code> 为最远碰撞追踪距离，但未能获取命中位置时，则返回以该值为命中距离对应的命中位置作为 Pawn 操作的参考锚点，单位 cm</td></tr>
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        <!-- Step 2 -->
-        <div class="step-card">
-          <div class="step-body">
-            <h3>插件设置</h3>
-            <p>在编辑器中打开 <code>Project Settings &gt; Plugins &gt; UCFPlugin</code>，配置以下选项：</p>
-            <ul>
-              <li><strong>BP Interface Path</strong>：添加蓝图接口所在的目录路径</li>
-              <li><strong>Double Tap Time Interval</strong>：输入双击间隔时间（默认 0.23 秒）</li>
-              <li><strong>Default Input Component Class</strong>：选择 <code>UCFInputComponent</code></li>
-            </ul>
+      <!-- BP_UCFDefaultPawn 交互行为 -->
+      <div class="doc-subsection" id="pawn-behavior">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg> BP_UCFDefaultPawn 交互行为</h3>
+        <p>UCFDefaultPawn 的交互行为都是以锚点为参考的，请始终注意鼠标按住时在场景中出现的绿色锚点，几种交互方式为：</p>
+        <div class="control-grid">
+          <!-- 定点移动 -->
+          <div class="control-card">
+            <div class="gif-wrap">
+              <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEYy&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+            </div>
+            <div class="control-info">
+              <h4>定点移动<span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span></h4>
+              <p>按住鼠标左键水平拖动，控制 Pawn 左右移动到锚点位置；按住鼠标左键上下拖动，控制 Pawn 前后移动到锚点位置</p>
+            </div>
           </div>
-        </div>
 
-        <!-- Step 3 -->
-        <div class="step-card">
-          <div class="step-body">
-            <h3>配置 GamePlay</h3>
-            <p>选定主关卡，然后转到 World Settings 窗口，GameMode Override 设置为 <code>UCFGameMode</code>，Pawn 与 PlayerController 会默认匹配为对应的 Class。</p>
-            <p>此时可以直接运行项目，项目默认视点为启动时编辑器视点的位置或者 <code>PlayerStart</code> 实例的位置。</p>
-            <p>若需要自定义 Pawn 操作配置，可以在场景中自定义位置放置 UCFDefaultPawn 的实例，然后在 Details 中自定义配置。</p>
+          <!-- 定点旋转 -->
+          <div class="control-card">
+            <div class="gif-wrap">
+              <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEvB&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+            </div>
+            <div class="control-info">
+              <h4>定点旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span></h4>
+              <p>按住鼠标右键水平拖动，控制 Pawn 以锚点为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以锚点为中心上下旋转</p>
+            </div>
           </div>
-        </div>
 
-        <!-- Step 4 -->
-        <div class="step-card">
-          <div class="step-body">
-            <h3>控制 Pawn</h3>
-            <p>UCFDefaultPawn 的基本控制都是以锚点为参考的，请始终注意鼠标按住时在场景中出现的绿色锚点，默认的控制方式如下：</p>
+          <!-- 定点缩放 -->
+          <div class="control-card">
+            <div class="gif-wrap">
+              <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEof&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+            </div>
+            <div class="control-info">
+              <h4>定点缩放<span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span></h4>
+              <p>向前滚动鼠标中键，控制 Pawn 逼近锚点；向后滚动鼠标中键，控制 Pawn 远离锚点</p>
+            </div>
+          </div>
 
-            <div class="control-grid">
-              <!-- 定点移动 -->
-              <div class="control-card">
-                <div class="gif-wrap">
-                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEYy&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
-                </div>
-                <div class="control-info">
-                  <h4>定点移动<span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span></h4>
-                  <p>按住鼠标左键水平拖动，控制 Pawn 左右移动到锚点位置；按住鼠标左键上下拖动，控制 Pawn 前后移动到锚点位置</p>
-                </div>
-              </div>
+          <!-- 快速聚焦 -->
+          <div class="control-card">
+            <div class="gif-wrap">
+              <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1YujB6BETw&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+            </div>
+            <div class="control-info">
+              <h4>快速聚焦<span class="key-hint"><kbd>双击鼠标左键</kbd></span></h4>
+              <p>双击鼠标左键，快速聚焦到锚点位置</p>
+            </div>
+          </div>
 
-              <!-- 定点旋转 -->
-              <div class="control-card">
-                <div class="gif-wrap">
-                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEvB&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
-                </div>
-                <div class="control-info">
-                  <h4>定点旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span></h4>
-                  <p>按住鼠标右键水平拖动，控制 Pawn 以锚点为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以锚点为中心上下旋转</p>
-                </div>
-              </div>
+          <!-- 竖向移动 -->
+          <div class="control-card">
+            <div class="gif-wrap">
+              <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BERs&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+            </div>
+            <div class="control-info">
+              <h4>竖向移动<span class="key-hint"><kbd>Q</kbd> 上升 <kbd>E</kbd> 下降</span></h4>
+              <p>按住 Q 键竖直向上移动；按住 E 键竖直向下移动</p>
+            </div>
+          </div>
 
-              <!-- 定点缩放 -->
-              <div class="control-card">
-                <div class="gif-wrap">
-                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BEof&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
-                </div>
-                <div class="control-info">
-                  <h4>定点缩放<span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span></h4>
-                  <p>向前滚动鼠标中键，控制 Pawn 逼近锚点；向后滚动鼠标中键，控制 Pawn 远离锚点</p>
-                </div>
-              </div>
-
-              <!-- 快速聚焦 -->
-              <div class="control-card">
-                <div class="gif-wrap">
-                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1YujB6BETw&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
-                </div>
-                <div class="control-info">
-                  <h4>快速聚焦<span class="key-hint"><kbd>双击鼠标右键</kbd></span></h4>
-                  <p>双击鼠标左键快速聚焦到锚点位置</p>
-                </div>
-              </div>
-
-              <!-- 竖向移动 -->
-              <div class="control-card">
-                <div class="gif-wrap">
-                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1XujB6BERs&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
-                </div>
-                <div class="control-info">
-                  <h4>竖向移动<span class="key-hint"><kbd>Q</kbd> 上升 <kbd>E</kbd> 下降</span></h4>
-                  <p>按住 Q 键竖直向上移动；按住 E 键竖直向下移动</p>
-                </div>
-              </div>
-
-              <!-- 居中旋转 -->
-              <div class="control-card">
-                <div class="gif-wrap">
-                  <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1YujB6BEt3&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
-                </div>
-                <div class="control-info">
-                  <h4>居中旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span></h4>
-                  <p>按住鼠标右键水平拖动，控制 Pawn 以自身为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以自身为中心上下旋转</p>
-                </div>
-              </div>
+          <!-- 居中旋转 -->
+          <div class="control-card">
+            <div class="gif-wrap">
+              <iframe loading="lazy" src="https://player.bilibili.com/player.html?bvid=BV1YujB6BEt3&page=1&high_quality=1&autoplay=0" allowfullscreen></iframe>
+            </div>
+            <div class="control-info">
+              <h4>居中旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span></h4>
+              <p>按住鼠标右键水平拖动，控制 Pawn 以自身为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以自身为中心上下旋转</p>
             </div>
           </div>
         </div>
+      </div>
 
+      <!-- BP_UCFVehicle 交互行为 -->
+      <div class="doc-subsection" id="vehicle-behavior">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> BP_UCFVehicle 交互行为</h3>
+        <div class="doc-note doc-note--warn">车行模式的载具系统模拟暂不稳定，谨慎使用。</div>
+        <div class="table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr><th>行为</th><th>控制方式</th><th>行为描述</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>前进</strong></td><td>按住 W 键</td><td>车辆前进</td></tr>
+              <tr><td><strong>后退</strong></td><td>按住 S 键</td><td>车辆后退</td></tr>
+              <tr><td><strong>左转</strong></td><td>按住 A 键</td><td>车辆左转向，需同时前进 / 后退，车辆才移动</td></tr>
+              <tr><td><strong>右转</strong></td><td>按住 D 键</td><td>车辆右转向，需同时前进 / 后退，车辆才移动</td></tr>
+              <tr><td><strong>制动</strong></td><td>单击空格键</td><td>车辆制动（默认制动缓冲时间为 1.5s），若同时按下 W / S 键时，制动失效</td></tr>
+              <tr><td><strong>恢复</strong></td><td>单击空格键</td><td>车辆侧翻时恢复正常</td></tr>
+              <tr><td><strong>切换第一 / 三人称视角</strong></td><td>单击 V 键</td><td>第一人称即车内沉浸视角，第三人称即车外俯视视角，默认第三人称</td></tr>
+              <tr><td><strong>转动自由视角</strong></td><td>鼠标移动（若显示光标时，必须按住移动）</td><td>自由环顾四周</td></tr>
+              <tr><td><strong>显 / 隐光标</strong></td><td>单击 H 键</td><td>显隐光标</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BP_UCFMale 交互行为 -->
+      <div class="doc-subsection" id="male-behavior">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> BP_UCFMale 交互行为</h3>
+        <div class="table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr><th>行为</th><th>控制方式</th><th>行为描述</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>前进</strong></td><td>按住 W 键</td><td>人物前进</td></tr>
+              <tr><td><strong>后退</strong></td><td>按住 S 键</td><td>人物后退</td></tr>
+              <tr><td><strong>左转</strong></td><td>按住 A 键</td><td>人物左转后前进</td></tr>
+              <tr><td><strong>右转</strong></td><td>按住 D 键</td><td>人物右转后前进</td></tr>
+              <tr><td><strong>跳跃</strong></td><td>单击空格键</td><td>人物跳跃障碍物</td></tr>
+              <tr><td><strong>切换第一 / 三人称视角</strong></td><td>单击 V 键</td><td>第一人称即沉浸视角，第三人称即俯视视角，默认第三人称</td></tr>
+              <tr><td><strong>转动自由视角</strong></td><td>鼠标移动（若显示光标时，必须按住移动）</td><td>自由环顾四周</td></tr>
+              <tr><td><strong>显 / 隐光标</strong></td><td>单击 H 键</td><td>显隐光标</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <!-- ─── 配置 UCFDefaultPawn ─── -->
-    <section id="ucfdefaultpawn" class="doc-section">
-      <div class="doc-section-header">
-        <h2>配置 UCFDefaultPawn</h2>
-      </div>
-      <div class="placeholder-section">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-        <h3>内容准备中</h3>
-        <p>UCFDefaultPawn 的详细配置说明、属性参考和最佳实践将在后续版本中更新。</p>
-      </div>
-    </section>
-
-    <!-- ─── 配置 POIStyle ─── -->
+    <!-- ─── 自定义 POI 样式 ─── -->
     <section id="poistyle" class="doc-section">
       <div class="doc-section-header">
-        <h2>配置 POIStyle</h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <h2>自定义 POI 样式</h2>
+      </div>
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-body">
+            <p>UCFPlugin 中的 POI 分为两类，一类是普通单个 POI、另一类是聚合效果时，用来表示当前区域内所有的 POI 实例。新增这两类 POI 的样式时都需要继承 <code>UCFPOIBase</code>，POI 的组件布局要求为：</p>
+            <ul>
+              <li><code>CanvasPanel</code> 组件作为根容器</li>
+              <li><code>CanvasPanel</code> 的直接子组件需要设置锚点，锚点必须设置为 <code>CanvasPanel</code> 的中心</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-body">
+            <p>UE 编辑器默认将 <code>CanvasPanel</code> 的直接子组件的左上角与锚点对齐，即 Alignment 的值默认为 <code>(1,1)</code>，应当根据实际该子组件的位置情况调整。例如一个箭头样式的 image 组件需要作为该 POI 的引线，则应该使箭头底部对齐到锚点，一般设置 <code>Alignment=(0.5,1)</code>。</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-body">
+            <h3>重写样式配置方法</h3>
+            <p>自定义的 POI 子类中按需重写样式配置方法：</p>
+            <ul>
+              <li>重写 <code>SetStyleConfig</code> 方法，用于解析 <code>UCFMark/CreatePOI</code> 接口传入的 StyleConfig，可设置样式配置信息；例如可以使用同一个 POIStyle 类，在创建时通过样式配置信息来设定具体样式，或者保持 POIStyle 类不变，但需要更新为特定样式时</li>
+              <li>重写 <code>SetInstanceData</code> 方法，用于解析 <code>UCFMark/CreatePOI</code> 接口传入的 POIData.config，可设置 POI 实例的配置数据；例如每个 POI 实例有各自需要显示的文本信息</li>
+              <li>对于聚合类型的 POI 子类，若需要显示当前区域所聚合的 POI 实例数量，需要重写 <code>SetAggregateCount</code> 方法，用来设置 POI 实例数量的文本值</li>
+            </ul>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-body">
+            <p>普通单个 POI 样式示例可参考 <code>/UCFPlugin/UCFPlugin/UCFMark/UCFPOI/POIStyle/POI_Style1</code></p>
+            <p>聚合 POI 样式示例可参考 <code>/UCFPlugin/UCFPlugin/UCFMark/UCFPOI/ClusterStyle/Cluster_Style2</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── UCFPixel（一级） ─── -->
+    <section id="ucfpixel" class="doc-section">
+      <div class="doc-section-header doc-section-header--h1">
+        <h1>UCFPixel</h1>
       </div>
       <div class="placeholder-section">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         <h3>内容准备中</h3>
-        <p>POI 样式的配置说明、样式参考和自定义技巧将在后续版本中更新。</p>
+        <p>UCFPixel 的详细说明将在后续版本中更新。</p>
+      </div>
+    </section>
+
+    <!-- ─── UCFAgent（一级） ─── -->
+    <section id="ucfagent" class="doc-section">
+      <div class="doc-section-header doc-section-header--h1">
+        <h1>UCFAgent</h1>
+      </div>
+      <div class="placeholder-section">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <h3>内容准备中</h3>
+        <p>UCFAgent 的详细说明将在后续版本中更新。</p>
       </div>
     </section>
 
@@ -197,38 +358,53 @@
 <script defer src="../js/common.js"></script>
 <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
-// ── Sidebar active state (IntersectionObserver, no scroll thrash) ──
+// ── Sidebar active state (scroll spy) ──
 (function(){
-  var sections=document.querySelectorAll('.doc-section');
-  var navItems=document.querySelectorAll('.doc-nav-item');
-  var navMap=new Map();
-  navItems.forEach(function(n){
-    var h=n.getAttribute('data-href');
-    if(h && h.charAt(0)==='#') navMap.set(h.slice(1),n);
-  });
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.doc-section'));
+  var navItems = Array.prototype.slice.call(document.querySelectorAll('.doc-nav-item'));
+  var activeLine = 120;
 
-  var io=new IntersectionObserver(function(entries){
-    // Pick the topmost intersecting section
-    var top=null;
-    entries.forEach(function(en){
-      if(en.isIntersecting && (!top || en.boundingClientRect.top < top.boundingClientRect.top)) top=en;
-    });
-    if(top){
-      var id=top.target.id;
-      navItems.forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-href')==='#'+id); });
+  function currentId(){
+    // 到达页面底部时，高亮最后一个 section
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4){
+      return sections[sections.length - 1].id;
     }
-  },{rootMargin:'-120px 0px -55% 0px',threshold:0});
+    var best = null;
+    for (var i = 0; i < sections.length; i++){
+      if (sections[i].getBoundingClientRect().top <= activeLine) best = sections[i].id;
+      else break;
+    }
+    if (!best && sections.length) best = sections[0].id;
+    return best;
+  }
 
-  sections.forEach(function(s){ io.observe(s); });
+  function setActive(id){
+    navItems.forEach(function(n){
+      n.classList.toggle('active', n.getAttribute('data-href') === '#' + id);
+    });
+  }
+
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      setActive(currentId());
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  setActive(currentId());
 
   navItems.forEach(function(item){
-    item.addEventListener('click',function(e){
+    item.addEventListener('click', function(e){
       e.preventDefault();
-      var target=document.querySelector(this.getAttribute('data-href'));
-      if(target){
-        var navH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'));
-        var ct=target.getBoundingClientRect().top;
-        window.scrollTo(window.scrollX,window.scrollY+ct-(navH||64)-24);
+      var target = document.querySelector(this.getAttribute('data-href'));
+      if (target){
+        setActive(this.getAttribute('data-href').slice(1)); // 立即高亮
+        var navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'));
+        var ct = target.getBoundingClientRect().top;
+        window.scrollTo(window.scrollX, window.scrollY + ct - (navH || 64) - 24);
       }
     });
   });
