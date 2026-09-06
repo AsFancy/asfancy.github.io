@@ -17,8 +17,6 @@
 
 <div id="navbar-container"></div>
 
-<div class="page-loading-overlay" id="pageLoadingOverlay" aria-hidden="true"></div>
-
 <main class="page-content" id="pageContent">
 
   <!-- ─── Hero ─── -->
@@ -332,108 +330,12 @@
   </section>
 
   <!-- ─── Footer ─── -->
-  <footer class="footer">
-    <div class="footer-note">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="12" y1="16" x2="12" y2="12"/>
-        <line x1="12" y1="8" x2="12.01" y2="8"/>
-      </svg>
-      <span>UCFPlugin 为个人持续开发，不保证更新频率与稳定性</span>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copyright">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M14.5 9a3.5 3.5 0 1 0 0 5.5"/>
-        </svg>
-        <span><span class="footer-copyright-at">@</span> 2026 UCFPlugin</span>
-      </div>
-      <div class="footer-visitor">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
-      </div>
-    </div>
-  </footer>
+  <div id="footer-container"></div>
 
 </main>
 
 <script defer src="js/common.js"></script>
 <script>
-// ── SPA: navigate to a sub-page ──
-function navigateToPage(pageName, hash){
-  const url='pages/'+encodeURIComponent(pageName)+'.html';
-  const content=document.getElementById('pageContent');
-  const overlay=document.getElementById('pageLoadingOverlay');
-
-  content.style.transition='opacity .2s ease';
-  content.style.opacity='0';
-  overlay.classList.add('active');
-
-  const old=content.querySelector('.page-loaded');
-  if(old) old.remove();
-
-  fetch(url)
-    .then(function(r){if(!r.ok) throw Error();return r.text()})
-    .then(function(html){
-      const parser=new DOMParser();
-      const doc=parser.parseFromString(html,'text/html');
-      const main=doc.querySelector('.page-loaded');
-      const newContent=main ? main.cloneNode(true) : document.createElement('div');
-
-      if(!main){
-        newContent.className='page-loaded';
-        newContent.innerHTML=doc.body.innerHTML;
-      }
-
-      overlay.classList.remove('active');
-      content.appendChild(newContent);
-      content.style.opacity='';
-      setActiveNav(pageName);
-
-      if(hash){
-        requestAnimationFrame(function(){
-          var target=content.querySelector('#'+hash);
-          if(target) target.scrollIntoView({behavior:'smooth'});
-        });
-      } else {
-        window.scrollTo({top:0,behavior:'smooth'});
-      }
-
-      content.querySelectorAll('.fade-in').forEach(function(el){
-        requestAnimationFrame(function(){el.classList.add('visible');});
-      });
-    })
-    .catch(function(){
-      overlay.classList.remove('active');
-      content.style.opacity='';
-      window.location.href=hash ? url+'#'+hash : url;
-    });
-}
-
-function setActiveNav(pageName){
-  document.querySelectorAll('.nav-item').forEach(function(el){
-    el.classList.toggle('active',el.dataset.page===pageName);
-  });
-}
-
-// ── [data-page] clicks (delegated so SPA-loaded content keeps working) ──
-document.getElementById('pageContent').addEventListener('click', function(e){
-  const el = e.target.closest('[data-page]');
-  if (!el) return;
-  e.preventDefault();
-  if (el.tagName === 'A') {
-    window.location.href = 'pages/' + encodeURIComponent(el.dataset.page) + '.html';
-    return;
-  }
-  navigateToPage(el.dataset.page);
-});
-
 // ── Code carousel (auto-rotate every 3.5s, pause on hover, manual dots) ──
 (function(){
   const carousel = document.getElementById('codeCarousel');

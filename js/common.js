@@ -40,6 +40,49 @@ document.getElementById('navbar-container').innerHTML =
   </div>
 </nav>`;
 
+// ── Footer ──
+const footerEl = document.getElementById('footer-container');
+if (footerEl) {
+  footerEl.innerHTML =
+`<footer class="footer">
+    <div class="footer-bottom">
+      <div class="footer-left">
+        <div class="footer-copyright">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M14.5 9a3.5 3.5 0 1 0 0 5.5"/>
+          </svg>
+          <span><span class="footer-copyright-at">@</span> 2026 UCFPlugin</span>
+        </div>
+        <div class="footer-contact">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+          <a href="mailto:ucfplugin@163.com">ucfplugin@163.com</a>
+        </div>
+      </div>
+      <div class="footer-visitor">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>访客 <span id="busuanzi_value_site_uv">0</span></span>
+      </div>
+    </div>
+    <div class="footer-note">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+      <span>UCFPlugin 为个人持续开发，不保证更新频率与稳定性</span>
+    </div>
+  </footer>`;
+}
+
 // ── Active nav ──
 if (pageName) {
   document.querySelectorAll('.nav-item[data-page]').forEach(function(el){

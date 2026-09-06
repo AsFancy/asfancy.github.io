@@ -760,7 +760,7 @@
 | bEnableHMove | Boolean | 选填 | 固定锚点水平移动开关 |
 | bEnableVMove | Boolean | 选填 | 竖直移动开关 |
 | bEnableRotateWithAnchor | Boolean | 选填 | 固定锚点旋转开关 |
-| bEnableRotateWithSelf | Boolean | 选填 | 绕自身位置旋转开关 |
+| bEnableRotateWithSelf | Boolean | 选填 | 居中旋转开关 |
 | bEnableZoom | Boolean | 选填 | 缩放开关 |
 | bEnableFastFocus | Boolean | 选填 | 快速聚焦开关 |
 
@@ -832,7 +832,7 @@
 | VerticalMoveSpeed | Float | 选填 | 单帧竖直移动距离（cm），默认 `1000.0` |
 | ZoomPercent | Float | 选填 | 单次缩放距离相对于当前位置与参考锚点距离的百分比，取值范围：[0.1, 0.8]，默认 `0.4` |
 | LagSpeed | Float | 选填 | 滞后平滑速度，值越小滞后效果越明显，值为0即关闭，取值范围：[0.0, 8.0]，默认 `5.0` |
-| FocusOffset | Float | 选填 | 快速聚焦到中键双击位置时的相对偏移距离（cm），默认 `1000.0` |
+| FocusOffset | Float | 选填 | 快速聚焦时相对目标点的偏移距离，单位cm，默认 `1000.0` |
 
 #### 调用参数示例
 
@@ -1126,9 +1126,9 @@
 **Tips:**
 
 - 若传入类型与当前类型相同，则操作无效
-- 切换到 Default 类型时，若不传入 Location/Rotation，则使用之前离开Default时保存的位置和角度
-- 从 Default 切换到 Male/Vehicle 时，若不传入Location，则通过鼠标点击确定生成位置
-- 从 Male/Vehicle 互相切换时，若不传入 Location/Rotation，直接在指定方位生成，否则使用当前的位置和角度直接切换
+- 切换到 Default 类型时，若未指定 Location/Rotation，则使用之前离开Default时的方位
+- 从 Default 切换到 Male/Vehicle 时，若未指定Location，则通过鼠标点击确定生成位置
+- 从 Male/Vehicle 互相切换时，若未指定 Location/Rotation，则使用当前的方位直接切换
 
 #### 调用参数说明
 
@@ -1144,13 +1144,13 @@
 |------|------|:----:|------|
 | ViewType | String | 必填 | 视点类型，可选值："Default"、"Male"、"Vehicle" |
 | Location | Object | 选填 | 目标生成位置 |
-| Location.X | Float | 必填 | X坐标（厘米） |
-| Location.Y | Float | 必填 | Y坐标（厘米） |
-| Location.Z | Float | 必填 | Z坐标（厘米） |
+| Location.X | Float | 选填 | X坐标（厘米） |
+| Location.Y | Float | 选填 | Y坐标（厘米） |
+| Location.Z | Float | 选填 | Z坐标（厘米） |
 | Rotation | Object | 选填 | 目标生成角度 |
-| Rotation.Pitch | Float | 必填 | 俯仰角（度） |
-| Rotation.Yaw | Float | 必填 | 偏航角（度） |
-| Rotation.Roll | Float | 必填 | 翻滚角（度） |
+| Rotation.Pitch | Float | 选填 | 俯仰角（度） |
+| Rotation.Yaw | Float | 选填 | 偏航角（度） |
+| Rotation.Roll | Float | 选填 | 翻滚角（度） |
 
 #### 调用参数示例
 

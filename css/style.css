@@ -525,13 +525,16 @@ body{
   margin-left:auto;
   margin-right:auto;
   padding:var(--sp-6) var(--sp-6) var(--sp-6);
-  border-top:1px solid var(--border);
+  border-top:2px solid var(--border-strong);
   display:flex;flex-direction:column;gap:8px;
   box-sizing:border-box;
 }
 .footer-bottom{
   display:flex;align-items:center;justify-content:space-between;
   gap:var(--sp-4);flex-wrap:wrap;
+}
+.footer-left{
+  display:flex;align-items:center;gap:70px;flex-wrap:wrap; /* 使邮箱右缘对齐上方说明文本右缘 */
 }
 .footer-note{
   display:inline-flex;align-items:center;gap:6px;
@@ -544,6 +547,13 @@ body{
 }
 .footer-copyright svg{opacity:.7;flex-shrink:0}
 .footer-copyright-at{font-size:16px;line-height:1}
+.footer-contact{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--text-muted);
+}
+.footer-contact svg{opacity:.7;flex-shrink:0}
+.footer-contact a{color:var(--text-muted);text-decoration:none;transition:color .2s}
+.footer-contact a:hover{color:var(--green)}
 .footer-visitor{
   display:inline-flex;align-items:center;gap:6px;
   font-size:12px;color:var(--text-dim);
@@ -806,15 +816,6 @@ body{
   border:1px solid rgba(251,191,36,0.18);
   letter-spacing:0.02em;
 }
-
-/* ── Page transition ── */
-.page-loading-overlay{
-  position:fixed;inset:0;z-index:99;
-  background:var(--bg-primary);
-  opacity:0;pointer-events:none;
-  transition:opacity .25s ease;
-}
-.page-loading-overlay.active{opacity:1}
 
 /* ── Animations ── */
 .fade-in{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
@@ -1348,7 +1349,7 @@ body{
 .license-steps-col{
   display:flex;flex-direction:column;gap:0;
   position:relative;
-  margin-top:-72px;
+  margin-top:-126px;
   margin-bottom:48px;
 }
 .license-steps-col .steps-heading{
@@ -1436,6 +1437,12 @@ body{
   font-size:12px;
   font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
   color:var(--green);
+}
+.license-steps-col .step-body strong{
+  color:var(--text-main);font-weight:600;
+}
+.license-steps-col .step-body p + p{
+  margin-top:10px;
 }
 .license-steps-col .step-body .step-hint{
   margin-top:10px;
