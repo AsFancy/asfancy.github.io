@@ -237,7 +237,7 @@
 <div class="page-header" style="padding:120px 24px 30px;text-align:center">
 
   <h1 style="font-size:34px;font-weight:700;margin-bottom:20px;letter-spacing:-0.02em">UCFTerrain - 地形分析</h1>
-  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">支持高程分析、坡度坡向分析</p>
+  <p style="font-size:16px;color:var(--text-muted);margin:0 auto 40px;line-height:1.6;max-width:none">高程分析、坡度坡向分析等接口</p>
 </div>
 
 <div class="api-layout">
@@ -286,7 +286,8 @@ window.API = {
   ['Offset', 'Float', '选填', '高程基准偏移值，单位cm，默认0，等于基准海平面']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Elevation",\n  "Params": {\n    "Offset": 0.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Elevation",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Elevation",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1rLbK6tEvw"
   },
   "UCFTerrain/Slope": {
     t:"sync",
@@ -298,7 +299,8 @@ window.API = {
   ['Params', 'Object', '参数对象']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Slope",\n  "Params": {}\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Slope",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/Slope",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1xKbK6eEmH"
   },
   "UCFTerrain/SetShowMark": {
     t:"sync",
@@ -343,7 +345,8 @@ window.API = {
   ['Interval', 'Float', '必填', '等高距，单位cm']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetInterval",\n  "Params": {\n    "Interval": 0.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetInterval",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetInterval",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1HLbK6tExA"
   },
   "UCFTerrain/SetWidth": {
     t:"sync",
@@ -358,7 +361,8 @@ window.API = {
   ['Width', 'Float', '必填', '等高线宽，单位像素']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetWidth",\n  "Params": {\n    "Width": 0.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetWidth",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetWidth",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1sMbK6AEB9"
   },
   "UCFTerrain/SetStep": {
     t:"sync",
@@ -373,7 +377,8 @@ window.API = {
   ['Step', 'Float', '必填', '坡向步长']
 ],
     req:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetStep",\n  "Params": {\n    "Step": 0.0\n  }\n}',
-    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetStep",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}'
+    cb:'{\n  "ExecutionID": "测试ID",\n  "Interface": "UCFTerrain/SetStep",\n  "Status": true,\n  "DebugInfo": "成功",\n  "Params": {}\n}',
+    bvid:"BV1xMbK6AENQ"
   },
   "UCFTerrain/Clear": {
     t:"sync",

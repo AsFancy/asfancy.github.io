@@ -1,6 +1,6 @@
 # UCFMeasure - 测量
 
-支持长度、面积、经纬度、高度测量
+长度、面积、经纬度、高度测量等接口
 
 ## 接口一览
 
@@ -67,6 +67,10 @@
 }
 ```
 
+#### 功能演示
+
+[![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1wLbK6bE8A/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
+
 <a id="ucfmeasurearea"></a>
 
 [← 返回接口一览](#接口一览)
@@ -120,6 +124,10 @@
   "Params": {}
 }
 ```
+
+#### 功能演示
+
+[![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1rLbK6tEma/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
 
 <a id="ucfmeasuregeocoord"></a>
 
@@ -175,6 +183,10 @@
 }
 ```
 
+#### 功能演示
+
+[![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1kLbK6tEwP/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
+
 <a id="ucfmeasureheight"></a>
 
 [← 返回接口一览](#接口一览)
@@ -228,6 +240,10 @@
   "Params": {}
 }
 ```
+
+#### 功能演示
+
+[![B站视频](https://img.shields.io/badge/点击查看-BiliBili功能演示-ff69b4?style=flat-square)](https://www.bilibili.com/video/BV1HLbK6tE4K/?share_source=copy_web&vd_source=a88925a690dc55b6a7d0a333e107e2eb)
 
 <a id="ucfmeasurecancel"></a>
 

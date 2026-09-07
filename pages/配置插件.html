@@ -70,7 +70,11 @@
       <div class="steps">
         <div class="step-card">
           <div class="step-body">
-            <p>在公开仓库 <a class="github-link" href="https://github.com/AsFancy/UCFPlugin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> AsFancy/UCFPlugin</a> 获取对应引擎版本的 UCFPlugin，解压缩到 UE 工程的 <code>Plugins</code> 目录下。UCFPlugin 以二进制形式提供，需要严格与所使用的 UE 版本对应，且不要对 UCFPlugin 目录内的文件做删改。安装路径示例：<code>D:\MyProject\Plugins\UCFPlugin</code></p>
+            <p>在公开仓库 <a class="github-link" href="https://github.com/AsFancy/UCFPlugin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> AsFancy/UCFPlugin</a> 获取对应引擎版本的 UCFPlugin。UCFPlugin 以二进制形式提供，需严格与所使用的 UE 版本对应，禁止对 UCFPlugin 目录内的文件做删改。</p>
+            <ul>
+              <li><strong>C++ 工程</strong>：解压缩到 UE 工程的 <code>Plugins</code> 目录下，安装路径示例：<code>D:\MyProject\Plugins\UCFPlugin</code></li>
+              <li><strong>纯蓝图工程</strong>：解压缩到 UE 引擎安装路径下的 Marketplace 目录，否则打包后不能正常运行，安装路径示例：<code>D:\SoftWare\Work\Epic Games\UE_5.1\Engine\Plugins\Marketplace\UCFPlugin</code></li>
+            </ul>
           </div>
         </div>
         <div class="step-card">
@@ -175,7 +179,8 @@
             </div>
             <div class="control-info">
               <h4>定点移动<span class="key-hint"><kbd>鼠标左键</kbd> + 拖动</span></h4>
-              <p>按住鼠标左键水平拖动，控制 Pawn 左右移动到锚点位置；按住鼠标左键上下拖动，控制 Pawn 前后移动到锚点位置</p>
+              <p>按住鼠标左键水平拖动，控制 Pawn 左右移动到锚点位置</p>
+              <p>按住鼠标左键上下拖动，控制 Pawn 前后移动到锚点位置</p>
             </div>
           </div>
 
@@ -186,7 +191,8 @@
             </div>
             <div class="control-info">
               <h4>定点旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动</span></h4>
-              <p>按住鼠标右键水平拖动，控制 Pawn 以锚点为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以锚点为中心上下旋转</p>
+              <p>按住鼠标右键水平拖动，控制 Pawn 以锚点为中心左右旋转</p>
+              <p>按住鼠标右键上下拖动，控制 Pawn 以锚点为中心上下旋转</p>
             </div>
           </div>
 
@@ -197,7 +203,8 @@
             </div>
             <div class="control-info">
               <h4>定点缩放<span class="key-hint"><kbd>鼠标中键</kbd> 滚动</span></h4>
-              <p>向前滚动鼠标中键，控制 Pawn 逼近锚点；向后滚动鼠标中键，控制 Pawn 远离锚点</p>
+              <p>向前滚动鼠标中键，控制 Pawn 逼近锚点</p>
+              <p>向后滚动鼠标中键，控制 Pawn 远离锚点</p>
             </div>
           </div>
 
@@ -230,7 +237,8 @@
             </div>
             <div class="control-info">
               <h4>居中旋转<span class="key-hint"><kbd>鼠标右键</kbd> + 拖动（无锚点）</span></h4>
-              <p>按住鼠标右键水平拖动，控制 Pawn 以自身为中心左右旋转；按住鼠标右键上下拖动，控制 Pawn 以自身为中心上下旋转</p>
+              <p>按住鼠标右键水平拖动，控制 Pawn 以自身为中心左右旋转</p>
+              <p>按住鼠标右键上下拖动，控制 Pawn 以自身为中心上下旋转</p>
             </div>
           </div>
         </div>

@@ -983,7 +983,7 @@ body{
 }
 .doc-section-header h2{
   font-family:'Orbitron',sans-serif;
-  font-size:22px;
+  font-size:18px;
   font-weight:700;
   letter-spacing:-0.02em;
 }
@@ -1217,7 +1217,7 @@ body{
   .doc-content{padding:0 16px}
   .control-grid{grid-template-columns:1fr}
   .step-card{padding:20px;gap:16px}
-  .doc-section-header h2{font-size:18px}
+  .doc-section-header h2{font-size:16px}
   .doc-section-header svg{width:20px;height:20px}
 }
 @media(max-width:600px){
@@ -1791,28 +1791,26 @@ body{
 }
 
 /* 正文两端对齐 */
-.step-body p,.step-body li,.doc-subsection > p{
+.step-body p,.doc-subsection > p{
   text-align:justify;text-justify:inter-ideograph;
+}
+.step-body li{
+  text-align:left;
 }
 
 /* GitHub 标识链接 */
 a.github-link{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:3px 10px;border-radius:6px;
-  background:rgba(255,255,255,0.06);border:1px solid var(--border-glass);
-  color:var(--text-main);font-weight:600;text-decoration:none;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:2px 8px;border-radius:5px;
+  background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);
+  color:var(--green);font-weight:700;text-decoration:none;
   font-size:13px;line-height:1.6;
-  font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
-  transition:border-color .2s,background .2s;
 }
-a.github-link svg{width:15px;height:15px;color:var(--text-main);flex-shrink:0}
-a.github-link:hover{border-color:rgba(74,222,128,0.4);background:rgba(74,222,128,0.08)}
+a.github-link svg{width:13px;height:13px;color:var(--green);flex-shrink:0}
 
 /* 跳转标识链接（激活） */
 a.doc-link-cta{
   display:inline-flex;align-items:center;gap:4px;
   color:var(--green);font-weight:700;text-decoration:none;
-  transition:color .2s;
 }
 a.doc-link-cta svg{width:14px;height:14px}
-a.doc-link-cta:hover{color:var(--green-dark)}
