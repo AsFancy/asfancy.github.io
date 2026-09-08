@@ -997,6 +997,28 @@ body{
   white-space:nowrap;
 }
 
+/* ── Heading Number Prefix (1.1, 1.1.1) ── */
+.heading-num{
+  font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:0;
+  flex-shrink:0;
+  display:inline-block;
+  line-height:1;
+}
+.doc-section-header h2 .heading-num{
+  font-size:18px;
+  color:var(--text-main);
+  margin-right:12px;
+  font-weight:700;
+}
+.doc-subsection h3 .heading-num{
+  font-size:16px;
+  font-weight:700;
+  color:var(--text-main);
+}
+
 /* ── Step Cards ── */
 .steps{display:flex;flex-direction:column;gap:20px}
 .step-card{
@@ -1721,6 +1743,39 @@ body{
 .doc-subsection h3 svg{width:16px;height:16px;color:var(--green);flex-shrink:0}
 .doc-subsection > p{
   font-size:14px;color:var(--text-muted);line-height:1.7;margin:0 0 16px;
+}
+
+/* 章节级正文段落 */
+.doc-section > p{
+  font-size:14px;color:var(--text-muted);line-height:1.7;margin:0 0 16px;
+  text-align:justify;text-justify:inter-ideograph;
+}
+.doc-section > p:last-child{margin-bottom:0}
+
+/* 配置 GamePlay 段段落内英文术语 / 自定义 POI 章节英文术语 chip 样式（与 TopsideElevation 一致） */
+.doc-section > p code,
+#poistyle code{
+  background:var(--bg-glass);
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:12px;
+  font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
+  color:var(--text-main);
+}
+
+/* POI 事件示意图 */
+.poi-event-images{
+  display:flex;
+  gap:16px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+.poi-event-images img{
+  max-width:400px;
+  width:100%;
+  border-radius:8px;
+  border:1px solid var(--border-glass);
+  background:var(--bg-glass);
 }
 
 /* 正文链接 */

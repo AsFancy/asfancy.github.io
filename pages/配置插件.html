@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>配置插件 - UCFPlugin</title>
-<meta name="description" content="UCFPlugin 配置指引：安装、激活、配置 GamePlay、BP_UCFDefaultPawn 配置、自定义 POI 样式等">
+<meta name="description" content="UCFPlugin 配置指引：安装、激活、配置 GamePlay、BP_UCFDefaultPawn 配置、自定义 POI 等">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap">
@@ -12,6 +12,15 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap"></noscript>
 <link rel="stylesheet" href="../css/style.css">
 <link rel="icon" type="image/svg+xml" href="../res/favicon.svg">
+<style>
+/* 减弱正文中英文术语的颜色亮度，与参考句中正文文本保持一致（标题不受影响） */
+.doc-content .step-body code,
+.doc-content .doc-section > p code,
+.doc-content #poistyle code,
+.doc-content .doc-table code{
+  color:var(--text-muted);
+}
+</style>
 </head>
 <body>
 
@@ -28,7 +37,7 @@
     <a data-href="#install" class="doc-nav-item">安装 UCFPlugin</a>
     <a data-href="#activate" class="doc-nav-item">激活 UCFPlugin</a>
     <a data-href="#gameplay" class="doc-nav-item">配置 GamePlay</a>
-    <a data-href="#poistyle" class="doc-nav-item">自定义 POI 样式</a>
+    <a data-href="#poistyle" class="doc-nav-item">自定义 POI</a>
     <a data-href="#ucfpixel" class="doc-nav-item">UCFPixel</a>
     <a data-href="#ucfagent" class="doc-nav-item">UCFAgent</a>
   </nav>
@@ -44,7 +53,7 @@
         <a data-href="#install" class="doc-nav-item">安装 UCFPlugin</a>
         <a data-href="#activate" class="doc-nav-item">激活 UCFPlugin</a>
         <a data-href="#gameplay" class="doc-nav-item">配置 GamePlay</a>
-        <a data-href="#poistyle" class="doc-nav-item">自定义 POI 样式</a>
+        <a data-href="#poistyle" class="doc-nav-item">自定义 POI</a>
       </div>
       <a data-href="#ucfpixel" class="doc-nav-item">UCFPixel</a>
       <a data-href="#ucfagent" class="doc-nav-item">UCFAgent</a>
@@ -64,24 +73,21 @@
     <!-- ─── 安装 UCFPlugin ─── -->
     <section id="install" class="doc-section">
       <div class="doc-section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-        <h2>安装 UCFPlugin</h2>
+        <h2><span class="heading-num">1.1</span>安装 UCFPlugin</h2>
       </div>
-      <div class="steps">
-        <div class="step-card">
-          <div class="step-body">
-            <p>在公开仓库 <a class="github-link" href="https://github.com/AsFancy/UCFPlugin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> AsFancy/UCFPlugin</a> 获取对应引擎版本的 UCFPlugin。UCFPlugin 以二进制形式提供，需严格与所使用的 UE 版本对应，禁止对 UCFPlugin 目录内的文件做删改。</p>
-            <ul>
-              <li><strong>C++ 工程</strong>：解压缩到 UE 工程的 <code>Plugins</code> 目录下，安装路径示例：<code>D:\MyProject\Plugins\UCFPlugin</code></li>
-              <li><strong>纯蓝图工程</strong>：解压缩到 UE 引擎安装路径下的 Marketplace 目录，否则打包后不能正常运行，安装路径示例：<code>D:\SoftWare\Work\Epic Games\UE_5.1\Engine\Plugins\Marketplace\UCFPlugin</code></li>
-            </ul>
-          </div>
-        </div>
-        <div class="step-card">
-          <div class="step-body">
-            <h3>配置工程描述文件</h3>
-            <p>使用文本编辑器打开工程描述文件 <code>[xxx.uproject]</code>，配置 UCFPlugin 为 <code>Plugins</code> 数组中的依赖项：</p>
-            <pre class="doc-code">"Plugins": [
+      <p>在公开仓库 <a class="github-link" href="https://github.com/AsFancy/UCFPlugin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> AsFancy/UCFPlugin</a> 获取对应引擎版本的 UCFPlugin。UCFPlugin 以二进制形式提供，需严格与所使用的 UE 版本对应，禁止对 UCFPlugin 目录内的文件做删改。</p>
+      <div class="step-body">
+        <ul>
+          <li><strong>C++ 工程</strong>：解压缩到 UE 工程的 <code>Plugins</code> 目录下，安装路径示例：<code>D:\MyProject\Plugins\UCFPlugin</code></li>
+          <li><strong>纯蓝图工程</strong>：解压缩到 UE 引擎安装路径下的 Marketplace 目录，否则打包后不能正常运行，安装路径示例：<code>D:\SoftWare\Work\Epic Games\UE_5.1\Engine\Plugins\Marketplace\UCFPlugin</code></li>
+        </ul>
+      </div>
+
+      <!-- 配置工程描述文件 -->
+      <div class="doc-subsection" id="uproject-config">
+        <h3><span class="heading-num">1.1.1</span>配置工程描述文件</h3>
+        <p>使用文本编辑器打开工程描述文件 <code>[xxx.uproject]</code>，配置 UCFPlugin 为 <code>Plugins</code> 数组中的依赖项：</p>
+        <pre class="doc-code">"Plugins": [
   {
     "Name": "UCFPlugin",
     "Enabled": true,
@@ -91,44 +97,28 @@
     ]
   }
 ]</pre>
-          </div>
-        </div>
       </div>
     </section>
 
     <!-- ─── 激活 UCFPlugin ─── -->
     <section id="activate" class="doc-section">
       <div class="doc-section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-        <h2>激活 UCFPlugin</h2>
+        <h2><span class="heading-num">1.2</span>激活 UCFPlugin</h2>
       </div>
-      <div class="steps">
-        <div class="step-card">
-          <div class="step-body">
-            <p>使用前需要先申请授权并完成激活，请点击 <a class="doc-link-cta" href="授权申请.html">授权申请<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a> 进入申请页面获取 UCFKEY。</p>
-          </div>
-        </div>
-      </div>
+      <p>使用前需要先申请授权并完成激活，请点击 <a class="doc-link-cta" href="授权申请.html">授权申请<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a> 进入申请页面获取 UCFKEY。</p>
     </section>
 
     <!-- ─── 配置 GamePlay ─── -->
     <section id="gameplay" class="doc-section">
       <div class="doc-section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><path d="M1 14h6"/><path d="M9 8h6"/><path d="M17 16h6"/></svg>
-        <h2>配置 GamePlay</h2>
+        <h2><span class="heading-num">1.3</span>配置 GamePlay</h2>
       </div>
-      <div class="steps">
-        <div class="step-card">
-          <div class="step-body">
-            <p>在 <code>World Settings</code> 面板，<code>GameMode Override</code> 设置为 <code>BP_UCFGameMode</code>，Pawn（默认为 <code>BP_UCFDefaultPawn</code>）与 PlayerController（默认为 <code>BP_UCFPlayerController</code>）会默认匹配为对应的 Class，可以直接运行项目，项目默认视点为启动时编辑器视点的位置或者 <code>PlayerStart</code> 实例的位置。</p>
-            <p>若需要自定义 Pawn 的配置，可以向场景中放置 <code>BP_UCFDefaultPawn</code> 的实例，然后在 Details 面板中配置。</p>
-          </div>
-        </div>
-      </div>
+      <p>在 <code>World Settings</code> 面板，<code>GameMode Override</code> 设置为 <code>BP_UCFGameMode</code>，<code>Pawn</code>（默认为 <code>BP_UCFDefaultPawn</code>）与 <code>PlayerController</code>（默认为 <code>BP_UCFPlayerController</code>）会默认匹配为对应的 <code>Class</code>，可以直接运行项目，项目默认视点为启动时编辑器视点的位置或者 <code>PlayerStart</code> 实例的位置。</p>
+      <p>若需要自定义 <code>Pawn</code> 的配置，可以向场景中放置 <code>BP_UCFDefaultPawn</code> 的实例，然后在 <code>Details</code> 面板中配置。</p>
 
       <!-- BP_UCFDefaultPawn 配置项 -->
       <div class="doc-subsection" id="pawn-config">
-        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg> BP_UCFDefaultPawn 配置项</h3>
+        <h3><span class="heading-num">1.3.1</span>BP_UCFDefaultPawn 配置项</h3>
         <div class="table-wrap">
           <table class="doc-table param-table">
             <thead>
@@ -169,7 +159,7 @@
 
       <!-- BP_UCFDefaultPawn 交互行为 -->
       <div class="doc-subsection" id="pawn-behavior">
-        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg> BP_UCFDefaultPawn 交互行为</h3>
+        <h3><span class="heading-num">1.3.2</span>BP_UCFDefaultPawn 交互行为</h3>
         <p>UCFDefaultPawn 的交互行为都是以锚点为参考的，请始终注意鼠标按住时在场景中出现的绿色锚点，几种交互方式为：</p>
         <div class="control-grid">
           <!-- 定点移动 -->
@@ -246,7 +236,7 @@
 
       <!-- BP_UCFVehicle 交互行为 -->
       <div class="doc-subsection" id="vehicle-behavior">
-        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> BP_UCFVehicle 交互行为</h3>
+        <h3><span class="heading-num">1.3.3</span>BP_UCFVehicle 交互行为</h3>
         <div class="doc-note doc-note--warn">车行模式的载具系统模拟暂不稳定，谨慎使用。</div>
         <div class="table-wrap">
           <table class="doc-table">
@@ -270,7 +260,7 @@
 
       <!-- BP_UCFMale 交互行为 -->
       <div class="doc-subsection" id="male-behavior">
-        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> BP_UCFMale 交互行为</h3>
+        <h3><span class="heading-num">1.3.4</span>BP_UCFMale 交互行为</h3>
         <div class="table-wrap">
           <table class="doc-table">
             <thead>
@@ -291,43 +281,66 @@
       </div>
     </section>
 
-    <!-- ─── 自定义 POI 样式 ─── -->
+    <!-- ─── 自定义 POI ─── -->
     <section id="poistyle" class="doc-section">
       <div class="doc-section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <h2>自定义 POI 样式</h2>
+        <h2><span class="heading-num">1.4</span>自定义 POI</h2>
       </div>
-      <div class="steps">
-        <div class="step-card">
-          <div class="step-body">
-            <p>UCFPlugin 中的 POI 分为两类，一类是普通单个 POI、另一类是聚合效果时，用来表示当前区域内所有的 POI 实例。新增这两类 POI 的样式时都需要继承 <code>UCFPOIBase</code>，POI 的组件布局要求为：</p>
-            <ul>
-              <li><code>CanvasPanel</code> 组件作为根容器</li>
-              <li><code>CanvasPanel</code> 的直接子组件需要设置锚点，锚点必须设置为 <code>CanvasPanel</code> 的中心</li>
-            </ul>
-          </div>
+
+      <p><code>UCFPlugin</code> 中的 <code>POI</code> 分为两类，一类是普通单个 <code>POI</code>、另一类是聚合效果时，用来表示当前区域内所有的 <code>POI</code> 实例。自定义这两类 <code>POI</code> 的样式时都需要继承 <code>UCFPOIBase</code></p>
+      <p>普通单个 <code>POI</code> 示例可参考 <code>/UCFPlugin/UCFPlugin/UCFMark/UCFPOI/POIStyle/POI_Style1</code></p>
+      <p>聚合 <code>POI</code> 示例可参考 <code>/UCFPlugin/UCFPlugin/UCFMark/UCFPOI/ClusterStyle/Cluster_Style2</code></p>
+
+      <!-- POI样式 -->
+      <div class="doc-subsection" id="poi-style">
+        <h3><span class="heading-num">1.4.1</span>POI样式</h3>
+        <p><code>POI</code> 中的控件布局要求 <code>CanvasPanel</code> 控件作为根容器，<code>CanvasPanel</code> 的直接子控件锚点必须设置为 <code>CanvasPanel</code> 的中心。<code>UE</code> 编辑器默认将 <code>CanvasPanel</code> 的直接子组件的左上角与锚点对齐，即 <code>Alignment</code> 的值默认为 <code>(1,1)</code>，应当根据实际该子组件的位置情况调整。例如一个箭头样式的 <code>image</code> 控件需要作为该 <code>POI</code> 的引线，则应该使箭头底部对齐到锚点，一般设置 <code>Alignment=(0.5,1)</code></p>
+        <p>自定义 <code>POI</code> 子类中按需重写样式配置方法：</p>
+        <div class="step-body">
+          <ul>
+            <li>重写 <code>SetStyleConfig</code> 方法，用于解析 <code>UCFMark/CreatePOI</code> 接口传入的 <code>StyleConfig</code>，可设置样式配置信息；例如可以使用同一个 <code>POIStyle</code> 类，在创建时通过样式配置信息来设定具体样式，或者保持 <code>POIStyle</code> 类不变，但需要更新为特定样式时</li>
+            <li>重写 <code>SetInstanceData</code> 方法，用于解析 <code>UCFMark/CreatePOI</code> 接口传入的 <code>POIData.config</code>，可设置 <code>POI</code> 实例的配置数据；例如每个 <code>POI</code> 实例有各自需要显示的文本信息</li>
+            <li>重写 <code>SetAggregateCount</code> 方法，用于设置聚合类型的 <code>POI</code> 显示当前区域所聚合的 <code>POI</code> 实例数量</li>
+          </ul>
         </div>
-        <div class="step-card">
-          <div class="step-body">
-            <p>UE 编辑器默认将 <code>CanvasPanel</code> 的直接子组件的左上角与锚点对齐，即 Alignment 的值默认为 <code>(1,1)</code>，应当根据实际该子组件的位置情况调整。例如一个箭头样式的 image 组件需要作为该 POI 的引线，则应该使箭头底部对齐到锚点，一般设置 <code>Alignment=(0.5,1)</code>。</p>
-          </div>
+      </div>
+
+      <!-- POI事件 -->
+      <div class="doc-subsection" id="poi-event">
+        <h3><span class="heading-num">1.4.2</span>POI事件</h3>
+        <p><code>UCFPOIBase</code> 中预定义了 <code>POI</code> 所需的三类光标交互事件，用于返回当前 <code>POI</code> 的信息（具体可见接口类 <code>UCFMark</code> 的触发接口 <code>UCFMark/OnPOIClicked</code>），在自定义的 <code>POI</code> 中，应在响应光标交互的控件的 <code>OnClicked/OnHovered/OnUnhovered</code> 中调用对应的光标交互事件：</p>
+        <div class="step-body">
+          <ul>
+            <li><code>NotifyPOIClicked</code>：光标点击该 <code>POI</code> 实例
+              <div class="poi-event-images">
+                <img src="../res/NotiyPOIClicked.png" alt="NotifyPOIClicked">
+              </div>
+            </li>
+            <li><code>NotifyPOIHovered</code>：光标悬停该 <code>POI</code> 实例
+              <div class="poi-event-images">
+                <img src="../res/NotifyPOIHovered.png" alt="NotifyPOIHovered">
+              </div>
+            </li>
+            <li><code>NotifyPOIUnhovered</code>：光标取消悬停该 <code>POI</code> 实例
+              <div class="poi-event-images">
+                <img src="../res/NotifyPOIUnhovered.png" alt="NotifyPOIUnhovered">
+              </div>
+            </li>
+          </ul>
         </div>
-        <div class="step-card">
-          <div class="step-body">
-            <h3>重写样式配置方法</h3>
-            <p>自定义的 POI 子类中按需重写样式配置方法：</p>
-            <ul>
-              <li>重写 <code>SetStyleConfig</code> 方法，用于解析 <code>UCFMark/CreatePOI</code> 接口传入的 StyleConfig，可设置样式配置信息；例如可以使用同一个 POIStyle 类，在创建时通过样式配置信息来设定具体样式，或者保持 POIStyle 类不变，但需要更新为特定样式时</li>
-              <li>重写 <code>SetInstanceData</code> 方法，用于解析 <code>UCFMark/CreatePOI</code> 接口传入的 POIData.config，可设置 POI 实例的配置数据；例如每个 POI 实例有各自需要显示的文本信息</li>
-              <li>对于聚合类型的 POI 子类，若需要显示当前区域所聚合的 POI 实例数量，需要重写 <code>SetAggregateCount</code> 方法，用来设置 POI 实例数量的文本值</li>
-            </ul>
-          </div>
+      </div>
+
+      <!-- POI属性 -->
+      <div class="doc-subsection" id="poi-property">
+        <h3><span class="heading-num">1.4.3</span>POI属性</h3>
+        <div class="poi-event-images">
+          <img src="../res/POI_Variable.png" alt="POI_Variable">
         </div>
-        <div class="step-card">
-          <div class="step-body">
-            <p>普通单个 POI 样式示例可参考 <code>/UCFPlugin/UCFPlugin/UCFMark/UCFPOI/POIStyle/POI_Style1</code></p>
-            <p>聚合 POI 样式示例可参考 <code>/UCFPlugin/UCFPlugin/UCFMark/UCFPOI/ClusterStyle/Cluster_Style2</code></p>
-          </div>
+        <div class="step-body">
+          <ul>
+            <li><code>Offset</code>：聚焦时视点相对于该 <code>POI</code> 实例的世界位置偏移距离</li>
+            <li><code>Autofocus</code>：是否启用光标点击后自动聚焦</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -338,7 +351,7 @@
         <h1>UCFPixel</h1>
       </div>
       <div class="placeholder-section">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/><line x1="8" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="8" y1="18" x2="20" y2="18"/></svg>
         <h3>内容准备中</h3>
         <p>UCFPixel 的详细说明将在后续版本中更新。</p>
       </div>
@@ -350,7 +363,7 @@
         <h1>UCFAgent</h1>
       </div>
       <div class="placeholder-section">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/><line x1="8" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="8" y1="18" x2="20" y2="18"/></svg>
         <h3>内容准备中</h3>
         <p>UCFAgent 的详细说明将在后续版本中更新。</p>
       </div>
